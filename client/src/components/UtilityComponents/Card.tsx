@@ -1,5 +1,5 @@
 import MuiCard from '@mui/material/Card';
-import { Divider, Button, Box, Avatar } from '@mui/material';
+import { Divider, Button, Avatar } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 const Card = styled(MuiCard)(({ theme }) => ({

@@ -5,19 +5,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Rotate90DegreesCcw } from "@mui/icons-material";
 
 import { ROTATION } from "../../helpers/constants";
-import { BuilderOverviewProps } from "../Dashboard/components/Builder/BuilderOverview";
 
 import { useNotifications } from '@toolpad/core/useNotifications';
 
 type FileUploadProps = {
     preview: string | null,
     setPreview: React.Dispatch<React.SetStateAction<string | null>>,
-    setFile: BuilderOverviewProps['setFile']
 }
 
-const FileUpload = ({ preview, setPreview, setFile}: FileUploadProps) => {
+const FileUpload = ({ preview, setPreview}: FileUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [rotation, setRotation] = useState(ROTATION);
   const notifications = useNotifications();
   
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,13 +32,11 @@ const FileUpload = ({ preview, setPreview, setFile}: FileUploadProps) => {
       }
 
       setPreview(URL.createObjectURL(file));
-      setFile(file);
     }
   };
 
   const handleRemoveImage = () => {
     setPreview(null);
-    setRotation(ROTATION);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Reset file input
     }
@@ -53,16 +48,8 @@ const FileUpload = ({ preview, setPreview, setFile}: FileUploadProps) => {
     }
   };
 
-  const onHandleRotation = () => {
-    setRotation((prev) => {
-        const [first, ...rest] = prev;
-        console.log({first, rest})
-        return [...rest, first];
-    });
-  }
-
   return (
-    <Stack spacing={2} alignItems="center" height={"450px"}  
+    <Stack spacing={2} alignItems="center" height={"50%"}  
         sx={{
         border: "5px",
         borderStyle: "double",
@@ -92,22 +79,8 @@ const FileUpload = ({ preview, setPreview, setFile}: FileUploadProps) => {
           <img
             src={preview}
             alt="Preview"
-            style={{ width: "100%", borderRadius: "8px", objectFit: "contain",  height: '100%', transform: `rotate(${rotation[3]}deg)` }}
+            style={{ width: "100%", borderRadius: "8px", objectFit: "cover",  height: '100%' }}
           />
-          <IconButton
-            sx={{
-              position: "absolute",
-              top: 5,
-              right: 50,
-              backgroundColor: "rgba(0,0,0,0.5)",
-              color: "white",
-              "&:hover": { backgroundColor: "rgba(0,0,0,0.8)" },
-            }}
-            onClick={onHandleRotation}
-
-          >
-            <Rotate90DegreesCcw />
-          </IconButton>
 
           <IconButton
             sx={{

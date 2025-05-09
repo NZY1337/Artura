@@ -1,8 +1,8 @@
 import Container from '@mui/material/Container';
-import { Breakpoint } from '@mui/system';
+import { type Breakpoint } from '@mui/system';
 import Typography from '@mui/material/Typography';
-import { Grid2 as Grid } from "@mui/material";
-import { TypographyProps } from '@mui/material/Typography';
+import { Grid } from "@mui/material";
+import { type TypographyProps } from '@mui/material/Typography';
 
 interface SectionWrapperInterface {
     children: React.ReactNode,
@@ -54,7 +54,8 @@ const SectionWrapper = ({
     return (
         <Container maxWidth={outerWidth} sx={{ p: '6rem 0rem', ...sx }}>
             <Container maxWidth={innerWidth}>
-                <Grid container justifyContent={justify} spacing={3}>
+                {title || subtitle1 || subtitle2 ? (
+                    <Grid container justifyContent={justify} spacing={3}>
                     {title && <Grid size={{ xs: 12, md: 12, lg: 12 }}>
                         {title}
                     </Grid>}
@@ -71,6 +72,7 @@ const SectionWrapper = ({
                         </SectionWrapper.Subtitle>    
                     </Grid>}
                 </Grid>
+                ) : null}
                 
                 {children}
             </Container>

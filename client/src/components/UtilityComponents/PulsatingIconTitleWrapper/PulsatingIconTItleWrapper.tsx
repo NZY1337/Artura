@@ -1,5 +1,5 @@
 import { useState } from "react";  
-import { Grid2 as Grid  } from "@mui/material";
+import { Grid  } from "@mui/material";
 import PulsatingIconTitle from "./PulsatingIconTitle";
 import FenceIcon from '@mui/icons-material/Fence';
 import BedIcon from '@mui/icons-material/Bed';

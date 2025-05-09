@@ -1,4 +1,4 @@
-import { FormControl, FormLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import { FormControl, FormLabel, Select, MenuItem, type SelectChangeEvent } from "@mui/material";
 
 export interface DynamicSelectProps {
     label: string;

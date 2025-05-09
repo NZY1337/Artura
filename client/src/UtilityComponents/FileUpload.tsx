@@ -62,7 +62,7 @@ const FileUpload = ({ preview, setPreview, setFile}: FileUploadProps) => {
   }
 
   return (
-    <Stack spacing={2} alignItems="center" height={"450px"}  
+    <Stack spacing={2} alignItems="center" 
         sx={{
         border: "5px",
         borderStyle: "double",
