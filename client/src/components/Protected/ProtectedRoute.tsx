@@ -6,12 +6,12 @@ import { useUser, useClerk } from '@clerk/clerk-react';
 
 
 const ProtectedRoute = () => {
-  const { isSignedIn } = useUser();
+  const { isSignedIn, isLoaded } = useUser();
   const location = useLocation();
 
   console.log(isSignedIn);
 
-  if (!isSignedIn) {
+  if (!isLoaded) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
         <CircularProgress size={200} />

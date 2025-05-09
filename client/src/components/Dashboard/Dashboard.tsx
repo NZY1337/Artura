@@ -64,9 +64,7 @@ export default function Dashboard() {
             theme={dashboardTheme}>
             <NotificationsProvider slotProps={{ snackbar: { anchorOrigin: { vertical: 'bottom', horizontal: 'right' }}}}>
                 <DashboardLayout 
-                    slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}
-                    // sx={{'.css-1xraqll-MuiList-root li:not(:first-of-type)': preview ? { display: 'none' } : { color: 'gray', pointerEvents: 'none', display: 'none' }}}
-                    >
+                    slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
                     <PageContainer>
                         {renderContent()}
                     </PageContainer>

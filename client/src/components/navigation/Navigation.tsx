@@ -1,7 +1,6 @@
 import React from 'react';
 import  AppBar from '@mui/material/AppBar';
 import  Toolbar from '@mui/material/Toolbar';
-import  Typography from '@mui/material/Typography';
 import  Box from '@mui/material/Box';
 import  Container from '@mui/material/Container';
 import MenuDrawer from './drawer';
@@ -32,8 +31,6 @@ const Navigation: React.FC = () => {
                 <MenuDrawer />
                 <Toolbar sx={{ height: '80px', mt: 2, borderRadius: 2 }}>
                     <Logo /> 
-                    {/* <Typography variant={"h4"}>Artura</Typography> */}
-
                     <Box sx={{ display: { xs: "none", md: "flex" }}}>
                         <RenderLinks />
                         

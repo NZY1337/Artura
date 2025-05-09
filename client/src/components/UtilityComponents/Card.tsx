@@ -10,11 +10,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
   padding: theme.spacing(3),
   gap: theme.spacing(2),
   border: `1px solid ${theme.palette.divider}`, // Soft white border
-  animation: "glow 2s infinite alternate",
-    "@keyframes glow": {
-        "0%": { boxShadow: "0 0 5px rgba(255, 255, 255, 0.2)" },
-        "100%": { boxShadow: "0 0 5px rgba(52, 50, 7, 0.5)" },
-    },
   '& a': {
     color: theme.palette.grey[400],
 
