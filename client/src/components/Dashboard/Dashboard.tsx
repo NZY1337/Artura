@@ -40,7 +40,7 @@ export default function Dashboard() {
     
     const authentication = useMemo(() => ({
         signIn: () => {}, signOut 
-    }),[navigate]);
+    }),[signOut]);
 
     const renderContent = () => {
         switch (router.pathname) {

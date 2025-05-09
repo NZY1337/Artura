@@ -7,7 +7,7 @@ import  Container from '@mui/material/Container';
 import MenuDrawer from './drawer';
 import RenderLinks from './RenderLinks';
 import { styled } from '@mui/material/styles';
-// import Logo from '../Logo/Logo';
+import Logo from '../Logo/Logo';
 
 const AppBarContainer = styled(AppBar)(({ theme }) => ({
     '.MuiToolbar-root': {
@@ -31,8 +31,8 @@ const Navigation: React.FC = () => {
             <Container>
                 <MenuDrawer />
                 <Toolbar sx={{ height: '80px', mt: 2, borderRadius: 2 }}>
-                    {/* <Logo />  */}
-                    <Typography variant={"h4"}>Artura</Typography>
+                    <Logo /> 
+                    {/* <Typography variant={"h4"}>Artura</Typography> */}
 
                     <Box sx={{ display: { xs: "none", md: "flex" }}}>
                         <RenderLinks />

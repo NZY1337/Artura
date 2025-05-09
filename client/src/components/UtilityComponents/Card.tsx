@@ -1,19 +1,20 @@
 import MuiCard from '@mui/material/Card';
-import { Divider, Button, Box } from '@mui/material';
+import { Divider, Button, Box, Avatar } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import GoogleIcon from '@mui/icons-material/Google';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignSelf: 'center',
   width: '100%',
-  padding: theme.spacing(4),
+  padding: theme.spacing(3),
   gap: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    width: '450px',
-  },
-  boxShadow: 'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
+  border: `1px solid ${theme.palette.divider}`, // Soft white border
+  animation: "glow 2s infinite alternate",
+    "@keyframes glow": {
+        "0%": { boxShadow: "0 0 5px rgba(255, 255, 255, 0.2)" },
+        "100%": { boxShadow: "0 0 5px rgba(52, 50, 7, 0.5)" },
+    },
   '& a': {
     color: theme.palette.grey[400],
 
@@ -24,18 +25,19 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }
 }));
 
-export default function CardModel({ children, variant }: { children: React.ReactNode, variant: 'elevation' | 'outlined' }) {
-
+export default function CardModel({ children, variant, src }: { children: React.ReactNode, variant: 'elevation' | 'outlined', src: string }) {
   return (
   
-    <Card variant={variant}>
+    <Card variant={variant} elevation={2}>
+        <Avatar 
+            src={src}
+            sx={{ 
+                width: "100%", height: 200, mb: 1, 
+                borderRadius: '5px'
+            }} 
+        />
         {children}
-        <Divider>or</Divider>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Button fullWidth variant="outlined" onClick={() => alert('Sign in with Google')} startIcon={<GoogleIcon />}>
-                Sign in with Google
-            </Button>
-        </Box>
+        <Divider sx={{ mt: 1 }}> <Button  sx={{ height:'50px'}} variant='text'>DiscoveR</Button></Divider>
     </Card>
   );
 }
