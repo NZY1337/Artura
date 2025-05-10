@@ -34,7 +34,7 @@ const ROTATION = [90, 180, 270, 360];
 
 const solutions = [
     { label: EMPTY_YOUR_SPACE.label, segment: EMPTY_YOUR_SPACE.segment, selected: true, icon: <DeleteIcon /> },
-    { label: VIRTUAL_STAGING.label, segment: VIRTUAL_STAGING.segment,  icon: <SofaIcon /> },
+    { label: VIRTUAL_STAGING.label, segment: VIRTUAL_STAGING.segment, icon: <SofaIcon /> },
     // { label: REDESIGN_FURNISHED_ROOMS_LABEL, icon: <ChairIcon /> },
     // { label: LANDSCAPING_LABEL, icon: <ParkIcon /> },
     // { label: RENDER_EXTERIOR_STRUCTURES_LABEL, icon: <HomeIcon /> },
@@ -64,23 +64,18 @@ const DASHBOARD_NAVIGATION: Navigation = [
         // ],
     },
     {
+        segment: 'dashboard/design-generator',
+        title: 'Design Generator',
+        icon: <ShoppingCartIcon />,
+    },
+    {
         segment: 'dashboard/virtual-staging',
         title: 'Virtual Staging',
         icon: <ShoppingCartIcon />,
     },
     {
-        segment: 'dashboard/redesigne-furnished-rooms',
-        title: 'Redesign Furnished Rooms',
-        icon: <BarChartIcon />,
-    },
-    {
         segment: 'dashboard/landscaping',
         title: 'Landscaping',
-        icon: <BarChartIcon />,
-    },
-    {
-        segment: 'dashboard/emptg-your-space',
-        title: 'Empty Your Space',
         icon: <BarChartIcon />,
     },
     {
@@ -109,7 +104,7 @@ const DASHBOARD_NAVIGATION: Navigation = [
 //       src: badPhoto4
 //     }
 // ];
-  
+
 //   const goodPhotosData = [
 //     {
 //       label: "Wide angle photo",
@@ -135,13 +130,13 @@ const builderModeStyle = ["Modern", "Traditional", "Contemporary"];
 const builderNumberOfDesigns = [1, 2, 3, 4];
 const builderAiIntervention = [1, 2, 3, 4];
 
-export {  
-    DASHBOARD_NAVIGATION, 
+export {
+    DASHBOARD_NAVIGATION,
     ROTATION,
-    builderAiIntervention, 
-    builderModeOptions, 
-    builderHouseAngle, 
-    builderModeStyle, 
+    builderAiIntervention,
+    builderModeOptions,
+    builderHouseAngle,
+    builderModeStyle,
     builderNumberOfDesigns,
     // goodPhotosData,
     // badPhotosData,

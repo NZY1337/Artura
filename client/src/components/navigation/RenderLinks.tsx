@@ -1,19 +1,19 @@
-import { MenuItem, Link, MenuList} from '@mui/material';
+import { MenuItem, Link, MenuList } from '@mui/material';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import SubMenu from '../UtilityComponents/SubMenu';
 import Button from '@mui/material/Button';
 
 // clerk
-import { SignInButton,  useUser, } from '@clerk/clerk-react'
+import { SignInButton, useUser, } from '@clerk/clerk-react'
 
 const RenderLinks = () => {
     const { isSignedIn } = useUser();
 
     return (
-        <MenuList sx={{display: "flex"}}>
+        <MenuList sx={{ display: "flex" }}>
             <MenuItem disableRipple >
                 <Link component={ReactRouterLink} to="/">
-                    Home  
+                    Home
                 </Link>
             </MenuItem>
 
@@ -22,13 +22,13 @@ const RenderLinks = () => {
             {isSignedIn ? (
                 <MenuItem disableRipple>
                     <Link component={ReactRouterLink} to="/dashboard">
-                        Dashboard  
-                    </Link>  
+                        Dashboard
+                    </Link>
                 </MenuItem>
             ) :
                 <>
                     <MenuItem disableRipple >
-                        <SignInButton>
+                        <SignInButton forceRedirectUrl={`${window.location.origin}/dashboard`}>
                             <Button className='clerk-signin-button' variant="contained" color="primary">
                                 Login / Register
                             </Button>
@@ -36,7 +36,7 @@ const RenderLinks = () => {
                     </MenuItem>
                 </>
             }
-            
+
             {/* <MenuItem><ColorModeSelect /></ MenuItem> */}
         </MenuList>
     )
