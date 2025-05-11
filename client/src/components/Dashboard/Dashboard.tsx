@@ -78,15 +78,16 @@ export default function Dashboard() {
         >
             <NotificationsProvider slotProps={{ snackbar: { anchorOrigin: { vertical: 'bottom', horizontal: 'right' } } }}>
                 <DashboardLayout
+                    sx={{ position: 'relative' }}
                     slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
-                    <DesignGeneratorBackground>
-                        <PageContainer>
-                            {renderContent()}
-                        </PageContainer>
-                    </DesignGeneratorBackground>
+                    {/* <DesignGeneratorBackground> */}
+                    <PageContainer >
+                        {renderContent()}
+                    </PageContainer>
+                    {/* </DesignGeneratorBackground> */}
 
                 </DashboardLayout>
             </NotificationsProvider>
-        </AppProvider>
+        </AppProvider >
     );
 }

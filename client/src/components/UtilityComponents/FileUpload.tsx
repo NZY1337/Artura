@@ -45,7 +45,7 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
     };
 
     return (
-        <Stack spacing={2} alignItems="center" height={"90vh"}
+        <Stack spacing={2} alignItems="center" height={"50vh"}
             sx={{
                 border: "5px",
                 borderStyle: "double",
@@ -75,7 +75,7 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
                     <img
                         src={preview}
                         alt="Preview"
-                        style={{ width: "100%", borderRadius: "8px", objectFit: "cover", height: '100%' }}
+                        style={{ width: "100%", borderRadius: "8px", objectFit: "contain", height: '100%' }}
                     />
 
                     <IconButton

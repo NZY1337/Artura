@@ -74,7 +74,6 @@ export default function HistoryDrawer() {
                     borderRadius: '5px',
                     p: .5,
                     '&:hover': {
-                        // backgroundColor: 'unset',
                         borderRadius: '5px',
                         color: 'white',
                     }
