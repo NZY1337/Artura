@@ -8,13 +8,13 @@ export interface DynamicSelectProps {
     options: string[] | undefined;
     keys: string[] | undefined;
     onChange: (
-      event:
-        | SelectChangeEvent<string | number>
-        | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+        event:
+            | SelectChangeEvent<string | number>
+            | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
     ) => void;
-  }
-  
-  const DynamicSelect: React.FC<DynamicSelectProps> = ({
+}
+
+const DynamicSelect: React.FC<DynamicSelectProps> = ({
     label,
     id,
     name,
@@ -22,26 +22,25 @@ export interface DynamicSelectProps {
     options = [],
     keys = [],
     onChange,
-  }) => {
+}) => {
     return (
-      <FormControl fullWidth>
-        <FormLabel sx={{mb: 1}} htmlFor={id}>{label}</FormLabel>
-        <Select
-          id={id}
-          name={name}
-          value={value}
-          onChange={onChange}
-          sx={{ svg: { color: "grey.500" } }}
-        >
-          {options.map((option, index) => (
-            <MenuItem key={keys[index]} value={keys[index]}>
-              {option}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+        <FormControl fullWidth>
+            <FormLabel sx={{ mb: 1 }} htmlFor={id}>{label}</FormLabel>
+            <Select
+                id={id}
+                name={name}
+                value={value}
+                onChange={onChange}
+                sx={{ svg: { color: "grey.500" } }}
+            >
+                {options.map((option, index) => (
+                    <MenuItem key={keys[index]} value={keys[index]}>
+                        {option}
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
     );
-  };
-  
-  export default DynamicSelect;
-  
+};
+
+export default DynamicSelect;

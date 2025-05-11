@@ -1,11 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Stack, Typography, IconButton } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Rotate90DegreesCcw } from "@mui/icons-material";
-
-import { ROTATION } from "../../helpers/constants";
-
 import { useNotifications } from '@toolpad/core/useNotifications';
 
 type FileUploadProps = {
@@ -49,12 +45,12 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
     };
 
     return (
-        <Stack spacing={2} alignItems="center" height={"50vh"}
+        <Stack spacing={2} alignItems="center" height={"90vh"}
             sx={{
                 border: "5px",
                 borderStyle: "double",
                 borderColor: "grey.800",
-                padding: 3,
+                padding: 1,
                 borderRadius: 2,
                 textAlign: "center",
                 cursor: "pointer",
@@ -86,7 +82,7 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
                         sx={{
                             position: "absolute",
                             top: 5,
-                            right: 0,
+                            right: 5,
                             backgroundColor: "rgba(0,0,0,0.5)",
                             color: "white",
                             "&:hover": { backgroundColor: "rgba(0,0,0,0.8)" },

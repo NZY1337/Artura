@@ -43,7 +43,7 @@ const solutions = [
 const DASHBOARD_NAVIGATION: Navigation = [
     {
         segment: 'dashboard',
-        title: 'Overview',
+        title: 'Dashboard',
         icon: <DashboardIcon />,
         // children: [
         //     {

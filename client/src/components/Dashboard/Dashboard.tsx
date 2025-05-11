@@ -11,9 +11,9 @@ import { PageContainer } from '@toolpad/core/PageContainer';
 import DesignGenerator from './variations/DesignGenerator';
 import VirtualStaging from './variations/VirtualStaging';
 import Landscaping from './variations/Landscaping';
+import Overview from './Overview';
 
 // utils
-import ProfileDashboard from './components/User/DashboardProfile';
 import { DASHBOARD_NAVIGATION } from '../../helpers/constants';
 
 // hooks
@@ -24,6 +24,7 @@ import { type Router } from '@toolpad/core';
 
 // clerk
 import { useUser, useClerk, UserProfile } from '@clerk/clerk-react';
+import DesignGeneratorBackground from '../DesignBackgroundGenerator';
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -48,7 +49,7 @@ export default function Dashboard() {
     const renderContent = () => {
         switch (router.pathname) {
             case '/dashboard':
-                return <ProfileDashboard />;
+                return <Overview />;
 
             case '/dashboard/design-generator':
                 return <DesignGenerator />;
@@ -73,13 +74,17 @@ export default function Dashboard() {
             authentication={authentication}
             navigation={DASHBOARD_NAVIGATION}
             router={router}
-            theme={dashboardTheme}>
+            theme={dashboardTheme}
+        >
             <NotificationsProvider slotProps={{ snackbar: { anchorOrigin: { vertical: 'bottom', horizontal: 'right' } } }}>
                 <DashboardLayout
                     slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
-                    <PageContainer>
-                        {renderContent()}
-                    </PageContainer>
+                    <DesignGeneratorBackground>
+                        <PageContainer>
+                            {renderContent()}
+                        </PageContainer>
+                    </DesignGeneratorBackground>
+
                 </DashboardLayout>
             </NotificationsProvider>
         </AppProvider>
