@@ -24,7 +24,6 @@ import { type Router } from '@toolpad/core';
 
 // clerk
 import { useUser, useClerk, UserProfile } from '@clerk/clerk-react';
-import DesignGeneratorBackground from '../DesignBackgroundGenerator';
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -74,18 +73,13 @@ export default function Dashboard() {
             authentication={authentication}
             navigation={DASHBOARD_NAVIGATION}
             router={router}
-            theme={dashboardTheme}
-        >
+            theme={dashboardTheme}>
             <NotificationsProvider slotProps={{ snackbar: { anchorOrigin: { vertical: 'bottom', horizontal: 'right' } } }}>
                 <DashboardLayout
-                    sx={{ position: 'relative' }}
                     slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
-                    {/* <DesignGeneratorBackground> */}
-                    <PageContainer >
+                    <PageContainer sx={{ position: 'relative' }}>
                         {renderContent()}
                     </PageContainer>
-                    {/* </DesignGeneratorBackground> */}
-
                 </DashboardLayout>
             </NotificationsProvider>
         </AppProvider >

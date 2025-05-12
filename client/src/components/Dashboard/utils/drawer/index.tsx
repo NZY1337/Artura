@@ -7,6 +7,7 @@ import { styled } from '@mui/material/styles';
 import History from '@mui/icons-material/History';
 import Close from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
+import HistoryVariations from './History';
 
 const DashboardDrawer = styled(Drawer)(({ theme }) => ({
     '.MuiList-root': {
@@ -31,8 +32,8 @@ const DashboardDrawer = styled(Drawer)(({ theme }) => ({
         color: theme.palette.warning.light,
         // backgroundColor: 'unset',
         position: 'absolute',
-        top: 0,
-        right: 0,
+        left: '0px',
+        top: '70px',
         '&:hover': {
             boxShadow: 'none',
             color: theme.palette.warning.dark,
@@ -58,18 +59,22 @@ export default function HistoryDrawer() {
         setOpen(newOpen);
     };
 
-    const DrawerList = (
-        <Box sx={{ width: 250 }} onClick={toggleDrawer(false)}>
-            <Button color="warning" className='close-drawer'><Close />Close</Button>
-        </Box>
+    const DrawerContent = (
+        <Box sx={{ width: '20vw', height: '100%' }} onClick={toggleDrawer(false)} className='dashboard-history'>   
+            <Button sx={{ zIndex:1 }} color="warning" className='close-drawer'><Close />Close</Button>
+            <Box onClick={(e) => e.stopPropagation()}>
+                <HistoryVariations />
+            </Box>
+        </Box>  
     );
 
     return (
         <>
             <IconButton
+                onClick={toggleDrawer(true)}
                 sx={{
                     position: 'absolute',
-                    top: '5px',
+                    top: '10px',
                     right: '15px',
                     borderRadius: '5px',
                     p: .5,
@@ -77,14 +82,13 @@ export default function HistoryDrawer() {
                         borderRadius: '5px',
                         color: 'white',
                     }
-                }}
-                onClick={toggleDrawer(true)} className='dashboard-history-btn'>
+                }}>
                 <History sx={{ mr: .5 }} />
                 <Typography>History</Typography>
             </IconButton>
 
-            <DashboardDrawer anchor='right' open={open} onClose={toggleDrawer(false)}>
-                {DrawerList}
+            <DashboardDrawer sx={{position:'relative', width: '20vw'}} anchor='right' open={open} onClose={toggleDrawer(false)}>
+                {DrawerContent}
             </DashboardDrawer>
         </>
     );
