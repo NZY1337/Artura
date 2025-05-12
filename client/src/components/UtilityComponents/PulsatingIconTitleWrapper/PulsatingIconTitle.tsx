@@ -16,8 +16,8 @@ const PulsatingIconTitle = ({
             sx={{
                 ...(selected ? { 
                     border: '5px solid #191B19', 
-                    borderStyle: 'ridge', 
-                    backgroundColor: '#191B19',
+                    borderStyle: 'double', 
+                    backgroundColor: '#000',
                     opacity: '.9' 
                 } : { border: '5px solid transparent' }),
 

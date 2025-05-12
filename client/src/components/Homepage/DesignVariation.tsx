@@ -21,7 +21,7 @@ const DesignVariations = () => {
             display: 'flex', 
             position: 'relative',
             zIndex: 1,
-            backgroundColor: '#111',
+            // backgroundColor: '#111',
             '&::after': {       
                 content: '""', 
                 display: 'block',         

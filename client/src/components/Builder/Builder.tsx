@@ -6,7 +6,7 @@ const Builder = () => {
     return (
         <SectionWrapper
             sx={{
-                backgroundColor: '#111',
+                // backgroundColor: '#111',
             }}
             justify='center'
             innerWidth='xl'
