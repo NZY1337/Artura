@@ -28,7 +28,9 @@ import { useUser, useClerk, UserProfile } from '@clerk/clerk-react';
 export default function Dashboard() {
     const navigate = useNavigate();
     const { user } = useUser();
-    const { signOut } = useClerk()
+    const { signOut } = useClerk();
+
+    // console.log(user?.publicMetadata)
 
     const router: Router = useMemo(() => ({
         navigate: (path: string | URL) => {
