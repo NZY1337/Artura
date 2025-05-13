@@ -3,7 +3,8 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import UserIcon from '@mui/icons-material/Person';
-import { DescriptionOutlined } from '@mui/icons-material';
+import SofaIcon from "@mui/icons-material/Weekend";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 // import goodPhoto1 from "../assets/guidelines/goodPhoto1.png"
 // import goodPhoto2 from "../assets/guidelines/goodPhoto2.png"
@@ -14,8 +15,7 @@ import { DescriptionOutlined } from '@mui/icons-material';
 // import badPhoto3 from "../assets/guidelines/badPhoto3.png"
 // import badPhoto4 from "../assets/guidelines/badPhoto4.png"
 
-import SofaIcon from "@mui/icons-material/Weekend";
-import DeleteIcon from "@mui/icons-material/Delete";
+const BACKEND_URL = "http://localhost:3010/api";
 
 const VIRTUAL_STAGING = {
     label: "Virtual Staging",
@@ -140,6 +140,7 @@ export {
     builderNumberOfDesigns,
     // goodPhotosData,
     // badPhotosData,
+    BACKEND_URL,
     solutions,
     EMPTY_YOUR_SPACE,
 };

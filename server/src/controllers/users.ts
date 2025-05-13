@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import express from 'express';
 import { clerkClient } from "@clerk/express";
 import { prismaClient } from "../utils/prismaClient";
+import { BadRequestException } from "../middlewares/errorMiddleware";
 const router = express.Router();
 
 /**
@@ -14,10 +15,15 @@ const router = express.Router();
 
 // api/users/:userId/metadata
 export const updateUserRole = async (req: Request, res: Response) => {
+    const { role } = req.body;
+    if (!role) {
+        throw new BadRequestException(400, "Role is required");
+    }
+
     const { userId } = req.params;
     clerkClient.users.getUserList()
 
-    const user = await clerkClient.users.updateUserMetadata(userId, { publicMetadata: { role: 'admin' } });
+    const user = await clerkClient.users.updateUserMetadata(userId, { publicMetadata: { role } });
     res.status(200).json(user);
 };
 

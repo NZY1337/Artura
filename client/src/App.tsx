@@ -9,17 +9,17 @@ import ProtectedRoute from './components/Protected/ProtectedRoute';
 function App() {
     return (
         <Router>
-          <CssBaseline />
-
+            <CssBaseline />
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="*" element={<NotFoundPage />} /> 
-              <Route path="/" element={<ProtectedRoute />}>
-                {/* <Route path="dashboard" element={<Navigate to="/dashboard" />} /> ✅ Redirect */}
-                <Route path="dashboard/*" element={<Dashboard />} />
-              </Route>
+                <Route path="/" element={<Home />} />
+                <Route path="*" element={<NotFoundPage />} />
+                <Route path="/" element={<ProtectedRoute />}>
+                    {/* <Route path="dashboard" element={<Navigate to="/dashboard" />} /> ✅ Redirect */}
+                    <Route path="dashboard/*" element={<Dashboard />} />
+                </Route>
             </Routes>
         </Router>
-)};
+    )
+};
 
 export default App;

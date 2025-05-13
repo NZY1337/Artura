@@ -43,7 +43,7 @@ const KeyPoints = () => {
             innerWidth='lg'
             outerWidth={false}
             title={<SectionWrapper.Title variant="h2">
-                Easy & Fast A.I. Technology
+                Easy and Fast A.I. Technology
             </SectionWrapper.Title>
             }>
             <Grid container gap={10} justifyContent={"center"} mt={10}>
