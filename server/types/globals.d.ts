@@ -1,12 +1,13 @@
-export { }
+import { User } from "@prisma/client";
 
-// Create a type for the roles
-export type Roles = 'admin' | 'moderator'
+export { };
 
 declare global {
-    interface CustomJwtSessionClaims {
-        metadata: {
-            role?: Roles
+    namespace Express {
+        export interface Request {
+            auth: {
+                userId: string;
+            }
         }
     }
 }

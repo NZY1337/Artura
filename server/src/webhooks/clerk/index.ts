@@ -2,21 +2,9 @@ import { Request, Response } from 'express';
 import { Webhook } from 'svix';
 import { CLERK_WEBHOOK_SIGNING_SECRET } from '../../../secrets'
 import { BadRequestException, InternalException, ErrorCode } from '../../middlewares/errorMiddleware';
-import { prismaClient } from '../../utils/prismaClient';
-
-// Session created event received: {
-//   abandon_at: 3894550325985,
-//   actor: null,
-//   client_id: 'client_2vqtaYe0RxROs8Lo9QjhBSIm3Cm',
-//   created_at: 1747066678985,
-//   expire_at: 3894550325985,
-//   id: 'sess_2x0EdckrPcQ5szoshSsz4huKhfs',
-//   last_active_at: 1747066678985,
-//   object: 'session',
-//   status: 'active',
-//   updated_at: 1747066679028,
-//   user_id: 'user_2vqtdU0El5DW5rI4CyjYSxdQwNF'
-// }
+import { prismaClient, } from '../../utils/prismaClient';
+import { Role } from '@prisma/client';
+import { clerkClient } from "@clerk/express";
 
 export const clerkWebhook = async (req: Request, res: Response) => {
     try {
@@ -49,45 +37,56 @@ export const clerkWebhook = async (req: Request, res: Response) => {
             throw new BadRequestException(ErrorCode.BAD_REQUEST, "Verification error");
         }
 
-        // model User {
-        //     id        String @id @default (uuid())
-        //     name      String
-        //     email     String @unique
-        //     password  String
-        //     role      Role @default (USER)
-        //     createdAt DateTime @default (now())
-        //     updatedAt DateTime @updatedAt
-        // }
-
-        // id: 'idn_2x0IPK36q0hHclUpK2rCDDQWNZR',
-        // 'user_2x0KddgiAQEk0xB6ksPOvs2qj7p
-
         try {
             // Handle specific event types
             if (evt.type === 'user.created') {
                 const { id, email_addresses, username, role, created_at, updated_at } = evt.data;
+
+                await clerkClient.users.updateUserMetadata(id, { publicMetadata: { role: 'user' } });
+
                 const user = {
                     id,
                     email: email_addresses[0].email_address,
                     username: username || null,
-                    role: role || "MEMBER",
+                    role: Role.user,
                     createdAt: new Date(created_at),
                     updatedAt: new Date(updated_at),
                 };
 
-                await prismaClient.user.upsert({
-                    where: { id },
-                    update: {},
-                    create: {
-                        ...user
-                    }
+                await prismaClient.user.create({
+                    data: { ...user }
                 })
             }
 
-            console.log("Ev Data:", evt.data,);
-            console.log("Ev Type:", evt.type);
+            if (evt.type === 'user.updated') {
+                console.log('hook triggered')
+                const { id, email_addresses, username, role, created_at, updated_at, public_metadata } = evt.data;
+
+                const user = {
+                    id,
+                    email: email_addresses[0].email_address,
+                    username: username || null,
+                    role: public_metadata.role || Role.user,
+                    createdAt: new Date(created_at),
+                    updatedAt: new Date(updated_at),
+                };
+
+                await prismaClient.user.update({
+                    where: { id: user.id },
+                    data: { ...user }
+                })
+            }
+
+            if (evt.type === 'user.deleted') {
+                const { id } = evt.data;
+
+                await prismaClient.user.delete({
+                    where: { id }
+                })
+            }
         } catch (error) {
-            console.error("Error: Could not handle webhook event:", error);
+            console.log(error);
+            return res.status(500).json({ error });
         }
 
         return res.status(200).json({ success: true });
