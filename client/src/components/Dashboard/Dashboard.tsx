@@ -30,7 +30,7 @@ export default function Dashboard() {
     const { user } = useUser();
     const { signOut } = useClerk();
 
-    // console.log(user?.publicMetadata)
+    console.log(user);
 
     const router: Router = useMemo(() => ({
         navigate: (path: string | URL) => {

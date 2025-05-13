@@ -21,7 +21,6 @@ const KeyPoints = () => {
                 alignItems: 'center',
                 position: 'relative',
                 zIndex: 1,
-                backgroundColor: '#000000',
                 '&::after': {
                     content: '""',
                     display: 'block',
