@@ -83,6 +83,11 @@ const DASHBOARD_NAVIGATION: Navigation = [
         title: 'Profile',
         icon: <UserIcon />,
     },
+    {
+        segment: 'dashboard/users',
+        title: 'Users',
+        icon: <UserIcon />,
+    },
 ];
 
 // // Example data arrays

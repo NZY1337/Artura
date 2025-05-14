@@ -14,7 +14,7 @@ const updateUserRole = async (userId: string, role: string) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ role }),
+        body: JSON.stringify({ role, userId }),
     });
     if (!response.ok) {
         throw new Error('Network response was not ok');

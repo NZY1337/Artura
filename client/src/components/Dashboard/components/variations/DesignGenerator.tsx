@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import HistoryDrawer from "../utils/drawer";
+import AIBuilder from "../../../Builder/AIBuilder";
+import HistoryDrawer from "../../utils/drawer";
 
-export default function VirtualStaging() {
+export default function DesignGenerator() {
     return (
         <>
             <Grid container spacing={3}>
@@ -12,7 +14,7 @@ export default function VirtualStaging() {
                     </Typography>
                 </Grid>
             </Grid>
-
+            <AIBuilder />
             <HistoryDrawer />
         </>
     );

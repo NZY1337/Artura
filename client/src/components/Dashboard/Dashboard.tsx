@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 // components
 import DashboardTitle from './DashboardTitle';
@@ -8,9 +9,10 @@ import dashboardTheme from './themeContext';
 import { AppProvider, type Session } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
-import DesignGenerator from './variations/DesignGenerator';
-import VirtualStaging from './variations/VirtualStaging';
-import Landscaping from './variations/Landscaping';
+import DesignGenerator from './components/variations/DesignGenerator'; // Ensure the file exists at this path or adjust the path accordingly
+import VirtualStaging from './components/variations/VirtualStaging';
+import Landscaping from './components/variations/Landscaping';
+import { Users } from './components/Users';
 import Overview from './Overview';
 
 // utils
@@ -29,8 +31,6 @@ export default function Dashboard() {
     const navigate = useNavigate();
     const { user } = useUser();
     const { signOut } = useClerk();
-
-    console.log(user);
 
     const router: Router = useMemo(() => ({
         navigate: (path: string | URL) => {
@@ -64,6 +64,11 @@ export default function Dashboard() {
             case '/dashboard/profile':
                 return <UserProfile />;
 
+            case '/dashboard/users':
+                return <Users />;
+
+
+
             default:
                 return null;
         }
@@ -79,7 +84,8 @@ export default function Dashboard() {
             <NotificationsProvider slotProps={{ snackbar: { anchorOrigin: { vertical: 'bottom', horizontal: 'right' } } }}>
                 <DashboardLayout
                     slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
-                    <PageContainer sx={{ position: 'relative' }}>
+                    <PageContainer sx={{ position: 'relative', px: 0, padding: 0 }}>
+                        <ToastContainer position="bottom-right" />
                         {renderContent()}
                     </PageContainer>
                 </DashboardLayout>

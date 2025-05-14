@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import HistoryDrawer from "../utils/drawer";
+import HistoryDrawer from "../../utils/drawer";
 
 export default function Landscaping() {
     return (

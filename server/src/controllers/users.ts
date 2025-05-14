@@ -15,15 +15,14 @@ const router = express.Router();
 
 // api/users/:userId/metadata
 export const updateUserRole = async (req: Request, res: Response) => {
-    const { role } = req.body;
-    if (!role) {
-        throw new BadRequestException(400, "Role is required");
+    const { role, userId } = req.body;
+    console.log('role -------------', role);
+
+    if (!role || !userId) {
+        throw new BadRequestException(400, "Role or userId is required");
     }
 
-    const { userId } = req.params;
-    clerkClient.users.getUserList()
-
-    const user = await clerkClient.users.updateUserMetadata(userId, { publicMetadata: { role } });
+    const user = await clerkClient.users.updateUserMetadata(userId, { publicMetadata: { role: role } });
     res.status(200).json(user);
 };
 
