@@ -1,3 +1,8 @@
 /* body, html {
     background: radial-gradient(circle, #272b2f 10%, #000000 100%)!important;
 } */
+
+header {
+    border-bottom: .5px solid gray;
+    border-bottom-style: outset;
+}

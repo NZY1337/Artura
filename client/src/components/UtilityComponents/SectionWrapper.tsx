@@ -6,8 +6,8 @@ import { type TypographyProps } from '@mui/material/Typography';
 
 interface SectionWrapperInterface {
     children: React.ReactNode,
-    innerWidth: Breakpoint | false,
-    outerWidth: Breakpoint | false,
+    innerWidth?: Breakpoint | false,
+    outerWidth?: Breakpoint | false,
     title?: React.ReactNode,
     subtitle1?: React.ReactNode,
     subtitle2?: React.ReactNode,
@@ -41,10 +41,10 @@ const Subtitle = ({ children, variant }: SubtitleProps) => {
     );
 };
 
-const SectionWrapper = ({ 
-    children, 
-    innerWidth, 
-    outerWidth, 
+const SectionWrapper = ({
+    children,
+    innerWidth,
+    outerWidth,
     title,
     subtitle1,
     subtitle2,
@@ -56,24 +56,24 @@ const SectionWrapper = ({
             <Container maxWidth={innerWidth}>
                 {title || subtitle1 || subtitle2 ? (
                     <Grid container justifyContent={justify} spacing={3}>
-                    {title && <Grid size={{ xs: 12, md: 12, lg: 12 }}>
-                        {title}
-                    </Grid>}
+                        {title && <Grid size={{ xs: 12, md: 12, lg: 12 }}>
+                            {title}
+                        </Grid>}
 
-                    {subtitle1 && <Grid size={{ xs: 12, md: 4, lg: 4 }}>
-                        <SectionWrapper.Subtitle variant="body1">
-                            {subtitle1}
-                        </SectionWrapper.Subtitle>    
-                    </Grid>}
+                        {subtitle1 && <Grid size={{ xs: 12, md: 4, lg: 4 }}>
+                            <SectionWrapper.Subtitle variant="body1">
+                                {subtitle1}
+                            </SectionWrapper.Subtitle>
+                        </Grid>}
 
-                    {subtitle2 && <Grid size={{ xs: 12, md: 4, lg: 4 }}>
-                        <SectionWrapper.Subtitle variant="body1">
-                            {subtitle2}
-                        </SectionWrapper.Subtitle>    
-                    </Grid>}
-                </Grid>
+                        {subtitle2 && <Grid size={{ xs: 12, md: 4, lg: 4 }}>
+                            <SectionWrapper.Subtitle variant="body1">
+                                {subtitle2}
+                            </SectionWrapper.Subtitle>
+                        </Grid>}
+                    </Grid>
                 ) : null}
-                
+
                 {children}
             </Container>
         </Container>

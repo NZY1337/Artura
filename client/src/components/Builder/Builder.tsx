@@ -5,6 +5,7 @@ import PulsatingIconTitleWrapper from '../UtilityComponents/PulsatingIconTitleWr
 const Builder = () => {
     return (
         <SectionWrapper
+        title='AI Builder'
             sx={{
                 // backgroundColor: '#111',
             }}
