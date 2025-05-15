@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { errorHandler } from "../middlewares/errorMiddleware";
-import { updateUserRole, getUsers } from "../controllers/users";
+import { updateUserRole, getUsers, deleteUser } from "../controllers/users";
 
 const usersRouter: Router = Router();
 
-usersRouter.put("/:userId/metadata", errorHandler(updateUserRole));
+usersRouter.put("/metadata/updateRole", errorHandler(updateUserRole));
 usersRouter.get("/", errorHandler(getUsers));
+usersRouter.delete("/", errorHandler(deleteUser));
 
 export default usersRouter;

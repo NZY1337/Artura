@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 
 import { useUser } from '@clerk/clerk-react';
 
-
 const ProtectedRoute = () => {
     const { isSignedIn, isLoaded } = useUser();
     const location = useLocation();

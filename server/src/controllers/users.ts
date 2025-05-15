@@ -13,10 +13,9 @@ const router = express.Router();
  * @returns The updated Clerk user object
  */
 
-// api/users/:userId/metadata
+// api/users/metadata/updateRole
 export const updateUserRole = async (req: Request, res: Response) => {
     const { role, userId } = req.body;
-    console.log('role -------------', role);
 
     if (!role || !userId) {
         throw new BadRequestException(400, "Role or userId is required");
@@ -29,4 +28,17 @@ export const updateUserRole = async (req: Request, res: Response) => {
 export const getUsers = async (req: Request, res: Response) => {
     const users = await prismaClient.user.findMany();
     res.status(200).json(users);
+}
+
+export const deleteUser = async (req: Request, res: Response) => {
+    const { userId } = req.body;
+
+    console.log(userId, '----------------');
+
+    if (!userId) {
+        throw new BadRequestException(400, "Role or userId is required");
+    }
+
+    const user = await clerkClient.users.deleteUser(userId);
+    res.status(200).json({ message: 'User delete sucessfully!' });
 }

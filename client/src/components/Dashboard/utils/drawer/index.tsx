@@ -10,17 +10,15 @@ import { IconButton } from '@mui/material';
 import HistoryVariations from './History';
 
 const DashboardDrawer = styled(Drawer)(({ theme }) => ({
+    '.MuiPaper-root': {
+        top: '65px'
+    },
     '.MuiList-root': {
         display: 'flex',
         flexDirection: 'column',
     },
     '.MuiBox-root': {
         position: 'relative',
-        marginTop: '.5rem',
-
-        '.MuiList-root': {
-            marginTop: '1rem',
-        },
     },
     '.MuiMenuItem-root': {
         minHeight: '48px',
@@ -30,10 +28,7 @@ const DashboardDrawer = styled(Drawer)(({ theme }) => ({
     },
     '.close-drawer': {
         color: theme.palette.warning.light,
-        // backgroundColor: 'unset',
-        position: 'absolute',
         left: '0px',
-        top: '70px',
         '&:hover': {
             boxShadow: 'none',
             color: theme.palette.warning.dark,
@@ -60,12 +55,12 @@ export default function HistoryDrawer() {
     };
 
     const DrawerContent = (
-        <Box sx={{ width: '20vw', height: '100%' }} onClick={toggleDrawer(false)} className='dashboard-history'>   
-            <Button sx={{ zIndex:1 }} color="warning" className='close-drawer'><Close />Close</Button>
+        <Box sx={{ width: '20vw', height: '100%' }} onClick={toggleDrawer(false)} className='dashboard-history'>
+            <Button sx={{ zIndex: 1 }} color="warning" className='close-drawer'><Close />Close</Button>
             <Box onClick={(e) => e.stopPropagation()}>
                 <HistoryVariations />
             </Box>
-        </Box>  
+        </Box>
     );
 
     return (
@@ -87,7 +82,7 @@ export default function HistoryDrawer() {
                 <Typography>History</Typography>
             </IconButton>
 
-            <DashboardDrawer sx={{position:'relative', width: '20vw'}} anchor='right' open={open} onClose={toggleDrawer(false)}>
+            <DashboardDrawer sx={{ position: 'relative', width: '20vw' }} anchor='right' open={open} onClose={toggleDrawer(false)}>
                 {DrawerContent}
             </DashboardDrawer>
         </>
