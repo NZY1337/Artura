@@ -27,6 +27,7 @@ export const updateUserRole = async (req: Request, res: Response) => {
 
 export const getUsers = async (req: Request, res: Response) => {
     const users = await prismaClient.user.findMany();
+    console.log(users);
     res.status(200).json(users);
 }
 

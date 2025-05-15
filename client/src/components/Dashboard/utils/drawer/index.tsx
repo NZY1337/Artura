@@ -46,7 +46,6 @@ const DashboardDrawer = styled(Drawer)(({ theme }) => ({
     }
 }));
 
-
 export default function HistoryDrawer() {
     const [open, setOpen] = React.useState(false);
 

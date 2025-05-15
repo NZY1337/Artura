@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { getUsers, updateUserRole, deleteUser } from '../../../services/users';
 import { queryClient } from '../../../context/TanstackQuery';
-import GenericModal from '../../UtilityComponents/GenericModal';
+import GenericDialog from '../../UtilityComponents/GenericDialog';
 import { DataGrid } from '@mui/x-data-grid';
 
 export const Users = () => {
@@ -156,7 +156,7 @@ export const Users = () => {
                 }} columns={columns} rows={users || []} />
             </div>
 
-            <GenericModal open={open} onClose={() => setOpen(false)}>
+            <GenericDialog open={open} onClose={() => setOpen(false)}>
                 <>
                     <Typography variant="body1" sx={{ mb: 2 }}>
                         Are you sure you want to delete this user?
@@ -170,7 +170,7 @@ export const Users = () => {
                         </Button>
                     </Stack>
                 </>
-            </GenericModal>
+            </GenericDialog>
         </Container >
     )
 }

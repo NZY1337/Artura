@@ -8,7 +8,6 @@ import { clerkWebhook } from './src/webhooks/clerk';
 import { clerkClient, requireAuth, getAuth, clerkMiddleware } from '@clerk/express'
 import rootRouter from './src/routes';
 
-
 const app: Express = express();
 const server = createServer(app);
 

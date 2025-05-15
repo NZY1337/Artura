@@ -4,7 +4,7 @@ import DesignVariations from './DesignVariation';
 import Footer from '../Footer/Footer';
 import HomeServicesPreview from './HomeServicesPreview';
 import CompareSlider from '../UtilityComponents/CompareSlider';
-import { SuccessMetricsSection } from './Something';
+import PricingSection from './PricingPlan';
 import Carousel from '../UtilityComponents/Carousel';
 
 const Home = () => {
@@ -13,10 +13,9 @@ const Home = () => {
         <HomeServicesPreview />
         <CompareSlider />
         <Carousel />
-
         <DesignVariations />
         <KeyPoints />
-        <SuccessMetricsSection />
+        <PricingSection />
         <Footer />
     </>
 }

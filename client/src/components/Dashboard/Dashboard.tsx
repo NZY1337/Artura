@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { useTheme } from '@mui/material';
 
 // components
 import DashboardTitle from './DashboardTitle';
@@ -31,6 +32,8 @@ export default function Dashboard() {
     const navigate = useNavigate();
     const { user } = useUser();
     const { signOut } = useClerk();
+    const theme = useTheme();
+    console.log(theme.palette.mode)
 
     const router: Router = useMemo(() => ({
         navigate: (path: string | URL) => {
@@ -81,6 +84,12 @@ export default function Dashboard() {
             theme={dashboardTheme}>
             <NotificationsProvider slotProps={{ snackbar: { anchorOrigin: { vertical: 'bottom', horizontal: 'right' } } }}>
                 <DashboardLayout
+                    sx={{
+                        'nav.MuiBox-root': {
+                            backgroundColor: '#e5e5f7',
+                            backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #212121 150px), repeating-linear-gradient(#212121, #000000)`
+                        }
+                    }}
                     slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
                     <PageContainer sx={{ position: 'relative', px: 0, padding: 0 }}>
                         <ToastContainer position="bottom-right" />

@@ -22,7 +22,6 @@ createRoot(document.getElementById('root')!).render(
                     <App />
                 </AppThemeProvider>
             </QueryClientProvider>
-
         </ClerkProvider>
     </StrictMode >,
 )

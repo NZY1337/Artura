@@ -43,7 +43,6 @@ export const clerkWebhook = async (req: Request, res: Response) => {
                 const { id, email_addresses, username, role, created_at, updated_at } = evt.data;
 
                 await clerkClient.users.updateUserMetadata(id, { publicMetadata: { role: 'user' } });
-
                 const user = {
                     id,
                     email: email_addresses[0].email_address,
@@ -52,6 +51,8 @@ export const clerkWebhook = async (req: Request, res: Response) => {
                     createdAt: new Date(created_at),
                     updatedAt: new Date(updated_at),
                 };
+
+                console.log('hoook griggered ---------', user)
 
                 await prismaClient.user.create({
                     data: { ...user }
@@ -70,6 +71,7 @@ export const clerkWebhook = async (req: Request, res: Response) => {
                     updatedAt: new Date(updated_at),
                 };
 
+                console.log(user);
                 await prismaClient.user.update({
                     where: { id: user.id },
                     data: { ...user }
@@ -78,7 +80,7 @@ export const clerkWebhook = async (req: Request, res: Response) => {
 
             if (evt.type === 'user.deleted') {
                 const { id } = evt.data;
-
+                console.log('---user-deleted');
                 await prismaClient.user.delete({
                     where: { id }
                 })

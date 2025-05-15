@@ -7,11 +7,11 @@ import {
 } from "@mui/material";
 
 import FilterVintageIcon from '@mui/icons-material/FilterVintage';
-import interior from '../../assets/interior-designers.svg';
 import realEstate from '../../assets/realestate.png';
 import DomainAddSharpIcon from '@mui/icons-material/DomainAddSharp';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
+import ChairIcon from '@mui/icons-material/Chair';
 
 const KeyPoints = () => {
     return (
@@ -52,7 +52,7 @@ const KeyPoints = () => {
                         <Typography variant="subtitle1" color='grey.400'>
                             Family & Friends, Gardners
                         </Typography>
-                        <FilterVintageIcon fontSize='large' sx={{ color: '#00FF00' }} />
+                        <FilterVintageIcon fontSize='large' sx={{ color: 'warning.main' }} />
                     </Stack>
                 </Grid>
 
@@ -62,7 +62,7 @@ const KeyPoints = () => {
                             Interior Designers
                         </Typography>
 
-                        <img src={interior} style={{ width: '40px', height: 'auto' }} />
+                        <ChairIcon fontSize='large' sx={{ color: 'warning.main' }} />
                     </Stack>
                 </Grid>
 
@@ -71,7 +71,7 @@ const KeyPoints = () => {
                         <Typography variant="subtitle1" color='grey.400'>
                             Architects, Home & Builders
                         </Typography>
-                        <EngineeringIcon fontSize='large' sx={{ color: '#00FF00' }} />
+                        <EngineeringIcon fontSize='large' sx={{ color: 'warning.main' }} />
                     </Stack>
                 </Grid>
 
@@ -80,7 +80,7 @@ const KeyPoints = () => {
                         <Typography variant="subtitle1" color='grey.400'>
                             Real Estate Agencies
                         </Typography>
-                        <DomainAddSharpIcon fontSize='large' sx={{ color: '#00FF00' }} />
+                        <DomainAddSharpIcon fontSize='large' sx={{ color: 'warning.main' }} />
                     </Stack>
                 </Grid>
 
