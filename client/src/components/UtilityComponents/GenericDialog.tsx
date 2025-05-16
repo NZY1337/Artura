@@ -13,7 +13,7 @@ interface GenericDialogProps {
 const GenericDialog = ({ children, open, onClose }: GenericDialogProps) => {
     return (
         <Dialog open={open} onClose={onClose}>
-            <Box sx={{ height: 'inherit' }}>
+            <Box sx={{ height: 'inherit', padding: 2 }}>
                 {children}
             </Box>
         </Dialog >

@@ -6,15 +6,17 @@ import HomeServicesPreview from './HomeServicesPreview';
 import CompareSlider from '../UtilityComponents/CompareSlider';
 import PricingSection from './PricingPlan';
 import Carousel from '../UtilityComponents/Carousel';
+import TwoImageLayout from './Something';
 
 const Home = () => {
     return <>
         <Hero />
         <HomeServicesPreview />
         <CompareSlider />
+        <KeyPoints />
         <Carousel />
         <DesignVariations />
-        <KeyPoints />
+        <TwoImageLayout />
         <PricingSection />
         <Footer />
     </>

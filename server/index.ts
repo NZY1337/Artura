@@ -27,6 +27,7 @@ app.get('/', (req, res) => {
     if (!req.auth.userId) {
         // User is not authenticated        
         // throw new BadRequestException(400, "Bad Request");}
+        // return res.redirect('/login');
         return res.status(400).json({ error: "Bad Request" });
     }
     res.send('Hello World!');

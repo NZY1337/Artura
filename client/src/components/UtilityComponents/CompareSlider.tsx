@@ -5,7 +5,7 @@ import img2 from '../../assets/kitchen-before.png';
 
 export const CompareSlider = () => {
     return (
-        <Container>
+        <Container sx={{ mb: 10 }}>
             <Grid container>
                 <Grid size={{ xs: 12 }}>
                     <ReactCompareSlider
