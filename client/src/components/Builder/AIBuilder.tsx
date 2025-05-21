@@ -1,76 +1,50 @@
-import React, { useState } from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState, useEffect } from "react";
 
 // components
 import { Grid } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Paper from "@mui/material/Paper";
 import DynamicSelect from "../UtilityComponents/DynamicSelect";
 import FileUpload from "../UtilityComponents/FileUpload";
 
+import { DESIGN_THEMES, SPACE_TYPES } from "../../helpers/constants";
 // types
 import { type DynamicSelectProps } from "../UtilityComponents/DynamicSelect";
 
 // types
 type OnchangeType = DynamicSelectProps['onChange'];
 
-const AIBuilder = () => {
+type AIBuilderProps = {
+    onSubmit: (event: React.FormEvent<HTMLFormElement>, stateBuilder: object) => void;
+};
+
+const AIBuilder = ({ onSubmit }: AIBuilderProps) => {
     const [preview, setPreview] = useState<string | null>(null);
-
-    const spaceTypes = [
-        { value: 'ST_livingRoom', label: 'Living Room' },
-        { value: 'ST_bedroom', label: 'Bedroom' },
-        { value: 'ST_kitchen', label: 'Kitchen' },
-        { value: 'ST_bathroom', label: 'Bathroom' },
-        { value: 'ST_diningRoom', label: 'Dining Room' },
-        { value: 'ST_homeOffice', label: 'Home Office' },
-        { value: 'ST_kidsRoom', label: 'Kids Room' },
-        { value: 'ST_hallway', label: 'Hallway / Corridor' },
-        { value: 'ST_balcony', label: 'Balcony / Terrace' },
-        { value: 'ST_gameRoom', label: 'Game Room' },
-        { value: 'ST_study', label: 'Study' },
-    ];
-
-    const designThemes = [
-        { value: 'DT_modern', label: 'Modern' },
-        { value: 'DT_contemporary', label: 'Contemporary' },
-        { value: 'DT_minimalist', label: 'Minimalist' },
-        { value: 'DT_scandinavian', label: 'Scandinavian' },
-        { value: 'DT_industrial', label: 'Industrial' },
-        { value: 'DT_midCentury', label: 'Mid-Century Modern' },
-        { value: 'DT_traditional', label: 'Traditional' },
-        { value: 'DT_classic', label: 'Classic' },
-        { value: 'DT_baroque', label: 'Baroque' },
-        { value: 'DT_japanese', label: 'Japanese Zen' },
-        { value: 'DT_wabiSabi', label: 'Wabi-Sabi' },
-        { value: 'DT_farmhouse', label: 'Farmhouse' },
-        { value: 'DT_rustic', label: 'Rustic' },
-        { value: 'DT_bohemian', label: 'Bohemian' },
-        { value: 'DT_artDeco', label: 'Art Deco' },
-        { value: 'DT_victorian', label: 'Victorian' },
-        { value: 'DT_coastal', label: 'Coastal' },
-        { value: 'DT_tropical', label: 'Tropical' },
-        { value: 'DT_urban', label: 'Urban' },
-        { value: 'DT_maximalist', label: 'Maximalist' },
-        { value: 'DT_futuristic', label: 'Futuristic' },
-    ];
-    const designThemesKeys = designThemes.map((designTheme) => designTheme.value);
-    const designThemesLabels = designThemes.map((designTheme) => designTheme.label);
-
-    const spaceTypesKeys = spaceTypes.map((spaceType) => spaceType.value);
-    const spaceTypesLabels = spaceTypes.map((spaceType) => spaceType.label);
-
     const [stateBuilder, setStateBuilder] = useState({
-        spaceType: spaceTypes[0].value,
-        designThemes: designThemes[0].value,
-        numberOfDesigns: 1,
-        aiIntervention: 1,
-        customInstructions: "",
-        useCustomInstructions: false,
+        spaceType: SPACE_TYPES[0].value,
+        designTheme: DESIGN_THEMES[0].value,
+        outputFormat: 'png',
+        quality: 'high',
+        generatedImages: 1,
+        size: '1024x1024',
+        prompt: "",
+        usePrompt: true,
     });
+
+    const designThemesKeys = DESIGN_THEMES.map((designTheme) => designTheme.value);
+    const designThemesLabels = DESIGN_THEMES.map((designTheme) => designTheme.label);
+    const spaceTypesKeys = SPACE_TYPES.map((spaceType) => spaceType.value);
+    const spaceTypesLabels = SPACE_TYPES.map((spaceType) => spaceType.label);
+
+    const { spaceType, designTheme, prompt } = stateBuilder;
+    const prefixPrompt = `Generate a design for a ${spaceType} in a ${designTheme} style. the design should have: `;
+    const finalPrompt = `${prefixPrompt}${prompt}`;
 
     const handleChange: OnchangeType = (event) => {
         const { name, value } = event.target;
@@ -80,27 +54,31 @@ const AIBuilder = () => {
         }));
     };
 
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { checked } = event.target;
-        setStateBuilder((prevState) => ({
-            ...prevState,
-            useCustomInstructions: checked,
-        }));
+    const finalStateBuilder = {
+        n: stateBuilder.generatedImages,
+        prompt: `${finalPrompt} ${stateBuilder.prompt}`,
+        size: stateBuilder.size,
+        output_format: stateBuilder.outputFormat,
+        quality: stateBuilder.quality,
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-    };
+    // const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const { checked } = event.target;
+    //     setStateBuilder((prevState) => ({
+    //         ...prevState,
+    //         usePrompt: checked,
+    //     }));
+    // };
 
     return (
-        <Grid spacing={3} container justifyContent="center" textAlign={"left"} my={5} height={"inherit"}>
-            <Grid size={{ xs: 12, md: 6, lg: 4, xl: 8 }}>
+        <Grid spacing={3} container textAlign={"left"} my={5} height={"inherit"}>
+            <Grid size={{ xs: 12, md: 6, lg: 4, xl: 6 }}>
                 {<FileUpload preview={preview} setPreview={setPreview} />}
             </Grid>
 
-            <Grid size={{ xs: 12, md: 6, lg: 4, xl: 4 }}>
+            <Grid size={{ xs: 12, xl: 6 }}>
                 <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
-                    <Stack spacing={3} component="form" onSubmit={handleSubmit}>
+                    <Stack spacing={3} component="form" onSubmit={(e) => onSubmit(e, finalStateBuilder)}>
                         <DynamicSelect
                             label="Space Type"
                             id="space-type"
@@ -114,29 +92,85 @@ const AIBuilder = () => {
                         <DynamicSelect
                             label="Design Themes"
                             id="design-themes"
-                            name="designThemes"
+                            name="designTheme"
                             onChange={handleChange}
-                            value={stateBuilder.designThemes}
+                            value={stateBuilder.designTheme}
                             options={designThemesLabels}
                             keys={designThemesKeys}
                         />
 
-                        <FormControlLabel
-                            label="Custom AI instructions"
-                            control={<Checkbox checked={stateBuilder.useCustomInstructions} onChange={handleCheckboxChange} color="primary" />}
-                        />
-
-                        {stateBuilder.useCustomInstructions && (
+                        {stateBuilder.usePrompt && (
                             <TextField
                                 multiline
-                                rows={4}
+                                rows={8}
+                                sx={{ mt: 0, p: 0 }}
                                 fullWidth
-                                placeholder="e.g. A clean room with beautiful lighting and green textures."
-                                name="customInstructions"
-                                value={stateBuilder.customInstructions}
-                                onChange={handleChange}
+                                placeholder={finalPrompt}
+                                name="prompt"
+                                value={stateBuilder.prompt}
+                                onChange={(e) => {
+                                    let p = "";
+                                    if (e.target.value.startsWith(prefixPrompt)) {
+                                        p = e.target.value.slice(prefixPrompt.length);
+                                    } else {
+                                        p = e.target.value;
+                                    }
+                                    setStateBuilder(prev => {
+                                        return {
+                                            ...prev,
+                                            prompt: p
+                                        }
+                                    })
+                                }}
                             />
                         )}
+
+                        <DynamicSelect
+                            label="Generation Number"
+                            id="generation_number"
+                            name="generatedImages"
+                            onChange={handleChange}
+                            value={stateBuilder.generatedImages}
+                            options={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
+                            keys={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
+                        />
+
+                        <DynamicSelect
+                            label="Output Format"
+                            id="generated_output"
+                            name="outputFormat"
+                            onChange={handleChange}
+                            value={stateBuilder.outputFormat}
+                            options={["png", "jpeg", "webp"]}
+                            keys={["png", "jpeg", "webp"]}
+                        />
+
+                        <DynamicSelect
+                            label="Quality"
+                            id="quality"
+                            name="quality"
+                            onChange={handleChange}
+                            value={stateBuilder.quality}
+                            options={["low", "medium", "high"]}
+                            keys={["low", "medium", "high"]}
+                        />
+
+                        <DynamicSelect
+                            label="Size"
+                            id="size"
+                            name="size"
+                            onChange={handleChange}
+                            value={stateBuilder.size}
+                            options={["1024x1024 (Square)", "Portrait (1024x1536)", "Landscape (1536x1024)", "auto"]}
+                            keys={["1024x1024", "1024x1536", "1536x1024", "auto"]}
+                        />
+
+                        {/* <FormControlLabel
+                            label="Custom AI instructions"
+                            control={<Checkbox checked={stateBuilder.usePrompt} onChange={handleCheckboxChange} color="primary" />}
+                        /> */}
+
+
 
                         <Button type="submit" variant="contained" fullWidth>
                             Generate Design

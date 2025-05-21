@@ -28,7 +28,7 @@ const Hero = () => {
             }}>
             <Navigation />
             <Container>
-                <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: 'left', }}>
                     <Typography variant="body2" sx={{ borderRadius: '8px', fontWeight: '400', fontSize: '18px' }}>
                         <TypeAnimation sequence={['Crafted for Interior Design.', 1500, 'Creating a Living Space.', 1500, 'Tailored by A.I.', 1500]}
                             wrapper="span"

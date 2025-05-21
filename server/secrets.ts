@@ -12,5 +12,7 @@ export const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME!;
 export const AWS_BUCKET_REGION = process.env.AWS_BUCKET_REGION!;
 export const AWS_USER_ACCESS_KEY = process.env.AWS_USER_ACCESS_KEY!;
 export const AWS_USER_SECRET_ACCESS_KEY = process.env.AWS_USER_SECRET_ACCESS_KEY!;
-export const REIMAGINE_HOME_API_KEY_NAME = process.env.REIMAGINE_HOME_API_KEY_NAME!;
-export const REIMAGINE_HOME_API_KEY_ID = process.env.REIMAGINE_HOME_API_KEY_ID!;
+export const REIMAGINE__API_KEY = process.env.REIMAGINE__API_KEY!
+export const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
+export const OPENAI_PROJECT_ID = process.env.OPENAI_PROJECT_ID!
+

@@ -86,7 +86,6 @@ const DesignVariations = () => {
                 <Grid size={{ xs: 12, lg: 4 }} display={'flex'} flexDirection={'column'}>
                     <Box
                         sx={{
-                            mt: 3,
                             position: "relative",
                             width: "100%",
                             height: '100%', // Adjust height as needed
@@ -127,7 +126,6 @@ const DesignVariations = () => {
                             backgroundImage: `url(${variant3})`,
                             backgroundSize: "cover",
                             backgroundPosition: "center",
-
                             overflow: "hidden",
                         }}
                     >

@@ -3,7 +3,7 @@ import express from 'express';
 import { clerkClient } from "@clerk/express";
 import { prismaClient } from "../utils/prismaClient";
 import { BadRequestException } from "../middlewares/errorMiddleware";
-const router = express.Router();
+
 
 /**
  * Updates a user's public metadata in Clerk.

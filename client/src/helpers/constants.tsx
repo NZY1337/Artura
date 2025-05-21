@@ -27,6 +27,44 @@ const EMPTY_YOUR_SPACE = {
     segment: "empty-your-space"
 }
 
+const SPACE_TYPES = [
+    { value: 'ST_livingRoom', label: 'Living Room' },
+    { value: 'ST_bedroom', label: 'Bedroom' },
+    { value: 'ST_kitchen', label: 'Kitchen' },
+    { value: 'ST_bathroom', label: 'Bathroom' },
+    { value: 'ST_diningRoom', label: 'Dining Room' },
+    { value: 'ST_homeOffice', label: 'Home Office' },
+    { value: 'ST_kidsRoom', label: 'Kids Room' },
+    { value: 'ST_hallway', label: 'Hallway / Corridor' },
+    { value: 'ST_balcony', label: 'Balcony / Terrace' },
+    { value: 'ST_gameRoom', label: 'Game Room' },
+    { value: 'ST_study', label: 'Study' },
+];
+
+const DESIGN_THEMES = [
+    { value: 'DT_modern', label: 'Modern' },
+    { value: 'DT_contemporary', label: 'Contemporary' },
+    { value: 'DT_minimalist', label: 'Minimalist' },
+    { value: 'DT_scandinavian', label: 'Scandinavian' },
+    { value: 'DT_industrial', label: 'Industrial' },
+    { value: 'DT_midCentury', label: 'Mid-Century Modern' },
+    { value: 'DT_traditional', label: 'Traditional' },
+    { value: 'DT_classic', label: 'Classic' },
+    { value: 'DT_baroque', label: 'Baroque' },
+    { value: 'DT_japanese', label: 'Japanese Zen' },
+    { value: 'DT_wabiSabi', label: 'Wabi-Sabi' },
+    { value: 'DT_farmhouse', label: 'Farmhouse' },
+    { value: 'DT_rustic', label: 'Rustic' },
+    { value: 'DT_bohemian', label: 'Bohemian' },
+    { value: 'DT_artDeco', label: 'Art Deco' },
+    { value: 'DT_victorian', label: 'Victorian' },
+    { value: 'DT_coastal', label: 'Coastal' },
+    { value: 'DT_tropical', label: 'Tropical' },
+    { value: 'DT_urban', label: 'Urban' },
+    { value: 'DT_maximalist', label: 'Maximalist' },
+    { value: 'DT_futuristic', label: 'Futuristic' },
+];
+
 // const REDESIGN_FURNISHED_ROOMS_LABEL = "Redesign Furnished Rooms";
 // const RENDER_EXTERIOR_STRUCTURES_LABEL = "Render Exterior Structures";
 
@@ -146,6 +184,8 @@ export {
     // goodPhotosData,
     // badPhotosData,
     BACKEND_URL,
+    SPACE_TYPES,
+    DESIGN_THEMES,
     solutions,
     EMPTY_YOUR_SPACE,
 };
