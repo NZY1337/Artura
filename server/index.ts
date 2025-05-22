@@ -20,10 +20,11 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(clerkMiddleware())
 
 app.get('/', (req, res) => {
+    console.log(req.auth);
+
     if (!req.auth.userId) {
         // User is not authenticated        
         // throw new BadRequestException(400, "Bad Request");}
@@ -33,10 +34,9 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-app.use("/api", rootRouter);
-
 app.post('/webhook', express.raw({ type: 'application/json' }), clerkWebhook);
-
+app.use("/api", rootRouter);
 app.use(errorMiddleware)
+
 server.listen(PORT, () => console.log("App is working on port: " + PORT));
 

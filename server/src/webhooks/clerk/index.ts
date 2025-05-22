@@ -43,6 +43,7 @@ export const clerkWebhook = async (req: Request, res: Response) => {
                 const { id, email_addresses, username, role, created_at, updated_at } = evt.data;
 
                 await clerkClient.users.updateUserMetadata(id, { publicMetadata: { role: 'user' } });
+
                 const user = {
                     id,
                     email: email_addresses[0].email_address,

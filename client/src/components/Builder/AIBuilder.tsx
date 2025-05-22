@@ -30,7 +30,6 @@ const AIBuilder = ({ onSubmit }: AIBuilderProps) => {
         spaceType: SPACE_TYPES[0].value,
         designTheme: DESIGN_THEMES[0].value,
         outputFormat: 'png',
-        quality: 'high',
         generatedImages: 1,
         size: '1024x1024',
         prompt: "",
@@ -59,7 +58,6 @@ const AIBuilder = ({ onSubmit }: AIBuilderProps) => {
         prompt: `${finalPrompt} ${stateBuilder.prompt}`,
         size: stateBuilder.size,
         output_format: stateBuilder.outputFormat,
-        quality: stateBuilder.quality,
     };
 
     // const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -146,16 +144,6 @@ const AIBuilder = ({ onSubmit }: AIBuilderProps) => {
                         />
 
                         <DynamicSelect
-                            label="Quality"
-                            id="quality"
-                            name="quality"
-                            onChange={handleChange}
-                            value={stateBuilder.quality}
-                            options={["low", "medium", "high"]}
-                            keys={["low", "medium", "high"]}
-                        />
-
-                        <DynamicSelect
                             label="Size"
                             id="size"
                             name="size"
@@ -169,8 +157,6 @@ const AIBuilder = ({ onSubmit }: AIBuilderProps) => {
                             label="Custom AI instructions"
                             control={<Checkbox checked={stateBuilder.usePrompt} onChange={handleCheckboxChange} color="primary" />}
                         /> */}
-
-
 
                         <Button type="submit" variant="contained" fullWidth>
                             Generate Design

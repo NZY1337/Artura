@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -57,12 +58,10 @@ model Project {
 }
 
 model Image {
-    id               String   @id @default(uuid())
-    url              String
-    prompt           String
-    projectId        String
-    generatedByModel String   @default("gpt-image-1")
-    createdAt        DateTime @default(now())
+    id        String   @id @default(uuid())
+    url       String
+    projectId String
+    createdAt DateTime @default(now())
 
     project Project @relation("ProjectImages", fields: [projectId], references: [id])
 }

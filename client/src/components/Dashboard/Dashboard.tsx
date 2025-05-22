@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useTheme } from '@mui/material';
@@ -26,12 +26,17 @@ import { NotificationsProvider } from '@toolpad/core/useNotifications';
 import { type Router } from '@toolpad/core';
 
 // clerk
-import { useUser, useClerk, UserProfile } from '@clerk/clerk-react';
+import { useUser, useClerk, UserProfile, useAuth } from '@clerk/clerk-react';
 
 export default function Dashboard() {
     const navigate = useNavigate();
     const { user } = useUser();
     const { signOut } = useClerk();
+    const { getToken } = useAuth();
+    const token = getToken();
+
+    console.log(token)
+
     const theme = useTheme();
     console.log(theme.palette.mode)
 
@@ -49,6 +54,15 @@ export default function Dashboard() {
     const authentication = useMemo(() => ({
         signIn: () => { }, signOut
     }), [signOut]);
+
+    // useEffect(() => {
+    //     async function callProtectedRoute() {
+    //         const token = await getToken();
+    //         console.log(token);  // copy this exact token to Postman
+    //     }
+
+    //     callProtectedRoute()
+    // }, [])
 
     const renderContent = () => {
         switch (router.pathname) {

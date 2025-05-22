@@ -3,6 +3,7 @@ import { BACKEND_URL } from '../../helpers/constants';
 export const createProject = async (data: unknown) => {
     const response = await fetch(BACKEND_URL + '/project', {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },

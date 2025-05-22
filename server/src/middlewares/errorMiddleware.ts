@@ -17,8 +17,6 @@ export enum ErrorCode {
 }
 
 export const errorMiddleware = (err: any, req: Request, res: Response, next: NextFunction) => {
-    console.error('Error:', err);
-
     const statusCode = err.status || 500;
     const message = err.message || 'Internal Server Error';
 
@@ -86,6 +84,7 @@ export const errorHandler = (method: Function) => {
                 exception = new BadRequestException(ErrorCode.UNPROCESSABLE_ENTITY, "Unprocessed Entity - Validation Error",);
             } else {
                 exception = new InternalException(ErrorCode.INTERNAL_EXCEPTION, "Something went wrong!",);
+
             }
 
             next(exception);

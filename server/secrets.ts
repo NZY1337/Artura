@@ -14,5 +14,7 @@ export const AWS_USER_ACCESS_KEY = process.env.AWS_USER_ACCESS_KEY!;
 export const AWS_USER_SECRET_ACCESS_KEY = process.env.AWS_USER_SECRET_ACCESS_KEY!;
 export const REIMAGINE__API_KEY = process.env.REIMAGINE__API_KEY!
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
-export const OPENAI_PROJECT_ID = process.env.OPENAI_PROJECT_ID!
+export const OPENAI_PROJECT_ID = process.env.OPENAI_PROJECT_ID!;
+export const SUPABASE_KEY = process.env.SUPABASE_KEY!;
+export const SUPABASE_URL = process.env.SUPABASE_URL!;
 

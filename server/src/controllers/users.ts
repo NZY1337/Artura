@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
-import express from 'express';
 import { clerkClient } from "@clerk/express";
 import { prismaClient } from "../utils/prismaClient";
 import { BadRequestException } from "../middlewares/errorMiddleware";
-
 
 /**
  * Updates a user's public metadata in Clerk.
@@ -17,24 +15,24 @@ import { BadRequestException } from "../middlewares/errorMiddleware";
 export const updateUserRole = async (req: Request, res: Response) => {
     const { role, userId } = req.body;
 
+    console.log(role, userId);
+
     if (!role || !userId) {
         throw new BadRequestException(400, "Role or userId is required");
     }
 
     const user = await clerkClient.users.updateUserMetadata(userId, { publicMetadata: { role: role } });
+    console.log(user)
     res.status(200).json(user);
 };
 
 export const getUsers = async (req: Request, res: Response) => {
     const users = await prismaClient.user.findMany();
-    console.log(users);
     res.status(200).json(users);
 }
 
 export const deleteUser = async (req: Request, res: Response) => {
     const { userId } = req.body;
-
-    console.log(userId, '----------------');
 
     if (!userId) {
         throw new BadRequestException(400, "Role or userId is required");
