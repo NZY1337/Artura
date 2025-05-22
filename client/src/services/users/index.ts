@@ -37,4 +37,22 @@ const deleteUser = async (userId: string) => {
     }
     return response.json();
 }
-export { getUsers, updateUserRole, deleteUser };
+
+const getUserCredits = async (userId: string) => {
+    const response = await fetch(`${BACKEND_URL}/users/credits?userId=${userId}`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    return response.json();
+}
+
+
+export { getUsers, updateUserRole, deleteUser, getUserCredits };

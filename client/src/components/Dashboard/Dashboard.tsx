@@ -33,12 +33,7 @@ export default function Dashboard() {
     const { user } = useUser();
     const { signOut } = useClerk();
     const { getToken } = useAuth();
-    const token = getToken();
-
-    console.log(token)
-
     const theme = useTheme();
-    console.log(theme.palette.mode)
 
     const router: Router = useMemo(() => ({
         navigate: (path: string | URL) => {

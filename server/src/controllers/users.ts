@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { clerkClient } from "@clerk/express";
 import { prismaClient } from "../utils/prismaClient";
-import { BadRequestException } from "../middlewares/errorMiddleware";
+import { BadRequestException, ErrorCode } from "../middlewares/errorMiddleware";
+import { Decimal } from "@prisma/client/runtime/library";
 
 /**
  * Updates a user's public metadata in Clerk.
@@ -40,4 +41,25 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     const user = await clerkClient.users.deleteUser(userId);
     res.status(200).json({ message: 'User delete sucessfully!' });
+}
+
+export const getUserCredits = async (req: Request, res: Response) => {
+    const userId = req.query.userId as string;
+
+    if (!userId) throw new BadRequestException(ErrorCode.BAD_REQUEST, 'userId Not Found')
+
+    const user = await prismaClient.user.findUnique({
+        where: {
+            id: userId
+        },
+        select: {
+            credits: true
+        }
+    });
+
+    if (!user) {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, 'User not found');
+    }
+
+    res.status(200).json({ ammount: (user.credits as Decimal).toNumber().toLocaleString() })
 }

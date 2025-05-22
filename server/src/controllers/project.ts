@@ -56,7 +56,7 @@ import { SUPABASE_URL } from "../../secrets";
 
 async function mockGenerateImage(): Promise<Buffer> {
     // Here you would call the OpenAI API, but we mock with reading a local file
-    const absolutePath = path.resolve(__dirname, "../../../server/output.png");
+    const absolutePath = path.resolve(__dirname, "../../../server/output1.png");
     const imageBuffer = await readFile(absolutePath);
     return imageBuffer;
 }
@@ -99,7 +99,8 @@ export const createProject = async (req: Request, res: Response) => {
         return { project, image };
     });
 
-    res.status(200).json(result);
+    console.log(result)
+    res.status(200).json({ result });
 }
 
 export const getProjects = async (req: Request, res: Response) => {

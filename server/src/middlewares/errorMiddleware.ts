@@ -3,7 +3,6 @@ import { StatusCodes } from "http-status-codes";
 import { Prisma } from "@prisma/client";
 import { ZodError } from "zod";
 
-
 export enum ErrorCode {
     NOT_FOUND = StatusCodes.NOT_FOUND,
     BAD_REQUEST = StatusCodes.BAD_REQUEST,

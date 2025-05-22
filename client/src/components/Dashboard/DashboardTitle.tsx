@@ -4,6 +4,11 @@ import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
 import DiamondIcon from "@mui/icons-material/Diamond";
 import { keyframes } from "@emotion/react";
+import { useQuery } from '@tanstack/react-query';
+import { useUser } from '@clerk/clerk-react';
+import { getUserCredits } from '../../services/users';
+
+import Skeleton from 'react-loading-skeleton';
 
 // hooks
 import { useNavigate } from 'react-router-dom';
@@ -11,29 +16,36 @@ import { useNavigate } from 'react-router-dom';
 const pulseAnimation = keyframes`
   0% {
     transform: scale(1);
-    box-shadow: 0 0 5px rgba(0, 255, 0, 0.6);
   }
   50% {
     transform: scale(1.1);
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.9);
   }
   100% {
     transform: scale(1);
-    box-shadow: 0 0 5px rgba(0, 255, 0, 0.6);
   }
 `;
 
 function DashboardTitle() {
     const navigate = useNavigate();
     const handleClick = () => navigate('/');
+    const { user } = useUser();
+
+    const { isPending, data } = useQuery({
+        queryKey: ['usersData', user?.id],
+        queryFn: () => {
+            if (!user?.id) throw new Error("User ID is undefined");
+            return getUserCredits(user.id);
+        },
+        enabled: !!user?.id
+    });
 
     return (
         <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography fontWeight={600} color={'warning'} variant="body1" sx={{cursor: 'pointer'}} onClick={handleClick}>HOME</Typography>
-            
-            {/* <Tooltip title="credits left">
-                <Chip sx={{ animation: `${pulseAnimation} 3.5s infinite ease-in-out` }} size="small" label={ 0} color="success" icon={<DiamondIcon />} />
-            </Tooltip> */}
+            <Typography fontWeight={600} color={'warning'} variant="body1" sx={{ cursor: 'pointer' }} onClick={handleClick}>HOME</Typography>
+
+            {isPending ? <Skeleton duration={1} height={25} width={100} borderRadius={50} /> : <Tooltip title="credits left">
+                <Chip size="small" label={data.ammount} icon={<DiamondIcon sx={{ animation: `${pulseAnimation} 3.5s infinite ease-in-out` }} />} />
+            </Tooltip>}
         </Stack>
     );
 }
