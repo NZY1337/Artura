@@ -5,8 +5,8 @@ import Footer from '../Footer/Footer';
 import HomeServicesPreview from './HomeServicesPreview';
 import CompareSlider from '../UtilityComponents/CompareSlider';
 import PricingSection from './PricingPlan';
-import Carousel from '../UtilityComponents/Carousel';
 import TwoImageLayout from './Something';
+import LatestProjects from './LatestProjects/LatestProjects';
 
 const Home = () => {
     return <>
@@ -14,7 +14,7 @@ const Home = () => {
         <HomeServicesPreview />
         <CompareSlider />
         <KeyPoints />
-        <Carousel />
+        <LatestProjects />
         <DesignVariations />
         <TwoImageLayout />
         <PricingSection />

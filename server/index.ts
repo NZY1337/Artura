@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(clerkMiddleware())
+app.use(clerkMiddleware());
 
 app.get('/', (req, res) => {
     const auth = getAuth(req);

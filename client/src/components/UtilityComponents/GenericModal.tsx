@@ -3,15 +3,14 @@ import Dialog from '@mui/material/Dialog';
 
 interface GenericModalProps {
     children: React.ReactNode,
-    onClose: () => void,
     open: boolean;
     sx?: object
 }
 
 
-const GenericModal = ({ children, open, onClose }: GenericModalProps) => {
+const GenericModal = ({ children, open, }: GenericModalProps) => {
     return (
-        <Dialog open={open} onClose={onClose} fullScreen={true} >
+        <Dialog open={open} fullScreen={true} >
             {children}
         </Dialog >
     );

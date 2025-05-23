@@ -80,18 +80,18 @@ export const Users = () => {
     ];
 
     const { isPending, error, data: users } = useQuery({
-        queryKey: ['usersData'],
+        queryKey: ['users'],
         queryFn: getUsers
     });
 
     const updateUserRoleMutation = useMutation({
         mutationFn: ({ userId, role }: { userId: string; role: any }) => updateUserRole(userId, role),
         onMutate: async ({ userId, role }: { userId: string; role: any }) => {
-            await queryClient.cancelQueries({ queryKey: ['usersData'] });
+            await queryClient.cancelQueries({ queryKey: ['users'] });
 
-            const previousUsers = queryClient.getQueryData(['usersData']);
+            const previousUsers = queryClient.getQueryData(['users']);
 
-            queryClient.setQueryData(['usersData'], (old: any) =>
+            queryClient.setQueryData(['users'], (old: any) =>
                 old.map((user: any) =>
                     user.id === userId ? { ...user, role } : user
                 )
@@ -108,12 +108,12 @@ export const Users = () => {
     const deleteUserMutation = useMutation({
         mutationFn: (userId: string) => deleteUser(userId), // Call the deleteUser function
         onMutate: async (userId: string) => {
-            await queryClient.cancelQueries({ queryKey: ['usersData'] });
+            await queryClient.cancelQueries({ queryKey: ['users'] });
 
-            const previousUsers = queryClient.getQueryData(['usersData']);
+            const previousUsers = queryClient.getQueryData(['users']);
 
             // Optimistically update the cache
-            queryClient.setQueryData(['usersData'], (old: any) =>
+            queryClient.setQueryData(['users'], (old: any) =>
                 old.filter((user: any) => user.id !== userId)
             );
 
@@ -121,7 +121,7 @@ export const Users = () => {
         },
 
         onError: (error, userId, context: any) => {
-            queryClient.setQueryData(['usersData'], context.previousUsers);
+            queryClient.setQueryData(['users'], context.previousUsers);
             setSelectedUserId(null);
             setOpen(false);
             toast.error(error.message);

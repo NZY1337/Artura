@@ -5,7 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useNotifications } from '@toolpad/core/useNotifications';
 
 type FileUploadProps = {
-    preview: string | null,
+    preview: string | undefined,
     setPreview: React.Dispatch<React.SetStateAction<string | null>>,
 }
 

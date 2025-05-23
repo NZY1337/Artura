@@ -22,9 +22,11 @@ type OnchangeType = DynamicSelectProps['onChange'];
 
 type AIBuilderProps = {
     onSubmit: (event: React.FormEvent<HTMLFormElement>, stateBuilder: object) => void;
+    generatedPreview: string | undefined;
+    isLoading: boolean
 };
 
-const AIBuilder = ({ onSubmit }: AIBuilderProps) => {
+const AIBuilder = ({ onSubmit, generatedPreview, isLoading }: AIBuilderProps) => {
     const [preview, setPreview] = useState<string | null>(null);
     const [stateBuilder, setStateBuilder] = useState({
         spaceType: SPACE_TYPES[0].value,
@@ -71,7 +73,7 @@ const AIBuilder = ({ onSubmit }: AIBuilderProps) => {
     return (
         <Grid spacing={3} container textAlign={"left"} my={5} height={"inherit"}>
             <Grid size={{ xs: 12, md: 6, lg: 4, xl: 6 }}>
-                {<FileUpload preview={preview} setPreview={setPreview} />}
+                {<FileUpload preview={preview || generatedPreview} setPreview={setPreview} />}
             </Grid>
 
             <Grid size={{ xs: 12, xl: 6 }}>
@@ -158,7 +160,7 @@ const AIBuilder = ({ onSubmit }: AIBuilderProps) => {
                             control={<Checkbox checked={stateBuilder.usePrompt} onChange={handleCheckboxChange} color="primary" />}
                         /> */}
 
-                        <Button type="submit" variant="contained" fullWidth>
+                        <Button type="submit" variant="contained" fullWidth disabled={isLoading}>
                             Generate Design
                         </Button>
                     </Stack>

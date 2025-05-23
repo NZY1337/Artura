@@ -1,18 +1,41 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState } from "react";
 import { Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import AIBuilder from "../../../Builder/AIBuilder";
 import HistoryDrawer from "../../utils/drawer";
 
 import { useMutation } from '@tanstack/react-query';
-import { createProject } from "../../../../services/builder";
+import { designGenerator } from "../../../../services/builder";
+
+type ProjectImage = {
+    id: string;
+    url: string;
+    projectId: string;
+    createdAt: string;
+};
+
+type ProjectData = {
+    result: {
+        project?: {
+            id: string;
+            title: string;
+            description: string;
+            userId: string;
+            category: string;
+            createdAt: string;
+            updatedAt: string;
+        };
+        image?: ProjectImage;
+    }
+};
 
 export default function DesignGenerator() {
-
-    const mutation = useMutation({
-        mutationFn: createProject,
-        onSuccess: (data) => {
-            console.log("✅ Project created:", data);
+    const [data, setData] = useState<ProjectData | null>(null);
+    const { isPending, mutate } = useMutation({
+        mutationFn: designGenerator,
+        onSuccess: (data: ProjectData) => {
+            setData(data);
             // optionally show success toast, redirect, etc.
         },
         onError: (error) => {
@@ -21,9 +44,10 @@ export default function DesignGenerator() {
         }
     });
 
+
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>, stateBuilder: object) => {
         event.preventDefault();
-        mutation.mutate(stateBuilder); // sends POST request
+        mutate(stateBuilder);
     };
 
     return (
@@ -36,7 +60,7 @@ export default function DesignGenerator() {
                 </Grid>
             </Grid>
 
-            <AIBuilder onSubmit={onSubmit} />
+            <AIBuilder onSubmit={onSubmit} generatedPreview={data?.result.image?.url} isLoading={isPending} />
             <HistoryDrawer />
         </>
     );

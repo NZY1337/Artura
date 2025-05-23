@@ -31,7 +31,7 @@ function DashboardTitle() {
     const { user } = useUser();
 
     const { isPending, data } = useQuery({
-        queryKey: ['usersData', user?.id],
+        queryKey: ['users', user?.id],
         queryFn: () => {
             if (!user?.id) throw new Error("User ID is undefined");
             return getUserCredits(user.id);
@@ -43,7 +43,7 @@ function DashboardTitle() {
         <Stack direction="row" alignItems="center" spacing={2}>
             <Typography fontWeight={600} color={'warning'} variant="body1" sx={{ cursor: 'pointer' }} onClick={handleClick}>HOME</Typography>
 
-            {isPending ? <Skeleton duration={1} height={25} width={100} borderRadius={50} /> : <Tooltip title="credits left">
+            {isPending ? <Skeleton duration={1} height={25} width={80} borderRadius={50} /> : <Tooltip title="credits left">
                 <Chip size="small" label={data.ammount} icon={<DiamondIcon sx={{ animation: `${pulseAnimation} 3.5s infinite ease-in-out` }} />} />
             </Tooltip>}
         </Stack>

@@ -8,9 +8,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     console.log(auth.userId);
 
     if (!auth.userId) {
-        // User is not authenticated        
-        // throw new BadRequestException(400, "Bad Request");}
-        // return res.redirect('/login');
         throw new UnauthorizedException(ErrorCode.UNAUTHORIZED, 'You need to login first')
     }
 
