@@ -1,6 +1,6 @@
 import { Grid, Typography, Button, Box, Chip } from '@mui/material';
 import Close from '@mui/icons-material/Close';
-import GenericModal from './GenericModal';
+import GenericModal from './modals/GenericModal';
 
 import type { ProjectProps } from '../../types';
 

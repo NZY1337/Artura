@@ -5,7 +5,7 @@ import type { CarouselProps } from "../../types";
 export default function Carousel({ children, settings }: CarouselProps) {
     return (
         <>
-            <Container maxWidth={false} sx={{ width: '98%' }}>
+            <Container sx={{ width: '98%' }}>
                 <Slider {...settings}>
                     {children}
                 </Slider>

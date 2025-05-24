@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { getUsers, updateUserRole, deleteUser } from '../../../services/users';
 import { queryClient } from '../../../context/TanstackQuery';
-import GenericDialog from '../../UtilityComponents/GenericDialog';
+import GenericDialog from '../../UtilityComponents/modals/GenericDialog';
 import { DataGrid } from '@mui/x-data-grid';
 
 export const Users = () => {

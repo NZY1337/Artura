@@ -9,7 +9,6 @@ interface GenericDialogProps {
     sx?: object
 }
 
-
 const GenericDialog = ({ children, open, onClose }: GenericDialogProps) => {
     return (
         <Dialog open={open} onClose={onClose}>

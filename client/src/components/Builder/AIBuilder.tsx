@@ -12,11 +12,11 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Paper from "@mui/material/Paper";
 import DynamicSelect from "../UtilityComponents/DynamicSelect";
 import FileUpload from "../UtilityComponents/FileUpload";
-
+import WaitingModal from "../UtilityComponents/modals/WaitingModal";
 import { DESIGN_THEMES, SPACE_TYPES } from "../../helpers/constants";
 // types
-import { type DynamicSelectProps } from "../UtilityComponents/DynamicSelect";
 
+import { type DynamicSelectProps } from "../UtilityComponents/DynamicSelect";
 // types
 type OnchangeType = DynamicSelectProps['onChange'];
 
@@ -72,6 +72,7 @@ const AIBuilder = ({ onSubmit, generatedPreview, isLoading }: AIBuilderProps) =>
 
     return (
         <Grid spacing={3} container textAlign={"left"} my={5} height={"inherit"}>
+
             <Grid size={{ xs: 12, md: 6, lg: 4, xl: 6 }}>
                 {<FileUpload preview={preview || generatedPreview} setPreview={setPreview} />}
             </Grid>

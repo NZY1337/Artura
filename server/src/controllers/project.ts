@@ -56,7 +56,7 @@ import { SUPABASE_URL } from "../../secrets";
 
 async function mockGenerateImage(): Promise<Buffer> {
     // Here you would call the OpenAI API, but we mock with reading a local file
-    const absolutePath = path.resolve(__dirname, "../../../server/output2.png");
+    const absolutePath = path.resolve(__dirname, "../../../server/output4.png");
     const imageBuffer = await readFile(absolutePath);
     return imageBuffer;
 }
@@ -98,16 +98,21 @@ export const designGenerator = async (req: Request, res: Response) => {
         return { project, image };
     });
 
-    console.log(result)
     res.status(200).json({ result });
 }
 
+
+// get all projects per user
 export const getProjects = async (req: Request, res: Response) => {
     const projects = await prismaClient.project.findMany({
         include: {
             images: true
+        },
+        where: {
+            userId: req.auth.userId
         }
     });
 
     res.status(200).json({ projects })
 }
+

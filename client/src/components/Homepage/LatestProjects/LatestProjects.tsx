@@ -10,14 +10,17 @@ export default function LatestProjects() {
     const [open, setOpen] = useState(false);
     const { data } = useCategory();
     const [currentIndex, setCurrentIndex] = useState(0)
+
+    console.log(data?.projects);
+
     const settings = {
         dots: false,
         autoplay: true,
         focusOnSelect: true,
         speed: 3000,
         autoplaySpeed: 0,
-        infinite: true,
-        slidesToShow: data?.projects.length || 3,
+        slidesToShow: data?.projects.length,
+        infinite: data?.projects.length > 3,  // Disable infinite if not enough items
         slidesToScroll: 1,
         responsive: [
             {

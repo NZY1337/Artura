@@ -7,6 +7,7 @@ import HistoryDrawer from "../../utils/drawer";
 
 import { useMutation } from '@tanstack/react-query';
 import { designGenerator } from "../../../../services/builder";
+import WaitingModal from "../../../UtilityComponents/modals/WaitingModal";
 
 type ProjectImage = {
     id: string;
@@ -31,11 +32,13 @@ type ProjectData = {
 };
 
 export default function DesignGenerator() {
+    const [openWaitingModal, setOpenWaitingModal] = useState<boolean>(false);
     const [data, setData] = useState<ProjectData | null>(null);
     const { isPending, mutate } = useMutation({
         mutationFn: designGenerator,
         onSuccess: (data: ProjectData) => {
             setData(data);
+            setOpenWaitingModal(false);
             // optionally show success toast, redirect, etc.
         },
         onError: (error) => {
@@ -44,10 +47,12 @@ export default function DesignGenerator() {
         }
     });
 
+    const handleCloseWaitingModal = () => setOpenWaitingModal(false);
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>, stateBuilder: object) => {
         event.preventDefault();
         mutate(stateBuilder);
+        setOpenWaitingModal(true);
     };
 
     return (
@@ -62,6 +67,8 @@ export default function DesignGenerator() {
 
             <AIBuilder onSubmit={onSubmit} generatedPreview={data?.result.image?.url} isLoading={isPending} />
             <HistoryDrawer />
+            <WaitingModal open={openWaitingModal} handleClose={handleCloseWaitingModal} />
+
         </>
     );
 }

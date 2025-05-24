@@ -12,3 +12,10 @@ export interface ProjectProps {
     title: string;
     description: string;
 }
+
+export interface RenderLatestProjectsProps {
+    project: ProjectProps
+    index: number;
+    handleOpenModal: () => void;
+    handleSetCurrentIndex: (index: number) => void;
+}
