@@ -34,7 +34,7 @@ function DashboardTitle() {
         queryKey: ['users', user?.id],
         queryFn: () => {
             if (!user?.id) throw new Error("User ID is undefined");
-            return getUserCredits(user.id);
+            return getUserCredits(user?.id);
         },
         enabled: !!user?.id
     });
@@ -44,7 +44,7 @@ function DashboardTitle() {
             <Typography fontWeight={600} color={'warning'} variant="body1" sx={{ cursor: 'pointer' }} onClick={handleClick}>HOME</Typography>
 
             {isPending ? <Skeleton duration={1} height={25} width={80} borderRadius={50} /> : <Tooltip title="credits left">
-                <Chip size="small" label={data.ammount} icon={<DiamondIcon sx={{ animation: `${pulseAnimation} 3.5s infinite ease-in-out` }} />} />
+                <Chip size="small" label={data?.ammount} icon={<DiamondIcon sx={{ animation: `${pulseAnimation} 3.5s infinite ease-in-out` }} />} />
             </Tooltip>}
         </Stack>
     );

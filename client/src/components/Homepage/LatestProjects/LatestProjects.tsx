@@ -6,12 +6,12 @@ import GenericModalPreview from "../../UtilityComponents/GenericModalPreview";
 import Carousel from "../../UtilityComponents/Carousel";
 import RenderLatestProjects from "./RenderLatestProject";
 
+import type { ProjectProps } from "../../../types";
+
 export default function LatestProjects() {
     const [open, setOpen] = useState(false);
     const { data } = useCategory();
     const [currentIndex, setCurrentIndex] = useState(0)
-
-    console.log(data?.projects);
 
     const settings = {
         dots: false,
@@ -19,8 +19,8 @@ export default function LatestProjects() {
         focusOnSelect: true,
         speed: 3000,
         autoplaySpeed: 0,
-        slidesToShow: data?.projects.length,
-        infinite: data?.projects.length > 3,  // Disable infinite if not enough items
+        slidesToShow: data?.projects?.length,
+        infinite: data?.projects?.length > 3,  // Disable infinite if not enough items
         slidesToScroll: 1,
         responsive: [
             {
@@ -55,30 +55,31 @@ export default function LatestProjects() {
 
     return (
         <>
-            <Container maxWidth={false} sx={{ width: '98%', mt: 15 }}>
-                <Container sx={{ mb: 3 }}>
-                    <Grid container justifyContent={'center'} >
-                        <Grid size={{ xs: 12, md: 6 }}>
-                            <Typography textAlign={'left'} variant="body1" sx={{ mb: 2 }} >
-                                Interior Photos Lorem ipsum dolor, sit amet consectetur. Voluptatibus veritatis nisi sunt ipsum eos blanditiis eius, nostrum nihil quaerat odit veniam at praesentium similique mollitia ducimus tempora molestiae pariatur laborum.
-                            </Typography>
+            {data && data.projects && data.projects.length > 0 ? <>
+                <Container maxWidth={false} sx={{ width: '98%', mt: 15 }}>
+                    <Container sx={{ mb: 3 }}>
+                        <Grid container justifyContent={'center'}>
+                            <Grid size={{ xs: 12, md: 6 }}>
+                                <Typography textAlign={'left'} variant="body1" sx={{ mb: 2 }}>
+                                    Interior Photos Lorem ipsum dolor, sit amet consectetur. Voluptatibus veritatis nisi sunt ipsum eos blanditiis eius, nostrum nihil quaerat odit veniam at praesentium similique mollitia ducimus tempora molestiae pariatur laborum.
+                                </Typography>
+                            </Grid>
+                            <Grid size={{ xs: 12, md: 6 }}>
+                                <Typography variant="h2" sx={{ mb: 2 }} textAlign={'right'}>
+                                    Latest Generations
+                                </Typography>
+                            </Grid>
                         </Grid>
-                        <Grid size={{ xs: 12, md: 6 }}>
-                            <Typography variant="h2" sx={{ mb: 2 }} textAlign={'right'}>
-                                Latest Generations
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Container>
+                    </Container>
 
-                <Carousel settings={settings}>
-                    {data?.projects.map((project: any, index: number) => (
-                        <RenderLatestProjects project={project} index={index} handleOpenModal={handleOpenModal} handleSetCurrentIndex={handleSetCurrentIndex} />
-                    ))}
-                </Carousel>
-            </Container>
-
-            <GenericModalPreview open={open} project={data?.projects[currentIndex]} handleCloseModal={() => setOpen(false)} />
+                    <Carousel settings={settings}>
+                        {data?.projects.map((project: ProjectProps, index: number) => (
+                            <RenderLatestProjects project={project} index={index} handleOpenModal={handleOpenModal} handleSetCurrentIndex={handleSetCurrentIndex} />
+                        ))}
+                    </Carousel>
+                </Container><GenericModalPreview open={open} project={data?.projects[currentIndex]} handleCloseModal={() => setOpen(false)} /></>
+                : null
+            }
         </>
     );
 }

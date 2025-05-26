@@ -1,10 +1,9 @@
 import { Box, Typography, Container, Button } from '@mui/material';
 import ArrowRight from '@mui/icons-material/ArrowRight';
-import Navigation from '../navigation/Navigation';
+import Navigation from '../Navigation/Navigation';
 import hero from '../../assets/hero-bg.jpg';
 
 import { TypeAnimation } from 'react-type-animation';
-
 
 // https://images.unsplash.com/photo-1606744888344-493238951221?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
 

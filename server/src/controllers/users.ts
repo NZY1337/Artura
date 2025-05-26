@@ -16,14 +16,12 @@ import { Decimal } from "@prisma/client/runtime/library";
 export const updateUserRole = async (req: Request, res: Response) => {
     const { role, userId } = req.body;
 
-    console.log(role, userId);
 
     if (!role || !userId) {
         throw new BadRequestException(400, "Role or userId is required");
     }
 
     const user = await clerkClient.users.updateUserMetadata(userId, { publicMetadata: { role: role } });
-    console.log(user)
     res.status(200).json(user);
 };
 

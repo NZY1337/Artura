@@ -1,7 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-
+import CircularProgress from '@mui/material/CircularProgress';
 import { useUser } from '@clerk/clerk-react';
 
 const ProtectedRoute = () => {

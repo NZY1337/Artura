@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Grid, Card, CardMedia } from '@mui/material';
 import Skeleton from 'react-loading-skeleton';
-import GenericModalPreview from '../../../UtilityComponents/GenericModalPreview';
-import useCategory from '../../../../hooks/useCategory';
+import GenericModalPreview from '../../UtilityComponents/GenericModalPreview';
+import useCategory from '../../../hooks/useCategory';
 
-const UserLatestProjects = () => {
+import type { ProjectProps } from '../../../types';
+
+const HistoryProjects = () => {
     const [open, setOpen] = useState(false);
     const [projectIndex, setProjectIndex] = useState(0);
     const { isPending, data, } = useCategory();
@@ -29,7 +31,7 @@ const UserLatestProjects = () => {
             <Grid container spacing={2} p={1.5}>
                 {data?.projects && data?.projects.length > 0 ?
                     <>
-                        {data?.projects.map((project: any, index: number) => {
+                        {data?.projects.map((project: ProjectProps, index: number) => {
                             return (
                                 <Grid size={{ xs: 6, md: 6, lg: 6, xl: 4 }} key={index}>
                                     <Card
@@ -75,4 +77,4 @@ const UserLatestProjects = () => {
     );
 };
 
-export default UserLatestProjects;
+export default HistoryProjects;

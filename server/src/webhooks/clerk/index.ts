@@ -53,8 +53,6 @@ export const clerkWebhook = async (req: Request, res: Response) => {
                     updatedAt: new Date(updated_at),
                 };
 
-                console.log('hoook griggered ---------', user)
-
                 await prismaClient.user.create({
                     data: { ...user }
                 })
@@ -72,7 +70,7 @@ export const clerkWebhook = async (req: Request, res: Response) => {
                     updatedAt: new Date(updated_at),
                 };
 
-                console.log(user);
+                console.log(user, '---user-updated');
                 await prismaClient.user.update({
                     where: { id: user.id },
                     data: { ...user }

@@ -4,10 +4,10 @@ import Typography from '@mui/material/Typography';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
-import History from '@mui/icons-material/History';
+import HistoryIcon from '@mui/icons-material/History';
 import Close from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
-import UserLatestProjects from './UserLatestProjects';
+import UserLatestProjects from './HistoryProjects';
 
 const DashboardDrawer = styled(Drawer)(({ theme }) => ({
     '.MuiPaper-root': {
@@ -46,7 +46,7 @@ const DashboardDrawer = styled(Drawer)(({ theme }) => ({
     }
 }));
 
-export default function HistoryDrawer() {
+export default function History() {
     const [open, setOpen] = React.useState(false);
 
     const toggleDrawer = (newOpen: boolean) => () => {
@@ -77,7 +77,7 @@ export default function HistoryDrawer() {
                         color: 'white',
                     }
                 }}>
-                <History sx={{ mr: .5 }} />
+                <HistoryIcon sx={{ mr: .5 }} />
                 <Typography>History</Typography>
             </IconButton>
 

@@ -1,7 +1,6 @@
 import { useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { useTheme } from '@mui/material';
 
 // components
 import DashboardTitle from './DashboardTitle';
@@ -10,10 +9,10 @@ import dashboardTheme from './themeContext';
 import { AppProvider, type Session } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
-import DesignGenerator from './components/variations/DesignGenerator'; // Ensure the file exists at this path or adjust the path accordingly
-import VirtualStaging from './components/variations/VirtualStaging';
-import Landscaping from './components/variations/Landscaping';
-import { Users } from './components/Users';
+import DesignGenerator from './Variations/DesignGenerator'; // Ensure the file exists at this path or adjust the path accordingly
+import VirtualStaging from './Variations/VirtualStaging';
+import Landscaping from './Variations/Landscaping';
+import { Users } from './Users';
 import Overview from './Overview';
 
 // utils
@@ -33,7 +32,6 @@ export default function Dashboard() {
     const { user } = useUser();
     const { signOut } = useClerk();
     const { getToken } = useAuth();
-    const theme = useTheme();
 
     const router: Router = useMemo(() => ({
         navigate: (path: string | URL) => {
@@ -50,14 +48,14 @@ export default function Dashboard() {
         signIn: () => { }, signOut
     }), [signOut]);
 
-    // useEffect(() => {
-    //     async function callProtectedRoute() {
-    //         const token = await getToken();
-    //         console.log(token);  // copy this exact token to Postman
-    //     }
+    useEffect(() => {
+        async function callProtectedRoute() {
+            const token = await getToken();
+            console.log(token);  // copy this exact token to Postman
+        }
 
-    //     callProtectedRoute()
-    // }, [])
+        callProtectedRoute()
+    }, [])
 
     const renderContent = () => {
         switch (router.pathname) {

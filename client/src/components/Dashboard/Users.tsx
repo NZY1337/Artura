@@ -1,16 +1,37 @@
+import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+import GenericDialog from '../UtilityComponents/modals/GenericDialog';
+import { DataGrid } from '@mui/x-data-grid/DataGrid';
+
+// hooks
 import { useState } from 'react';
-import { Button, MenuItem, Select, Container, Box, Typography, Stack } from '@mui/material';
-import { toast } from 'react-toastify';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { getUsers, updateUserRole, deleteUser } from '../../../services/users';
-import { queryClient } from '../../../context/TanstackQuery';
-import GenericDialog from '../../UtilityComponents/modals/GenericDialog';
-import { DataGrid } from '@mui/x-data-grid';
+import { useUsersManagement } from '../../hooks/useUserManagement';
+
+// types
+import type { UserProps } from '../../types';
+import type { GridColDef } from '@mui/x-data-grid';
+
 
 export const Users = () => {
     const [updatedRole, setUpdatedRole] = useState<{ [userId: string]: string }>({});
     const [open, setOpen] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+
+    const { users, isPending, error, updateUserRoleMutation, deleteUserMutation } = useUsersManagement({
+        onUserDeleted: () => {
+            setSelectedUserId(null);
+            setOpen(false);
+        },
+        onDeleteModalClose: () => {
+            setSelectedUserId(null);
+            setOpen(false);
+        }
+    });
 
     const columns = [
         { field: 'username', headerName: 'Username', width: 130 },
@@ -37,18 +58,18 @@ export const Users = () => {
             field: 'createdAt',
             headerName: 'Created At',
             width: 180,
-            valueFormatter: (date: any) => new Date(date).toLocaleString(),
+            valueFormatter: (date: UserProps['createdAt']) => new Date(date).toLocaleString(),
         },
         {
             field: 'updatedAt',
             headerName: 'Updated At',
             width: 180,
-            valueFormatter: (date: any) => new Date(date).toLocaleString(),
+            valueFormatter: (date: UserProps['updatedAt']) => new Date(date).toLocaleString(),
         },
         {
-            field: 'actions', headerName: 'Actions', width: 200, sortable: false, renderCell: (params: any) => {
-                const user = params.row;
-                const selectedRole = updatedRole[user.id] || user.role;
+            field: 'actions', headerName: 'Actions', width: 200, sortable: false, renderCell: (params: UserProps) => {
+                const user = params?.row as UserProps;
+                const selectedRole = updatedRole[user.id] || user.role as UserProps['id'];
 
                 return (
                     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -67,7 +88,7 @@ export const Users = () => {
                             size="small"
                             onClick={() => {
                                 setOpen(true);
-                                setSelectedUserId(params.row.id);
+                                setSelectedUserId((params?.row as UserProps).id);
                             }}
                             sx={{ mr: 1 }}
                         >
@@ -77,62 +98,7 @@ export const Users = () => {
                 );
             },
         },
-    ];
-
-    const { isPending, error, data: users } = useQuery({
-        queryKey: ['users'],
-        queryFn: getUsers
-    });
-
-    const updateUserRoleMutation = useMutation({
-        mutationFn: ({ userId, role }: { userId: string; role: any }) => updateUserRole(userId, role),
-        onMutate: async ({ userId, role }: { userId: string; role: any }) => {
-            await queryClient.cancelQueries({ queryKey: ['users'] });
-
-            const previousUsers = queryClient.getQueryData(['users']);
-
-            queryClient.setQueryData(['users'], (old: any) =>
-                old.map((user: any) =>
-                    user.id === userId ? { ...user, role } : user
-                )
-            );
-
-            return { previousUsers };
-        },
-        onSuccess: (_data, variables) => {
-            toast('Role changed to ' + variables.role);
-        }
-    });
-
-    // now i can i delete user with tanstack query
-    const deleteUserMutation = useMutation({
-        mutationFn: (userId: string) => deleteUser(userId), // Call the deleteUser function
-        onMutate: async (userId: string) => {
-            await queryClient.cancelQueries({ queryKey: ['users'] });
-
-            const previousUsers = queryClient.getQueryData(['users']);
-
-            // Optimistically update the cache
-            queryClient.setQueryData(['users'], (old: any) =>
-                old.filter((user: any) => user.id !== userId)
-            );
-
-            return { previousUsers };
-        },
-
-        onError: (error, userId, context: any) => {
-            queryClient.setQueryData(['users'], context.previousUsers);
-            setSelectedUserId(null);
-            setOpen(false);
-            toast.error(error.message);
-        },
-        onSuccess: () => {
-            setSelectedUserId(null);
-            setOpen(false);
-            toast.success('User deleted successfully.');
-        },
-
-    });
+    ] as GridColDef[];
 
     const handleRoleChange = (userId: string, newRole: string) => {
         setUpdatedRole((prev) => ({
@@ -148,12 +114,13 @@ export const Users = () => {
     return (
         <Container disableGutters={true}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <DataGrid sx={{
-                    '& .MuiDataGrid-cell': {
-                        display: 'flex', // Make all cells flex containers
-                        alignItems: 'center', // Vertically center content
-                    },
-                }} columns={columns} rows={users || []} />
+                <DataGrid
+                    sx={{
+                        '& .MuiDataGrid-cell': {
+                            display: 'flex', alignItems: 'center',
+                        },
+                    }}
+                    columns={columns} rows={users || []} />
             </div>
 
             <GenericDialog open={open} onClose={() => setOpen(false)}>

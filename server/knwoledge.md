@@ -31,3 +31,5 @@
 
 # SUPABASE:
  - tutorial: https://www.youtube.com/watch?v=kyphLGnSz6Q&t=3877s
+
+ # use node v 21.0.0: nvm use 21.0.0

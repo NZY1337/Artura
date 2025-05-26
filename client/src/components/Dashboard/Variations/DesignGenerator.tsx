@@ -2,48 +2,28 @@
 import { useState } from "react";
 import { Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import AIBuilder from "../../../Builder/AIBuilder";
-import HistoryDrawer from "../../utils/drawer";
+import AIBuilder from "../../Builder/AIBuilder";
+import HistoryDrawer from "../History/History";
 
 import { useMutation } from '@tanstack/react-query';
-import { designGenerator } from "../../../../services/builder";
-import WaitingModal from "../../../UtilityComponents/modals/WaitingModal";
+import { designGenerator } from "../../../services/builder";
+import WaitingModal from "../../UtilityComponents/modals/WaitingModal";
 
-type ProjectImage = {
-    id: string;
-    url: string;
-    projectId: string;
-    createdAt: string;
-};
+import type { ProjectProps } from "../../../types";
 
-type ProjectData = {
-    result: {
-        project?: {
-            id: string;
-            title: string;
-            description: string;
-            userId: string;
-            category: string;
-            createdAt: string;
-            updatedAt: string;
-        };
-        image?: ProjectImage;
-    }
-};
 
 export default function DesignGenerator() {
     const [openWaitingModal, setOpenWaitingModal] = useState<boolean>(false);
-    const [data, setData] = useState<ProjectData | null>(null);
+    const [data, setData] = useState<ProjectProps | null>(null);
+
     const { isPending, mutate } = useMutation({
         mutationFn: designGenerator,
-        onSuccess: (data: ProjectData) => {
+        onSuccess: (data: ProjectProps) => {
             setData(data);
             setOpenWaitingModal(false);
-            // optionally show success toast, redirect, etc.
         },
         onError: (error) => {
-            console.error("❌ Failed to create project:", error);
-            // optionally show error toast
+            console.error(error);
         }
     });
 
