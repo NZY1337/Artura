@@ -37,7 +37,7 @@ export const Users = () => {
         { field: 'username', headerName: 'Username', width: 130 },
         { field: 'email', headerName: 'Email', width: 250 },
         {
-            field: 'role', headerName: 'Role', width: 150, sortable: false, renderCell: (params: any) => {
+            field: 'role', headerName: 'Role', width: 150, sortable: false, renderCell: (params: { row: UserProps }) => {
                 const selectedRole = updatedRole[params.row.id] || params.row.role;
 
                 return (
