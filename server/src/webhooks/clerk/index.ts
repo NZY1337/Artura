@@ -60,7 +60,7 @@ export const clerkWebhook = async (req: Request, res: Response) => {
 
             if (evt.type === 'user.updated') {
                 const { id, email_addresses, username, role, created_at, updated_at, public_metadata } = evt.data;
-
+                console.log('---user-updated', evt.data);
                 const user = {
                     id,
                     email: email_addresses[0].email_address,
