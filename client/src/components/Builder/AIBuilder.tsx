@@ -1,41 +1,32 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 // components
 import { Grid } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Paper from "@mui/material/Paper";
 import DynamicSelect from "../UtilityComponents/DynamicSelect";
 import FileUpload from "../UtilityComponents/FileUpload";
-import WaitingModal from "../UtilityComponents/modals/WaitingModal";
 import { DESIGN_THEMES, SPACE_TYPES } from "../../helpers/constants";
+
+// helpers
+import { formatPrompt } from "../../helpers/helpers";
+
 // types
+import type { BuilderStateProps, AIBuilderProps, SubmitBuilderProps } from "../../types";
 
-import { type DynamicSelectProps } from "../UtilityComponents/DynamicSelect";
-// types
-type OnchangeType = DynamicSelectProps['onChange'];
-
-type AIBuilderProps = {
-    onSubmit: (event: React.FormEvent<HTMLFormElement>, stateBuilder: object) => void;
-    generatedPreview: string | undefined;
-    isLoading: boolean
-};
-
-const AIBuilder = ({ onSubmit, generatedPreview, isLoading }: AIBuilderProps) => {
+const AIBuilder = ({ onHandleSubmit, generatedPreview, isLoading }: AIBuilderProps) => {
     const [preview, setPreview] = useState<string | null>(null);
-    const [stateBuilder, setStateBuilder] = useState({
+
+    const [stateBuilder, setStateBuilder] = useState<BuilderStateProps>({
         spaceType: SPACE_TYPES[0].value,
         designTheme: DESIGN_THEMES[0].value,
-        outputFormat: 'png',
-        generatedImages: 1,
+        output_format: 'png',
+        n: 1,
         size: '1024x1024',
         prompt: "",
-        usePrompt: true,
     });
 
     const designThemesKeys = DESIGN_THEMES.map((designTheme) => designTheme.value);
@@ -43,32 +34,23 @@ const AIBuilder = ({ onSubmit, generatedPreview, isLoading }: AIBuilderProps) =>
     const spaceTypesKeys = SPACE_TYPES.map((spaceType) => spaceType.value);
     const spaceTypesLabels = SPACE_TYPES.map((spaceType) => spaceType.label);
 
-    const { spaceType, designTheme, prompt } = stateBuilder;
-    const prefixPrompt = `Generate a design for a ${spaceType} in a ${designTheme} style. the design should have: `;
-    const finalPrompt = `${prefixPrompt}${prompt}`;
+    const finalPrompt = formatPrompt(stateBuilder);
 
-    const handleChange: OnchangeType = (event) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | { target: { name: string; value: string | number } }) => {
         const { name, value } = event.target;
-        setStateBuilder((prevState) => ({
+        setStateBuilder((prevState: BuilderStateProps) => ({
             ...prevState,
             [name]: value,
         }));
     };
 
     const finalStateBuilder = {
-        n: stateBuilder.generatedImages,
+        n: stateBuilder.n,
         prompt: `${finalPrompt} ${stateBuilder.prompt}`,
         size: stateBuilder.size,
-        output_format: stateBuilder.outputFormat,
-    };
+        output_format: stateBuilder.output_format,
+    } as SubmitBuilderProps;
 
-    // const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     const { checked } = event.target;
-    //     setStateBuilder((prevState) => ({
-    //         ...prevState,
-    //         usePrompt: checked,
-    //     }));
-    // };
 
     return (
         <Grid spacing={3} container textAlign={"left"} my={5} height={"inherit"}>
@@ -79,7 +61,7 @@ const AIBuilder = ({ onSubmit, generatedPreview, isLoading }: AIBuilderProps) =>
 
             <Grid size={{ xs: 12, xl: 6 }}>
                 <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
-                    <Stack spacing={3} component="form" onSubmit={(e) => onSubmit(e, finalStateBuilder)}>
+                    <Stack spacing={3} component="form" onSubmit={(e) => onHandleSubmit(e, finalStateBuilder)}>
                         <DynamicSelect
                             label="Space Type"
                             id="space-type"
@@ -100,38 +82,36 @@ const AIBuilder = ({ onSubmit, generatedPreview, isLoading }: AIBuilderProps) =>
                             keys={designThemesKeys}
                         />
 
-                        {stateBuilder.usePrompt && (
-                            <TextField
-                                multiline
-                                rows={8}
-                                sx={{ mt: 0, p: 0 }}
-                                fullWidth
-                                placeholder={finalPrompt}
-                                name="prompt"
-                                value={stateBuilder.prompt}
-                                onChange={(e) => {
-                                    let p = "";
-                                    if (e.target.value.startsWith(prefixPrompt)) {
-                                        p = e.target.value.slice(prefixPrompt.length);
-                                    } else {
-                                        p = e.target.value;
+                        <TextField
+                            multiline
+                            rows={8}
+                            sx={{ mt: 0, p: 0 }}
+                            fullWidth
+                            placeholder={finalPrompt}
+                            name="prompt"
+                            value={stateBuilder.prompt}
+                            onChange={(e) => {
+                                let p = "";
+                                if (e.target.value.startsWith(prefixPrompt)) {
+                                    p = e.target.value.slice(prefixPrompt.length);
+                                } else {
+                                    p = e.target.value;
+                                }
+                                setStateBuilder(prev => {
+                                    return {
+                                        ...prev,
+                                        prompt: p
                                     }
-                                    setStateBuilder(prev => {
-                                        return {
-                                            ...prev,
-                                            prompt: p
-                                        }
-                                    })
-                                }}
-                            />
-                        )}
+                                })
+                            }}
+                        />
 
                         <DynamicSelect
-                            label="Generation Number"
+                            label="Generated Images"
                             id="generation_number"
-                            name="generatedImages"
+                            name="n"
                             onChange={handleChange}
-                            value={stateBuilder.generatedImages}
+                            value={stateBuilder.n}
                             options={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
                             keys={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
                         />
@@ -139,9 +119,9 @@ const AIBuilder = ({ onSubmit, generatedPreview, isLoading }: AIBuilderProps) =>
                         <DynamicSelect
                             label="Output Format"
                             id="generated_output"
-                            name="outputFormat"
+                            name="output_format"
                             onChange={handleChange}
-                            value={stateBuilder.outputFormat}
+                            value={stateBuilder.output_format}
                             options={["png", "jpeg", "webp"]}
                             keys={["png", "jpeg", "webp"]}
                         />

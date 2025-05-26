@@ -1,39 +1,34 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState } from "react";
-import { Grid } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import AIBuilder from "../../Builder/AIBuilder";
 import HistoryDrawer from "../History/History";
-
-import { useMutation } from '@tanstack/react-query';
-import { designGenerator } from "../../../services/builder";
 import WaitingModal from "../../UtilityComponents/modals/WaitingModal";
 
-import type { ProjectProps } from "../../../types";
+// hooks
+import { useState } from "react";
+import useDesignGeneration from "../../../hooks/variations/useDesignGeneration";
 
+import type { SubmitBuilderProps, ProjectResponseProps } from "../../../types";
 
 export default function DesignGenerator() {
     const [openWaitingModal, setOpenWaitingModal] = useState<boolean>(false);
-    const [data, setData] = useState<ProjectProps | null>(null);
-
-    const { isPending, mutate } = useMutation({
-        mutationFn: designGenerator,
-        onSuccess: (data: ProjectProps) => {
-            setData(data);
-            setOpenWaitingModal(false);
-        },
-        onError: (error) => {
-            console.error(error);
-        }
-    });
 
     const handleCloseWaitingModal = () => setOpenWaitingModal(false);
+    const handleOpenWaitingModal = () => setOpenWaitingModal(true);
 
-    const onSubmit = async (event: React.FormEvent<HTMLFormElement>, stateBuilder: object) => {
+    const { isPending, mutate, data } = useDesignGeneration({
+        closeWaitingModal: handleCloseWaitingModal
+    });
+
+    const onHandleSubmit = async (event: React.FormEvent<HTMLFormElement>, data: SubmitBuilderProps) => {
         event.preventDefault();
-        mutate(stateBuilder);
-        setOpenWaitingModal(true);
+        mutate(data);
+        handleOpenWaitingModal();
     };
+
+    const generatedPreview = data?.result?.image?.url as ProjectResponseProps['result']['image']['url'];
+
 
     return (
         <>
@@ -45,7 +40,7 @@ export default function DesignGenerator() {
                 </Grid>
             </Grid>
 
-            <AIBuilder onSubmit={onSubmit} generatedPreview={data?.result.image?.url} isLoading={isPending} />
+            <AIBuilder onHandleSubmit={onHandleSubmit} generatedPreview={generatedPreview} isLoading={isPending} />
             <HistoryDrawer />
             <WaitingModal open={openWaitingModal} handleClose={handleCloseWaitingModal} />
 

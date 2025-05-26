@@ -23,7 +23,7 @@ const GenericModalPreview = ({ project, handleCloseModal, open }: { project: Pro
                         }
                     })}>
 
-                    <img src={project?.images[0].url} alt="Interior" style={{ objectFit: 'contain', objectPosition: 'right', width: '100%', maxHeight: '80vh' }} />
+                    <img src={project?.images[0]?.url} alt="Interior" style={{ objectFit: 'contain', objectPosition: 'right', width: '100%', maxHeight: '80vh' }} />
                 </Grid>
 
                 <Grid size={{ xs: 12, md: 12, lg: 4 }} sx={{ display: 'flex', alignItems: 'center', p: 4 }}>

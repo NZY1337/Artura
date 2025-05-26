@@ -20,7 +20,7 @@ export default function LatestProjects() {
         speed: 3000,
         autoplaySpeed: 0,
         slidesToShow: data?.projects?.length,
-        infinite: data?.projects?.length > 3,  // Disable infinite if not enough items
+        infinite: data?.projects?.length >= 3,  // Disable infinite if not enough items
         slidesToScroll: 1,
         responsive: [
             {

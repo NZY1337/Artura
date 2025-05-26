@@ -39,7 +39,7 @@ const SPACE_TYPES = [
     { value: 'ST_balcony', label: 'Balcony / Terrace' },
     { value: 'ST_gameRoom', label: 'Game Room' },
     { value: 'ST_study', label: 'Study' },
-];
+] as const;
 
 const DESIGN_THEMES = [
     { value: 'DT_modern', label: 'Modern' },
@@ -63,7 +63,7 @@ const DESIGN_THEMES = [
     { value: 'DT_urban', label: 'Urban' },
     { value: 'DT_maximalist', label: 'Maximalist' },
     { value: 'DT_futuristic', label: 'Futuristic' },
-];
+] as const;
 
 // const REDESIGN_FURNISHED_ROOMS_LABEL = "Redesign Furnished Rooms";
 // const RENDER_EXTERIOR_STRUCTURES_LABEL = "Render Exterior Structures";

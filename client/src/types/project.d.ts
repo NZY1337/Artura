@@ -1,3 +1,7 @@
+interface ApiResponse<T> {
+    result: T;
+}
+
 interface ProjectImageProps {
     url: string;
     createdAt: string;
@@ -9,8 +13,10 @@ export interface ProjectProps {
     images: ProjectImageProps[];
     category: string;
     createdAt: string;
+    updatedAt: string
     title: string;
     description: string;
+    userId: string
 }
 
 export interface RenderLatestProjectsProps {
@@ -19,3 +25,8 @@ export interface RenderLatestProjectsProps {
     handleOpenModal: () => void;
     handleSetCurrentIndex: (index: number) => void;
 }
+
+export type ProjectResponseProps = ApiResponse<{
+    project: ProjectProps;
+    image: ProjectImageProps;
+}>;

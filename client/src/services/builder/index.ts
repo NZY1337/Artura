@@ -1,6 +1,8 @@
 import { BACKEND_URL } from '../../helpers/constants';
 
-export const designGenerator = async (data: unknown) => {
+import type { SubmitBuilderProps } from '../../types';
+
+export const designGenerator = async (data: SubmitBuilderProps) => {
     const response = await fetch(BACKEND_URL + '/project/design-generator', {
         method: 'POST',
         credentials: 'include',

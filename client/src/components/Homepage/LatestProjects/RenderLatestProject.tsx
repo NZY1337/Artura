@@ -17,7 +17,7 @@ const RenderLatestProjects = ({ project, index, handleOpenModal, handleSetCurren
                 handleOpenModal();
             }}
         >
-            <Box component="img" src={project?.images[0].url} alt={`Interior ${index + 1}`}
+            <Box component="img" src={project?.images[0]?.url} alt={`Interior ${index + 1}`}
                 sx={{
                     width: '100%',
                     height: '100%',
