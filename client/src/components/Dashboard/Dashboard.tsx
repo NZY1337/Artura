@@ -91,12 +91,12 @@ export default function Dashboard() {
             theme={dashboardTheme}>
             <NotificationsProvider slotProps={{ snackbar: { anchorOrigin: { vertical: 'bottom', horizontal: 'right' } } }}>
                 <DashboardLayout
-                    sx={{
-                        'nav.MuiBox-root': {
-                            backgroundColor: '#e5e5f7',
-                            backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #212121 150px), repeating-linear-gradient(#212121, #000000)`
-                        }
-                    }}
+                    // sx={{
+                    //     'nav.MuiBox-root': {
+                    //         backgroundColor: '#e5e5f7',
+                    //         backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #212121 150px), repeating-linear-gradient(#212121, #000000)`
+                    //     }
+                    // }}
                     slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
                     <PageContainer sx={{ position: 'relative', px: 0, padding: 0 }}>
                         <ToastContainer position="bottom-right" />

@@ -9,10 +9,9 @@ import type { ProjectProps } from '../../../types';
 const HistoryProjects = () => {
     const [open, setOpen] = useState(false);
     const [projectIndex, setProjectIndex] = useState(0);
-    const { isPending, data, } = useCategory();
+    const { isPending, data } = useCategory();
 
     console.log(data);
-
     const skeletonCount = data?.projects?.length || 6;
 
     if (isPending) {
@@ -48,7 +47,7 @@ const HistoryProjects = () => {
                                         <CardMedia
                                             component="img"
                                             height="100"
-                                            image={project.images[0].url}
+                                            image={project.images[0]?.url}
                                             alt={`Pexels image ${index + 1}`}
                                             sx={{
                                                 objectFit: 'cover',

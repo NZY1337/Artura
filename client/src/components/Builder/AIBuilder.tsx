@@ -12,14 +12,15 @@ import FileUpload from "../UtilityComponents/FileUpload";
 import { DESIGN_THEMES, SPACE_TYPES } from "../../helpers/constants";
 
 // helpers
-import { formatPrompt } from "../../helpers/helpers";
+import { formatPrompt, extractLabelsAndValues } from "../../helpers/helpers";
 
 // types
 import type { BuilderStateProps, AIBuilderProps, SubmitBuilderProps } from "../../types";
 
+import ChatInput from "../Dashboard/ChatInput";
+
 const AIBuilder = ({ onHandleSubmit, generatedPreview, isLoading }: AIBuilderProps) => {
     const [preview, setPreview] = useState<string | null>(null);
-
     const [stateBuilder, setStateBuilder] = useState<BuilderStateProps>({
         spaceType: SPACE_TYPES[0].value,
         designTheme: DESIGN_THEMES[0].value,
@@ -29,12 +30,7 @@ const AIBuilder = ({ onHandleSubmit, generatedPreview, isLoading }: AIBuilderPro
         prompt: "",
     });
 
-    const designThemesKeys = DESIGN_THEMES.map((designTheme) => designTheme.value);
-    const designThemesLabels = DESIGN_THEMES.map((designTheme) => designTheme.label);
-    const spaceTypesKeys = SPACE_TYPES.map((spaceType) => spaceType.value);
-    const spaceTypesLabels = SPACE_TYPES.map((spaceType) => spaceType.label);
-
-    const finalPrompt = formatPrompt(stateBuilder);
+    const [finalPrompt, prefixPrompt] = formatPrompt(stateBuilder);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | { target: { name: string; value: string | number } }) => {
         const { name, value } = event.target;
@@ -43,24 +39,23 @@ const AIBuilder = ({ onHandleSubmit, generatedPreview, isLoading }: AIBuilderPro
             [name]: value,
         }));
     };
+    const { values: designThemesKeys, labels: designThemesLabels } = extractLabelsAndValues([...DESIGN_THEMES]);
+    const { values: spaceTypesKeys, labels: spaceTypesLabels } = extractLabelsAndValues([...SPACE_TYPES]);
 
-    const finalStateBuilder = {
+    const finalStateBuilder: SubmitBuilderProps = {
         n: stateBuilder.n,
         prompt: `${finalPrompt} ${stateBuilder.prompt}`,
         size: stateBuilder.size,
         output_format: stateBuilder.output_format,
-    } as SubmitBuilderProps;
-
+    };
 
     return (
         <Grid spacing={3} container textAlign={"left"} my={5} height={"inherit"}>
-
-            <Grid size={{ xs: 12, md: 6, lg: 4, xl: 6 }}>
+            <Grid size={{ xs: 12, }}>
                 {<FileUpload preview={preview || generatedPreview} setPreview={setPreview} />}
             </Grid>
 
-            <Grid size={{ xs: 12, xl: 6 }}>
-                <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
+            {/* <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
                     <Stack spacing={3} component="form" onSubmit={(e) => onHandleSubmit(e, finalStateBuilder)}>
                         <DynamicSelect
                             label="Space Type"
@@ -125,7 +120,7 @@ const AIBuilder = ({ onHandleSubmit, generatedPreview, isLoading }: AIBuilderPro
                             options={["png", "jpeg", "webp"]}
                             keys={["png", "jpeg", "webp"]}
                         />
-
+                
                         <DynamicSelect
                             label="Size"
                             id="size"
@@ -136,17 +131,13 @@ const AIBuilder = ({ onHandleSubmit, generatedPreview, isLoading }: AIBuilderPro
                             keys={["1024x1024", "1024x1536", "1536x1024", "auto"]}
                         />
 
-                        {/* <FormControlLabel
-                            label="Custom AI instructions"
-                            control={<Checkbox checked={stateBuilder.usePrompt} onChange={handleCheckboxChange} color="primary" />}
-                        /> */}
-
                         <Button type="submit" variant="contained" fullWidth disabled={isLoading}>
                             Generate Design
                         </Button>
                     </Stack>
-                </Paper>
-            </Grid>
+                </Paper> */}
+
+            <ChatInput />
         </Grid>
     );
 };

@@ -56,20 +56,22 @@ import { SUPABASE_URL } from "../../secrets";
 
 async function mockGenerateImage(): Promise<Buffer> {
     // Here you would call the OpenAI API, but we mock with reading a local file
-    const absolutePath = path.resolve(__dirname, "../../../server/output2.png");
+    const absolutePath = path.resolve(__dirname, "../../../server/output4.png");
     const imageBuffer = await readFile(absolutePath);
     return imageBuffer;
 }
 
 export const designGenerator = async (req: Request, res: Response) => {
-    // const { data: { n, prompt, size, output_format } } = req.body;
+    const { data: { n, prompt, size, output_format } } = req.body;
     // const { data } = req.body;
+
+    console.log({ n, prompt, size, output_format });
 
     // call OPEN AI for image generation with all the data
     const imageBuffer = await mockGenerateImage()
-    const fileName = `generated-${Date.now()}.png`; // check the extension provided by OPEN.AI
+    const storagePath = `${req.auth.userId}/generated-${req.auth.userId}-${Date.now()}.png`; // check the extension provided by OPEN.AI
 
-    const uploadResult = await supabaseClient.storage.from('artura').upload(fileName, imageBuffer)
+    const uploadResult = await supabaseClient.storage.from('artura').upload(storagePath, imageBuffer)
 
     if (uploadResult.error) {
         throw new BadRequestException(ErrorCode.BAD_REQUEST, 'Image could not be stored to Prisma DB Storage');
@@ -81,10 +83,11 @@ export const designGenerator = async (req: Request, res: Response) => {
     const result = await prismaClient.$transaction(async (tx) => {
         const project = await tx.project.create({
             data: {
-                title: 'My first project',
-                description: 'this is a self description text',
                 category: 'DESIGN_GENERATION',
-                userId: req.auth.userId
+                userId: req.auth.userId,
+                prompt,
+                size,
+                quality: 'HIGH',
             }
         });
 

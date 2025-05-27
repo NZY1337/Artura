@@ -7,15 +7,18 @@ interface ProjectImageProps {
     createdAt: string;
     projectId: string;
     id: string;
+    projectId: string;
 }
 
 export interface ProjectProps {
     images: ProjectImageProps[];
     category: string;
     createdAt: string;
-    updatedAt: string
-    title: string;
-    description: string;
+    updatedAt: string;
+    prompt: string;
+    size: string;
+    quality: string;
+    id: string;
     userId: string
 }
 
