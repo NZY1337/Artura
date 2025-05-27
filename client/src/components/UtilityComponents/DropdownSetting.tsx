@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { IconButton, Menu } from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
 
-const DropdownSetting = ({ children }: { children: React.ReactNode }) => {
+const DropdownSetting = ({ children, icon }: { children: React.ReactNode, icon: React.ReactElement }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-
-    console.log(open)
 
     const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -18,9 +15,10 @@ const DropdownSetting = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <>
-            <IconButton onClick={handleOpen}>
-                <SettingsIcon />
+            <IconButton loading={false} onClick={handleOpen}>
+                {icon}
             </IconButton>
+
             <Menu anchorOrigin={{
                 vertical: 'top',    // position the menu's anchor at the top of the icon
                 horizontal: 'right',

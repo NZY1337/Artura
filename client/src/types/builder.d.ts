@@ -1,23 +1,42 @@
+import {
+    SpaceTypeProps,
+    DesignThemeProps,
+    OutputFormatProps,
+    GeneratedImagesCountProps,
+    SizeImageProps,
+    QualityFormatProps
+} from "./index";
 
-export type SpaceTypeProps = typeof SPACE_TYPES[number]['value'];
-export type DesignThemeProps = typeof DESIGN_THEMES[number]['value'];
-export type OutputFormatProps = 'png' | 'jpeg' | 'webp';
-export type SizeImageProps = "1024x1024" | "1024x1536" | "1536x1024" | "auto";
-export type GeneratedImagesCountProps = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
-
-export interface BuilderStateProps {
-    spaceType: SpaceTypeProps;
-    designTheme: DesignTheme;
-    output_format: OutputFormat;
+export interface AiBuilderStateProps {
+    spaceType: SpaceTypesProps[];
+    designTheme: DesignThemeProps[];
+    output_format: OutputFormatProps;
     n: GeneratedImagesCountProps;
-    size: string;
+    size: SizeImageProps;
     prompt: string;
+    quality: QualityFormatProps;
 }
 
-export type SubmitBuilderProps = Pick<BuilderStateProps, "n" | "prompt" | "size" | "output_format">
+// interface BuilderStateProp {
+//     size: string;
+//     quality: string;
+//     [key: string]: any;
+// }
+
+interface BuilderOptionsProps {
+    builderState: AiBuilderStateProps;
+    isLoading: boolean;
+    setBuilderState: React.Dispatch<React.SetStateAction<BuilderState>>;
+}
+
+export type SubmitBuilderProps = Pick<AiBuilderStateProps, "n" | "prompt" | "size" | "output_format">
 
 export interface AIBuilderProps {
     onHandleSubmit: (event: React.FormEvent<HTMLFormElement>, stateBuilder: SubmitBuilderProps) => void;
     generatedPreview: string | undefined;
     isLoading: boolean
 };
+
+export type QualityAndSizeBuilderProps = Omit<BuilderOptionsProps, 'isLoading'>;
+export type SpaceTypesBuilderProps = QualityAndSizeBuilderProps;
+export type DesignThemesBuilderProps = QualityAndSizeBuilderProps;

@@ -48,14 +48,14 @@ export default function Dashboard() {
         signIn: () => { }, signOut
     }), [signOut]);
 
-    useEffect(() => {
-        async function callProtectedRoute() {
-            const token = await getToken();
-            console.log(token);  // copy this exact token to Postman
-        }
+    // useEffect(() => {
+    //     async function callProtectedRoute() {
+    //         const token = await getToken();
+    //         console.log(token);  // copy this exact token to Postman
+    //     }
 
-        callProtectedRoute()
-    }, [])
+    //     callProtectedRoute()
+    // }, [])
 
     const renderContent = () => {
         switch (router.pathname) {

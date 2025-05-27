@@ -3,9 +3,8 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import UserIcon from '@mui/icons-material/Person';
-import SofaIcon from "@mui/icons-material/Weekend";
-import DeleteIcon from "@mui/icons-material/Delete";
-
+// import SofaIcon from "@mui/icons-material/Weekend";
+// import DeleteIcon from "@mui/icons-material/Delete";
 // import goodPhoto1 from "../assets/guidelines/goodPhoto1.png"
 // import goodPhoto2 from "../assets/guidelines/goodPhoto2.png"
 // import goodPhoto3 from "../assets/guidelines/goodPhoto3.png"
@@ -15,68 +14,57 @@ import DeleteIcon from "@mui/icons-material/Delete";
 // import badPhoto3 from "../assets/guidelines/badPhoto3.png"
 // import badPhoto4 from "../assets/guidelines/badPhoto4.png"
 
+import type { SpaceTypeProps, DesignThemeProps } from '../types';
 const BACKEND_URL = "http://localhost:3010/api";
-
-const VIRTUAL_STAGING = {
-    label: "Virtual Staging",
-    segment: "virtual-staging"
-}
 
 const EMPTY_YOUR_SPACE = {
     label: "Empty Your Space",
     segment: "empty-your-space"
 }
 
-const SPACE_TYPES = [
-    { value: 'ST_livingRoom', label: 'Living Room' },
-    { value: 'ST_bedroom', label: 'Bedroom' },
-    { value: 'ST_kitchen', label: 'Kitchen' },
-    { value: 'ST_bathroom', label: 'Bathroom' },
-    { value: 'ST_diningRoom', label: 'Dining Room' },
-    { value: 'ST_homeOffice', label: 'Home Office' },
-    { value: 'ST_kidsRoom', label: 'Kids Room' },
-    { value: 'ST_hallway', label: 'Hallway / Corridor' },
-    { value: 'ST_balcony', label: 'Balcony / Terrace' },
-    { value: 'ST_gameRoom', label: 'Game Room' },
-    { value: 'ST_study', label: 'Study' },
-] as const;
+const SPACE_TYPE: SpaceTypeProps[] = [
+    'Living Room',
+    'Bedroom',
+    'Kitchen',
+    'Bathroom',
+    'Dining Room',
+    'Home Office',
+    'Kids Room',
+    'Hallway / Corridor',
+    'Balcony / Terrace',
+    'Game Room',
+    'Study',
+];
 
-const DESIGN_THEMES = [
-    { value: 'DT_modern', label: 'Modern' },
-    { value: 'DT_contemporary', label: 'Contemporary' },
-    { value: 'DT_minimalist', label: 'Minimalist' },
-    { value: 'DT_scandinavian', label: 'Scandinavian' },
-    { value: 'DT_industrial', label: 'Industrial' },
-    { value: 'DT_midCentury', label: 'Mid-Century Modern' },
-    { value: 'DT_traditional', label: 'Traditional' },
-    { value: 'DT_classic', label: 'Classic' },
-    { value: 'DT_baroque', label: 'Baroque' },
-    { value: 'DT_japanese', label: 'Japanese Zen' },
-    { value: 'DT_wabiSabi', label: 'Wabi-Sabi' },
-    { value: 'DT_farmhouse', label: 'Farmhouse' },
-    { value: 'DT_rustic', label: 'Rustic' },
-    { value: 'DT_bohemian', label: 'Bohemian' },
-    { value: 'DT_artDeco', label: 'Art Deco' },
-    { value: 'DT_victorian', label: 'Victorian' },
-    { value: 'DT_coastal', label: 'Coastal' },
-    { value: 'DT_tropical', label: 'Tropical' },
-    { value: 'DT_urban', label: 'Urban' },
-    { value: 'DT_maximalist', label: 'Maximalist' },
-    { value: 'DT_futuristic', label: 'Futuristic' },
-] as const;
+const DESIGN_THEME: DesignThemeProps[] = [
+    'Modern',
+    'Contemporary',
+    'Minimalist',
+    'Scandinavian',
+    'Industrial',
+    'Mid-Century Modern',
+    'Traditional',
+    'Classic',
+    'Baroque',
+    'Japanese Zen',
+    'Wabi-Sabi',
+    'Farmhouse',
+    'Rustic',
+    'Bohemian',
+    'Art Deco',
+    'Victorian',
+    'Coastal',
+    'Tropical',
+    'Urban',
+    'Maximalist',
+    'Futuristic'
+];
+
 
 // const REDESIGN_FURNISHED_ROOMS_LABEL = "Redesign Furnished Rooms";
 // const RENDER_EXTERIOR_STRUCTURES_LABEL = "Render Exterior Structures";
 
 const ROTATION = [90, 180, 270, 360];
-
-const solutions = [
-    { label: EMPTY_YOUR_SPACE.label, segment: EMPTY_YOUR_SPACE.segment, selected: true, icon: <DeleteIcon /> },
-    { label: VIRTUAL_STAGING.label, segment: VIRTUAL_STAGING.segment, icon: <SofaIcon /> },
-    // { label: REDESIGN_FURNISHED_ROOMS_LABEL, icon: <ChairIcon /> },
-    // { label: LANDSCAPING_LABEL, icon: <ParkIcon /> },
-    // { label: RENDER_EXTERIOR_STRUCTURES_LABEL, icon: <HomeIcon /> },
-];
 
 const DASHBOARD_NAVIGATION: Navigation = [
     {
@@ -173,6 +161,19 @@ const builderModeStyle = ["Modern", "Traditional", "Contemporary"];
 const builderNumberOfDesigns = [1, 2, 3, 4];
 const builderAiIntervention = [1, 2, 3, 4];
 
+const BUILDER_SIZES = [
+    { value: '1024x1024', label: 'Square (1024×1024)' },
+    { value: '1024x1536', label: 'Portrait (1024×1536)' },
+    { value: '1536x1024', label: 'Landscape (1536×1024)' },
+    { value: 'auto', label: 'Auto (let AI decide)' },
+];
+
+const BUILDER_QUALITIES = [
+    { value: 'high', label: 'High' },
+    { value: 'medium', label: 'Medium' },
+    { value: 'low', label: 'Low' },
+];
+
 export {
     DASHBOARD_NAVIGATION,
     ROTATION,
@@ -184,8 +185,9 @@ export {
     // goodPhotosData,
     // badPhotosData,
     BACKEND_URL,
-    SPACE_TYPES,
-    DESIGN_THEMES,
-    solutions,
+    SPACE_TYPE,
+    DESIGN_THEME,
     EMPTY_YOUR_SPACE,
+    BUILDER_SIZES,
+    BUILDER_QUALITIES,
 };
