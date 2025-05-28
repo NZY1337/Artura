@@ -1,6 +1,5 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 
 // components
 import DashboardTitle from './DashboardTitle';
@@ -99,7 +98,6 @@ export default function Dashboard() {
                     // }}
                     slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
                     <PageContainer sx={{ position: 'relative', px: 0, padding: 0 }}>
-                        <ToastContainer position="bottom-right" />
                         {renderContent()}
                     </PageContainer>
                 </DashboardLayout>

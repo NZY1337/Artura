@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
 import { getUsers, updateUserRole, deleteUser } from '../services/users'; // adjust import path
+import { useNotifications } from '@toolpad/core';
 
 import type { UserProps } from '../types'; // adjust import path
 
@@ -12,6 +12,7 @@ export const useUsersManagement = ({
     onDeleteModalClose?: () => void;
 } = {}) => {
     const queryClient = useQueryClient();
+    const notifications = useNotifications();
 
     const { isPending, error, data: users, } = useQuery({
         queryKey: ['users'],
@@ -37,7 +38,11 @@ export const useUsersManagement = ({
         },
 
         onSuccess: (_data, variables) => {
-            toast('Role changed to ' + variables.role);
+            // toast('Role changed to ' + variables.role);
+            notifications.show('Role changed to ' + variables.role, {
+                severity: 'success',
+                autoHideDuration: 3000
+            })
         },
     });
 
@@ -61,13 +66,19 @@ export const useUsersManagement = ({
                 queryClient.setQueryData(['users'], context.previousUsers);
             }
             onDeleteModalClose();
-            toast.error(error.message);
+            notifications.show(error.message, {
+                severity: 'error',
+                autoHideDuration: 3000
+            })
         },
 
         onSuccess: () => {
             onUserDeleted();
             onDeleteModalClose();
-            toast.success('User deleted successfully.');
+            notifications.show('User deleted successfully. ', {
+                severity: 'success',
+                autoHideDuration: 3000
+            })
         },
     });
 

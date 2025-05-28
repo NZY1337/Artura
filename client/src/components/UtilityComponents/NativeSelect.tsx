@@ -27,7 +27,7 @@ const NativeSelect = ({ optionLabels, labels, labelName, setBuilderState, name }
                     multiple={true}
                     native
                     value={labels}
-                    // @ts-ignore Typings are not considering `native`
+                    // @ts-expect-error Typings are not considering `native`
                     onChange={handleChangeMultiple}
                     label="Native"
                     name={name}
