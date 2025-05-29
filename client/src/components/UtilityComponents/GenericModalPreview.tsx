@@ -5,7 +5,6 @@ import { Box, Avatar, Stack, Divider, Grid, Typography, Button, } from '@mui/mat
 import type { ProjectProps } from '../../types';
 
 const GenericModalPreview = ({ project, handleCloseModal, open }: { project: ProjectProps, open: boolean, handleCloseModal: () => void }) => {
-    console.log(project);
     return (
         <GenericModal open={open}>
             <Grid container sx={(theme) => ({

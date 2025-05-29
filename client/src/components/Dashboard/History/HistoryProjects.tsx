@@ -11,7 +11,6 @@ const HistoryProjects = () => {
     const [projectIndex, setProjectIndex] = useState(0);
     const { isPending, data } = useCategory();
 
-    console.log(data);
     const skeletonCount = data?.projects?.length || 6;
 
     if (isPending) {
