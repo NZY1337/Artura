@@ -14,7 +14,6 @@
 
 - https://github.com/ishaangupta-YB/clerk-webhook-tutorial/blob/main/app/api/webhooks/clerk/route.ts - clerk webHook
 
-
 # OPEN AI
 
 - https://platform.openai.com/docs/guides/production-best-practices: production best practices
@@ -33,3 +32,6 @@
  - tutorial: https://www.youtube.com/watch?v=kyphLGnSz6Q&t=3877s
 
  # use node v 21.0.0: nvm use 21.0.0
+
+ # MUI CONFIGURATIONS:
+  - theming: https://codesandbox.io/embed/zhlj7t?module=/src/Demo.tsx&fontsize=12

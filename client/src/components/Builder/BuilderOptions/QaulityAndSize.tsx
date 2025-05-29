@@ -19,7 +19,7 @@ const QualityAndSize: React.FC<QualityAndSizeBuilderProps> = ({ builderState, se
 
             {BUILDER_SIZES.map(({ value, label }) => (
                 <MenuItem key={value} onClick={() => setBuilderState((prev: QualityAndSizeBuilderProps['builderState']) => ({ ...prev, size: value }))}>
-                    {size === value && <CheckIcon fontSize="small" />}
+                    {size === value && <CheckIcon sx={{ color: 'orange' }} fontSize="small" />}
                     <Typography ml={size === value ? 1 : 3}>{label}</Typography>
                 </MenuItem>
             ))}
@@ -28,7 +28,7 @@ const QualityAndSize: React.FC<QualityAndSizeBuilderProps> = ({ builderState, se
 
             {BUILDER_QUALITIES.map(({ value, label }) => (
                 <MenuItem key={value} onClick={() => setBuilderState((prev: QualityAndSizeBuilderProps['builderState']) => ({ ...prev, quality: value }))}>
-                    {quality === value && <CheckIcon fontSize="small" />}
+                    {quality === value && <CheckIcon sx={{ color: 'orange' }} fontSize="small" />}
                     <Typography ml={quality === value ? 1 : 3}>{label}</Typography>
                 </MenuItem>
             ))}

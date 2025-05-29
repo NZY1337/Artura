@@ -9,12 +9,16 @@ import { Send } from '@mui/icons-material';
 import QualityAndSize from './BuilderOptions/QaulityAndSize';
 import SpaceTypes from './BuilderOptions/SpaceTypes';
 import DesignThemes from './BuilderOptions/DesignThemes';
-// import AttachFile from '@mui/icons-material/AttachFile';
+// import AttachFile from '@mui/icons-material/AttachFile';\
+
+// hooks
+import { useColorScheme } from "@mui/material";
 
 import type { BuilderOptionsProps } from '../../types';
 
 const BuilderOptions = ({ onHandleSubmit, builderState, setBuilderState, isLoading }: BuilderOptionsProps) => {
     const { prompt } = builderState;
+    const { mode } = useColorScheme();
 
     return (
         <Box sx={{ width: '100%', }} component={'form'}>
@@ -30,19 +34,23 @@ const BuilderOptions = ({ onHandleSubmit, builderState, setBuilderState, isLoadi
                     resize: 'none',
                     fontFamily: 'Roboto, sans-serif',
                     fontSize: '16px',
-                    backgroundColor: '#2e2f38',
+                    backgroundColor: mode === 'dark' ? '#fff' : '#2e2f38',
+                    color: mode === 'dark' ? '#2e2f38' : '#fff',
                     padding: '15px',
                     overscrollBehavior: 'contain',
                     border: 'none',
                     borderTopLeftRadius: '8px',
                     borderTopRightRadius: '8px',
-                    outline: 'none'
+                    outline: 'none',
                 }}
             />
 
             <Divider sx={{ backgroundColor: '#3c3f47' }} />
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '8px', backgroundColor: '#2e2f38', width: '100%', }}>
+            <Box sx={{
+                display: 'flex', justifyContent: 'space-between', padding: '8px',
+                backgroundColor: '#2e2f38', width: '100%',
+            }}>
                 <Box>
                     <QualityAndSize setBuilderState={setBuilderState} builderState={builderState} />
                     <SpaceTypes setBuilderState={setBuilderState} builderState={builderState} />

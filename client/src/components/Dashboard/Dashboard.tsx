@@ -1,36 +1,56 @@
+
+// hooks
 import { useMemo, } from 'react';
+import { useColorScheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { useUser, useClerk, } from '@clerk/clerk-react';
 
 // components
 import DashboardTitle from './DashboardTitle';
 import DashboardFooter from './DashboardFooter';
-import dashboardTheme from './themeContext';
-import { AppProvider, type Session } from '@toolpad/core/AppProvider';
+import DesignGenerator from './Variations/DesignGenerator'; // Ensure the file exists at this path or adjust the path accordingly
+import Overview from './Overview';
+import Landscaping from './Variations/Landscaping';
+import VirtualStaging from './Variations/VirtualStaging';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
-import DesignGenerator from './Variations/DesignGenerator'; // Ensure the file exists at this path or adjust the path accordingly
-import VirtualStaging from './Variations/VirtualStaging';
-import Landscaping from './Variations/Landscaping';
 import { Users } from './Users';
-import Overview from './Overview';
+import { AppProvider } from '@toolpad/core/AppProvider';
+import { UserProfile } from '@clerk/clerk-react';
+
+// Providers
+import { NotificationsProvider } from '@toolpad/core/useNotifications';
+import CustomThemeSwitcher from './CustomThemeSwitcher';
 
 // utils
 import { DASHBOARD_NAVIGATION } from '../../helpers/constants';
-
-// hooks
-import { NotificationsProvider } from '@toolpad/core/useNotifications';
+import { createTheme } from '@mui/material/styles';
+import { typography, components, colorSchemes, palette } from './context/themeContext';
 
 // types
 import { type Router } from '@toolpad/core';
+import { type Session } from '@toolpad/core/AppProvider';
 
-// clerk
-import { useUser, useClerk, UserProfile, useAuth } from '@clerk/clerk-react';
+// constants
+import { DASHBOARD_NAV_BACKGROUND } from '../../helpers/constants';
 
 export default function Dashboard() {
     const navigate = useNavigate();
     const { user } = useUser();
     const { signOut } = useClerk();
-    const { getToken } = useAuth();
+    // const { getToken } = useAuth();
+    const { setMode, mode } = useColorScheme() as {
+        setMode: (mode: 'light' | 'dark') => void;
+        mode: 'light' | 'dark';
+    };
+
+    const dashboardSession = {
+        user: {
+            name: user?.fullName,
+            image: user?.imageUrl || 'https://avatars.githubusercontent.com/c',
+            email: user?.emailAddresses[0].emailAddress, id: user?.id
+        } as Session['user']
+    }
 
     const router: Router = useMemo(() => ({
         navigate: (path: string | URL) => {
@@ -43,18 +63,18 @@ export default function Dashboard() {
         searchParams: new URLSearchParams(window.location.search),
     }), [navigate]);
 
+    const memoizedTheme = useMemo(() =>
+        createTheme({
+            colorSchemes,
+            typography,
+            components,
+            palette: { ...palette }
+        }), [mode]);
+
     const authentication = useMemo(() => ({
         signIn: () => { }, signOut
     }), [signOut]);
 
-    // useEffect(() => {
-    //     async function callProtectedRoute() {
-    //         const token = await getToken();
-    //         console.log(token);  // copy this exact token to Postman
-    //     }
-
-    //     callProtectedRoute()
-    // }, [])
 
     const renderContent = () => {
         switch (router.pathname) {
@@ -81,23 +101,36 @@ export default function Dashboard() {
         }
     };
 
+    // useEffect(() => {
+    //     async function callProtectedRoute() {
+    //         const token = await getToken();
+    //         console.log(token);  // copy this exact token to Postman
+    //     }
+
+    //     callProtectedRoute()
+    // }, [])
+
+
     return (
         <AppProvider
-            session={{ user: { name: user?.fullName, image: user?.imageUrl || 'https://avatars.githubusercontent.com/c', email: user?.emailAddresses[0].emailAddress, id: user?.id } as Session['user'] }}
+            session={dashboardSession}
             authentication={authentication}
             navigation={DASHBOARD_NAVIGATION}
             router={router}
-            theme={dashboardTheme}>
+            theme={memoizedTheme}>
             <NotificationsProvider slotProps={{ snackbar: { anchorOrigin: { vertical: 'bottom', horizontal: 'right' } } }}>
                 <DashboardLayout
-                    // sx={{
-                    //     'nav.MuiBox-root': {
-                    //         backgroundColor: '#e5e5f7',
-                    //         backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #212121 150px), repeating-linear-gradient(#212121, #000000)`
-                    //     }
-                    // }}
-                    slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
-                    <PageContainer sx={{ position: 'relative', px: 0, padding: 0 }}>
+                    sx={{
+                        'nav.MuiBox-root': {
+                            ...DASHBOARD_NAV_BACKGROUND.setBackgroundNav(mode)
+                        }
+                    }}
+                    slots={{
+                        sidebarFooter: DashboardFooter,
+                        appTitle: DashboardTitle,
+                        toolbarActions: () => <CustomThemeSwitcher setMode={setMode} mode={mode} />
+                    }}>
+                    <PageContainer breadcrumbs={[]} sx={{ position: 'relative', px: 0, padding: 0 }}>
                         {renderContent()}
                     </PageContainer>
                 </DashboardLayout>

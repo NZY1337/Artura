@@ -15,7 +15,7 @@ const DropdownSetting = ({ children, icon }: { children: React.ReactNode, icon: 
 
     return (
         <>
-            <IconButton loading={false} onClick={handleOpen}>
+            <IconButton sx={{ color: '#fff' }} loading={false} onClick={handleOpen}>
                 {icon}
             </IconButton>
 

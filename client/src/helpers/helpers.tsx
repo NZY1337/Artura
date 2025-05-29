@@ -1,6 +1,6 @@
-import type { BuilderStateProps, LabelValueItemProps } from "../types";
+import type { LabelValueItemProps } from "../types";
 
-const formatPrompt = (stateBuilder: BuilderStateProps) => {
+const formatPrompt = (stateBuilder: any) => {
     const { spaceType, designTheme, prompt } = stateBuilder;
     const prefixPrompt = `Generate a design for a ${spaceType} in a ${designTheme} style. the design should have: `;
     const finalPrompt = `${prefixPrompt}${prompt}`;
@@ -13,6 +13,5 @@ export const extractLabelsAndValues = (items: LabelValueItemProps[]) => {
     const labels = items.map(item => item.label);
     return { values, labels };
 };
-
 
 export { formatPrompt }

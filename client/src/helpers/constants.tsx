@@ -168,6 +168,20 @@ const BUILDER_SIZES = [
     { value: 'auto', label: 'Auto (let AI decide)' },
 ];
 
+const DASHBOARD_NAV_BACKGROUND = {
+    dark: {
+        backgroundColor: '#e5e5f7',
+        backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #212121 150px), repeating-linear-gradient(#212121, #000000)`
+    },
+    light: {
+        backgroundColor: '#e5e5f7',
+        backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #efefef 150px), repeating-linear-gradient(#ffffff, #ffffff)`
+    },
+    setBackgroundNav: function (mode: "light" | "dark") {
+        return this[mode];
+    },
+}
+
 const BUILDER_QUALITIES = [
     { value: 'high', label: 'High' },
     { value: 'medium', label: 'Medium' },
@@ -190,4 +204,5 @@ export {
     EMPTY_YOUR_SPACE,
     BUILDER_SIZES,
     BUILDER_QUALITIES,
+    DASHBOARD_NAV_BACKGROUND
 };
