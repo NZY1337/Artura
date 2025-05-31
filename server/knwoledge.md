@@ -17,21 +17,22 @@
 # OPEN AI
 
 - https://platform.openai.com/docs/guides/production-best-practices: production best practices
+- cost calculator: https://chatgpt.com/share/683b1f88-36e4-800f-a22a-a601cb09cc7d
 
-- cost calculator: https://chatgpt.com/share/682e3a4a-d04c-800f-a52d-f48fc897bb65
-
-- CALCULATIONS: 
-    usage: {
-        input_tokens: 111,
-        input_tokens_details: { image_tokens: 0, text_tokens: 111 },
-        output_tokens: 4160,
-        total_tokens: 4271
-    }
+- CALCULATIONS:
+  usage: {
+  input_tokens: 111,
+  input_tokens_details: { image_tokens: 0, text_tokens: 111 },
+  output_tokens: 4160,
+  total_tokens: 4271
+  }
 
 # SUPABASE:
- - tutorial: https://www.youtube.com/watch?v=kyphLGnSz6Q&t=3877s
 
- # use node v 21.0.0: nvm use 21.0.0
+- tutorial: https://www.youtube.com/watch?v=kyphLGnSz6Q&t=3877s
 
- # MUI CONFIGURATIONS:
-  - theming: https://codesandbox.io/embed/zhlj7t?module=/src/Demo.tsx&fontsize=12
+# use node v 21.0.0: nvm use 21.0.0
+
+# MUI CONFIGURATIONS:
+
+- theming: https://codesandbox.io/embed/zhlj7t?module=/src/Demo.tsx&fontsize=12

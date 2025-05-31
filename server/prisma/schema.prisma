@@ -41,6 +41,7 @@ model User {
     freeCredits Int       @default(5)
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
+
     Project     Project[]
 }
 
@@ -57,6 +58,31 @@ model Project {
 
     user   User    @relation(fields: [userId], references: [id])
     images Image[] @relation("ProjectImages")
+
+    imageGenerationResponse ImageGenerationResponse? @relation(name: "ImageGenerationResponse")
+}
+
+model ImageGenerationResponse { 
+  id           String   @id @default(uuid())
+  projectId    String   @unique
+
+  background   String   // 'transparent' | 'opaque' | 'auto'
+  outputFormat String   // 'png' | 'webp'
+  quality      String   // 'low' | 'medium' | 'high'
+  size         String   // '1024x1024', etc.
+
+  inputTokens        Int
+  imageTokens        Int
+  textTokens         Int
+  outputTokens       Int
+  totalTokens        Int
+
+  // Calculated fields
+  imageCost    Float  // from fixed pricing
+  tokenCost    Float  // from tokens
+  totalCost    Float  // imageCost + tokenCost
+
+  project Project @relation(fields: [projectId], references: [id], name: "ImageGenerationResponse")
 }
 
 model Image {
