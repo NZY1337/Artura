@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Container, Grid, Typography } from '@mui/material';
 
 import useCategory from "../../../hooks/useCategory";
-import GenericModalPreview from "../../UtilityComponents/GenericModalPreview";
+import BuilderModalPreview from "../../Builder/BuiulderModalPreview";
 import Carousel from "../../UtilityComponents/Carousel";
 import RenderLatestProjects from "./RenderLatestProject";
 
@@ -77,9 +77,10 @@ export default function LatestProjects() {
                             <RenderLatestProjects project={project} index={index} handleOpenModal={handleOpenModal} handleSetCurrentIndex={handleSetCurrentIndex} />
                         ))}
                     </Carousel>
-                </Container><GenericModalPreview open={open} project={data?.projects[currentIndex]} handleCloseModal={() => setOpen(false)} /></>
-                : null
-            }
+                </Container>
+
+                <BuilderModalPreview open={open} project={data?.projects[currentIndex]} handleCloseModal={() => setOpen(false)} />
+            </> : null}
         </>
     );
 }

@@ -1,10 +1,10 @@
 import Close from '@mui/icons-material/Close';
-import GenericModal from './modals/GenericModal';
+import GenericModal from '../UtilityComponents/modals/GenericModal';
 import { Box, Avatar, Stack, Divider, Grid, Typography, Button, } from '@mui/material';
-
+import BuilderOptionsPreview from './BuilderOptionsPreview';
 import type { ProjectProps } from '../../types';
 
-const GenericModalPreview = ({ project, handleCloseModal, open }: { project: ProjectProps, open: boolean, handleCloseModal: () => void }) => {
+const BuilderModalPreview = ({ project, handleCloseModal, open }: { project: ProjectProps, open: boolean, handleCloseModal: () => void }) => {
     return (
         <GenericModal open={open}>
             <Grid container sx={(theme) => ({
@@ -47,24 +47,15 @@ const GenericModalPreview = ({ project, handleCloseModal, open }: { project: Pro
 
                             <Divider sx={{ borderColor: '#333', my: 2 }} />
 
-                            {/* Footer Metadata */}
-                            <Stack direction="row" spacing={3} justifyContent="flex-start" mt={2}>
-                                <Typography variant="caption" color="gray">
-                                    quality: <span style={{ color: '#fff' }}>high</span>
-                                </Typography>
-                                <Typography variant="caption" color="gray">
-                                    size: <span style={{ color: '#fff' }}>1536×1024</span>
-                                </Typography>
-                                <Typography variant="caption" color="gray">
-                                    text input: <span style={{ color: '#fff' }}>79t</span>
-                                </Typography>
-                                <Typography variant="caption" color="gray">
-                                    image input: <span style={{ color: '#fff' }}>323t</span>
-                                </Typography>
-                                <Typography variant="caption" color="gray">
-                                    output: <span style={{ color: '#fff' }}>6,208t</span>
-                                </Typography>
-                            </Stack>
+                            <BuilderOptionsPreview builderState={{
+                                size: '1536x1024',
+                                quality: 'high',
+                                spaceType: ['Living Room'],
+                                designTheme: ['Modern'],
+                                prompt: project.prompt,
+                                n: 1,
+                                output_format: 'png',
+                            }} />
                         </Box>
                     </Box>
                 </Grid>
@@ -75,5 +66,5 @@ const GenericModalPreview = ({ project, handleCloseModal, open }: { project: Pro
     );
 }
 
-export default GenericModalPreview
+export default BuilderModalPreview
 

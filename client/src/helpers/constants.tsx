@@ -64,8 +64,8 @@ const DESIGN_THEME: DesignThemeProps[] = [
 // const REDESIGN_FURNISHED_ROOMS_LABEL = "Redesign Furnished Rooms";
 // const RENDER_EXTERIOR_STRUCTURES_LABEL = "Render Exterior Structures";
 
-const ROTATION = [90, 180, 270, 360];
-
+const ROTATION: number[] = [90, 180, 270, 360];
+const CHARS_LIMIT: number = 500;
 const DASHBOARD_NAVIGATION: Navigation = [
     {
         segment: 'dashboard',
@@ -204,5 +204,5 @@ export {
     EMPTY_YOUR_SPACE,
     BUILDER_SIZES,
     BUILDER_QUALITIES,
-    DASHBOARD_NAV_BACKGROUND
+    DASHBOARD_NAV_BACKGROUND, CHARS_LIMIT
 };

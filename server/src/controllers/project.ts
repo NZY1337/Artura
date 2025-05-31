@@ -54,9 +54,39 @@ import { SUPABASE_URL } from "../../secrets";
 // console.log(img);
 // const finalImage = `data:image/png;base64,${imageBase64}`
 
+// Types for the request
+export interface ImageRequest {
+    n: number;
+    prompt: string;
+    size: string;
+    output_format: 'png' | 'webp';
+}
+
+// Types for the response
+export interface ImageResponse {
+    created: number;
+    background: 'transparent' | 'opaque' | 'auto';
+    data: {
+        b64_json: string;
+    }[];
+    output_format: 'png' | 'webp';
+    quality: 'low' | 'medium' | 'high';
+    size: string;
+    usage: {
+        input_tokens: number;
+        input_tokens_details: {
+            image_tokens: number;
+            text_tokens: number;
+        };
+        output_tokens: number;
+        total_tokens: number;
+    };
+}
+
+
 async function mockGenerateImage(): Promise<Buffer> {
     // Here you would call the OpenAI API, but we mock with reading a local file
-    const absolutePath = path.resolve(__dirname, "../../../server/output2.png");
+    const absolutePath = path.resolve(__dirname, "../../../server/output.png");
     const imageBuffer = await readFile(absolutePath);
     return imageBuffer;
 }
@@ -67,8 +97,27 @@ export const designGenerator = async (req: Request, res: Response) => {
 
     console.log({ n, prompt, size, output_format });
 
+    const img = await openAiClient.images.generate({
+        model: "gpt-image-1",
+        prompt,
+        n: 1,
+        size,
+        background: 'auto'
+    });
+
+
+    if (!img.data || !img.data[0]?.b64_json) {
+        throw new NotFoundException(
+            ErrorCode.NOT_FOUND,
+            "Image data is undefined or invalid.", // message
+        );
+    }
+
+    const base64Data = img.data[0].b64_json;
+    const imageBuffer = Buffer.from(base64Data, 'base64');
+
     // call OPEN AI for image generation with all the data
-    const imageBuffer = await mockGenerateImage()
+    // const imageBuffer = await mockGenerateImage()
     const storagePath = `${req.auth.userId}/generated-${req.auth.userId}-${Date.now()}.png`; // check the extension provided by OPEN.AI
 
     const uploadResult = await supabaseClient.storage.from('artura').upload(storagePath, imageBuffer)
@@ -101,7 +150,7 @@ export const designGenerator = async (req: Request, res: Response) => {
         return { project, image };
     });
 
-    res.status(200).json({ result });
+    res.status(200).json({ result: result });
 }
 
 

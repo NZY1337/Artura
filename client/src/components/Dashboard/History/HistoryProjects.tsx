@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Grid, Card, CardMedia } from '@mui/material';
 import Skeleton from 'react-loading-skeleton';
-import GenericModalPreview from '../../UtilityComponents/GenericModalPreview';
+import GenericModalPreview from '../../Builder/BuiulderModalPreview';
 import useCategory from '../../../hooks/useCategory';
 
 import type { ProjectProps } from '../../../types';
@@ -40,7 +40,7 @@ const HistoryProjects = () => {
                                             setProjectIndex(index);
                                         }}
                                         sx={{
-                                            borderRadius: '10px',
+                                            borderRadius: '2px',
                                             boxShadow: 3,
                                         }}>
                                         <CardMedia
