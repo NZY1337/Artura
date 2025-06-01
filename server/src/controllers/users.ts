@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { clerkClient } from "@clerk/express";
-import { prismaClient } from "../utils/prismaClient";
+import { prismaClient } from "../services/prismaClient";
 import { BadRequestException, ErrorCode } from "../middlewares/errorMiddleware";
 import { Decimal } from "@prisma/client/runtime/library";
 

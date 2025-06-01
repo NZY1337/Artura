@@ -62,7 +62,7 @@ model Project {
     imageGenerationResponse ImageGenerationResponse? @relation(name: "ImageGenerationResponse")
 }
 
-model ImageGenerationResponse { 
+model ImageGenerationResponse {  
   id           String   @id @default(uuid())
   projectId    String   @unique
 

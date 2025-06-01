@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { openAiClient } from "../utils/openai";
-import { supabaseClient } from "../utils/supabase";
+import { openAiClient } from "../services/openai";
+import { supabaseClient } from "../services/supabase";
 import { writeFile, readFile } from "fs/promises";
 import {
   BadRequestException,
@@ -8,13 +8,13 @@ import {
   NotFoundException,
 } from "../middlewares/errorMiddleware";
 import path from "path";
-import { prismaClient } from "../utils/prismaClient";
+import { prismaClient } from "../services/prismaClient";
 
 import { ProjectValidator } from "../validation/project";
 
 import { SUPABASE_URL } from "../../secrets";
 
-import { type ImagesResponse } from "openai/resources/images";
+import type { ImageGenerationResponseProps } from "../../types";
 
 // https://yfyiqiqqwgdvmazcgdnv.supabase.co - SUPABASE_URL
 // {
@@ -110,7 +110,7 @@ export const designGenerator = async (req: Request, res: Response) => {
     n: 1,
     size,
     background: "auto",
-  })) as ImagesResponse;
+  })) as ImageGenerationResponseProps;
 
   console.log(imgResponse);
 
