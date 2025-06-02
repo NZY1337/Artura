@@ -1,4 +1,5 @@
 import type { ImagesResponse, ImageEditParams } from "openai/resources/images";
+import { BadRequestException } from "../middlewares/errorMiddleware";
 
 // pricing for GPT-image-1
 const TOTAL_TOKENS: number = 1000000; // Cost per million tokens for GPT-image-1
@@ -30,17 +31,17 @@ const SINGLE_IMAGE_PRICE = {
         low: {
             "1024x1024": 0.011,
             "1024x1536": 0.016,
-            "1535x1024": 0.016,
+            "1536x1024": 0.016,
         },
         medium: {
             "1024x1024": 0.042,
             "1024x1536": 0.063,
-            "1535x1024": 0.063,
+            "1536x1024": 0.063,
         },
         high: {
             "1024x1024": 0.167,
             "1024x1536": 0.25,
-            "1535x1024": 0.25,
+            "1536x1024": 0.25,
         },
     },
     "dall-e-2": {
@@ -123,16 +124,20 @@ export const calculateImageGenerationCost = (imgResponseData: any, useCache = fa
     totalCost: number;
 } => {
     const {
+        model,
+        quality,
+        size,
         input_tokens_details: { image_tokens, text_tokens },
-        output_tokens,
-    } = imgResponseData.usage;
+        output_tokens
+    } = imgResponseData;
 
-    const { model, quality, size } = imgResponseData;
+    // console.log('from inside fn', model, quality, size, image_tokens, text_tokens, output_tokens);
 
     const textInputPrice = useCache ? SINGLE_TOKEN_PRICE.text.cached : SINGLE_TOKEN_PRICE.text.input;
     const imageInputPrice = useCache ? SINGLE_TOKEN_PRICE.image.cached : SINGLE_TOKEN_PRICE.image.input;
 
     const tokenCost = text_tokens * textInputPrice + image_tokens * imageInputPrice + output_tokens * SINGLE_TOKEN_PRICE.image.output;
+
     const imageCost = costPerImageGeneration({ model, quality, size });
 
     const totalCost = tokenCost + imageCost;

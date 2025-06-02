@@ -163,8 +163,8 @@ const builderAiIntervention = [1, 2, 3, 4];
 
 const BUILDER_SIZES = [
     { value: '1024x1024', label: 'Square (1024×1024)' },
-    { value: '1024x1536', label: 'Portrait (1024×1536)' },
-    { value: '1536x1024', label: 'Landscape (1536×1024)' },
+    { value: '1024x1536', label: 'Portrait (1024×1535)' },
+    { value: '1536x1024', label: 'Landscape (1536x1024)' },
     { value: 'auto', label: 'Auto (let AI decide)' },
 ];
 

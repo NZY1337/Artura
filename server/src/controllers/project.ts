@@ -77,24 +77,46 @@ export const designGenerator = async (req: Request, res: Response) => {
         n: 1,
         size,
         background: "auto",
-    })
+    });
 
     if (!imgResponse.data || !imgResponse.data[0]?.b64_json) {
-        throw new BadRequestException(
-            ErrorCode.BAD_REQUEST, "Image data is undefined or invalid.",
-        );
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image data is undefined or invalid.");
+    }
+
+    const usage = imgResponse.usage;
+    if (
+        usage === undefined ||
+        usage.input_tokens === undefined ||
+        usage.output_tokens === undefined ||
+        usage.total_tokens === undefined ||
+        usage.input_tokens_details?.image_tokens === undefined ||
+        usage.input_tokens_details?.text_tokens === undefined
+    ) {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "Incomplete usage data from OpenAI.");
     }
 
     const base64Data = imgResponse.data[0].b64_json;
     const imageBuffer = Buffer.from(base64Data, "base64");
-    // const imageBuffer = await mockGenerateImage()
 
-    const storagePath = createStorageUrl(req.auth.userId); // check the extension provided by OPEN.AI
+    const storagePath = createStorageUrl(req.auth.userId);
     const uploadResult = await supabaseClient.storage.from("artura").upload(storagePath, imageBuffer);
 
-    if (uploadResult.error) throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image could not be stored to Supabase Storage");
+    if (uploadResult.error) {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image could not be stored to Supabase Storage");
+    }
 
     const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/${uploadResult.data.fullPath}`;
+
+    // ✅ Cost calculation outside transaction
+    const imgResponseData = {
+        model: "gpt-image-1",
+        size,
+        quality: "high",
+        input_tokens_details: usage.input_tokens_details,
+        output_tokens: usage.output_tokens,
+    };
+
+    const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(imgResponseData, false);
 
     const result = await prismaClient.$transaction(async (tx) => {
         const project = await tx.project.create({
@@ -114,27 +136,21 @@ export const designGenerator = async (req: Request, res: Response) => {
             },
         });
 
-        const imgResponseData = { ...imgResponse.usage, model: "gpt-image-1", size, quality: "high" }
-
-        const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(imgResponseData, false);
-
         const imageGenerationResponse = await tx.imageGenerationResponse.create({
             data: {
                 projectId: project.id,
-                background: "auto", // from your input or a constant
-                outputFormat: output_format, // default or from your input if you have it
-                quality: "high", // default or from your input
+                background: "auto",
+                outputFormat: output_format,
+                quality: "high",
                 size,
-
-                inputTokens: imgResponse.usage?.input_tokens!,
-                imageTokens: imgResponse.usage?.input_tokens_details?.image_tokens!,
-                textTokens: imgResponse.usage?.input_tokens_details?.text_tokens!,
-                outputTokens: imgResponse.usage?.output_tokens!,
-                totalTokens: imgResponse.usage?.total_tokens!,
-
+                inputTokens: usage.input_tokens,
+                imageTokens: usage.input_tokens_details.image_tokens,
+                textTokens: usage.input_tokens_details.text_tokens,
+                outputTokens: usage.output_tokens,
+                totalTokens: usage.total_tokens,
                 imageCost,
                 tokenCost,
-                totalCost
+                totalCost,
             },
         });
 
@@ -143,6 +159,7 @@ export const designGenerator = async (req: Request, res: Response) => {
 
     res.status(200).json({ result });
 };
+
 
 // get all projects per user
 export const getProjects = async (req: Request, res: Response) => {
