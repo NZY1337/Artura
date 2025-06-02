@@ -26,6 +26,8 @@ const HistoryProjects = () => {
         );
     }
 
+    console.log(data?.projects);
+
     return (
         <>
             <Grid container spacing={2} p={1.5}>

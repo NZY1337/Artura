@@ -101,7 +101,6 @@ const costPerImageGeneration = ({
     return price;
 };
 
-
 /**
 usage: {
     input_tokens: 95,

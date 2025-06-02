@@ -60,6 +60,11 @@ import { SUPABASE_URL } from "../../secrets";
 //   };
 // }
 
+
+// https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1748797755897.png
+// https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1748888792317-0.png"
+
+
 async function mockGenerateImage(): Promise<Buffer> {
     // Here you would call the OpenAI API, but we mock with reading a local file
     const absolutePath = path.resolve(__dirname, "../../../server/output.png");
@@ -74,7 +79,7 @@ export const designGenerator = async (req: Request, res: Response) => {
     const imgResponse = await openAiClient.images.generate({
         model: "gpt-image-1",
         prompt,
-        n: 1,
+        n: 2,
         size,
         background: "auto",
     });
@@ -95,19 +100,29 @@ export const designGenerator = async (req: Request, res: Response) => {
         throw new BadRequestException(ErrorCode.BAD_REQUEST, "Incomplete usage data from OpenAI.");
     }
 
-    const base64Data = imgResponse.data[0].b64_json;
-    const imageBuffer = Buffer.from(base64Data, "base64");
+    const upload = await Promise.all(
+        imgResponse.data.map(async (data, index) => {
+            if (!data.b64_json) {
+                throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image data is missing in the response.");
+            }
 
-    const storagePath = createStorageUrl(req.auth.userId);
-    const uploadResult = await supabaseClient.storage.from("artura").upload(storagePath, imageBuffer);
+            const imageBuffer = Buffer.from(data.b64_json, "base64");
+            const storagePath = createStorageUrl(req.auth.userId, index);
 
-    if (uploadResult.error) {
-        throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image could not be stored to Supabase Storage");
-    }
+            const { data: filePath, error } = await supabaseClient.storage.from("artura").upload(storagePath, imageBuffer, { contentType: "image/png" });
 
-    const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/${uploadResult.data.fullPath}`;
+            if (error) {
+                throw new BadRequestException(ErrorCode.BAD_REQUEST, "Failed to upload image to storage.");
+            }
 
-    // ✅ Cost calculation outside transaction
+            return filePath;
+        })
+    );
+
+    const imageUrls = upload.map(object => `${SUPABASE_URL}/storage/v1/object/public/${object.fullPath}`);
+
+    console.log({ upload, imageUrls });
+
     const imgResponseData = {
         model: "gpt-image-1",
         size,
@@ -129,11 +144,11 @@ export const designGenerator = async (req: Request, res: Response) => {
             },
         });
 
-        const image = await tx.image.create({
-            data: {
-                url: imageUrl,
+        const images = await tx.image.createMany({
+            data: imageUrls.map(url => ({
+                url,
                 projectId: project.id,
-            },
+            })),
         });
 
         const imageGenerationResponse = await tx.imageGenerationResponse.create({
@@ -154,7 +169,7 @@ export const designGenerator = async (req: Request, res: Response) => {
             },
         });
 
-        return { project, image, imageGenerationResponse };
+        return { project, images, imageGenerationResponse };
     });
 
     res.status(200).json({ result });
