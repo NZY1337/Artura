@@ -66,7 +66,7 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
                 >
                     <CloudUploadIcon sx={{ fontSize: 40, mb: 1 }} />
                     <Typography variant="body2">
-                        Upload an image here to get started </Typography>
+                        Upload an image to get started </Typography>
                     <Typography variant="body2">
                         & unlock all the <b style={{ textShadow: "0 0 5px rgba(255, 255, 255, 0.5), 0 0 30px rgba(0, 150, 255, 0.3)", }}>A.I. features</b>.</Typography>
                 </Stack>
