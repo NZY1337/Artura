@@ -12,6 +12,8 @@ import {
 import BuilderOptionsPreview from "./BuilderOptionsPreview";
 import type { ProjectProps } from "../../types";
 
+import Carousel from "../UtilityComponents/Carousel";
+
 const BuilderModalPreview = ({
     project,
     handleCloseModal,
@@ -21,6 +23,18 @@ const BuilderModalPreview = ({
     open: boolean;
     handleCloseModal: () => void;
 }) => {
+
+    const settings = {
+        dots: false,
+        slidesToShow: 1,  // make sure it's 1 if you want only one image at a time
+        slidesToScroll: 1,
+        infinite: project.images.length > 1, // infinite scroll only if more than one image
+        autoplay: true,
+        speed: 1000,
+        autoplaySpeed: 3000,
+
+    };
+
     return (
         <GenericModal open={open}>
             <Grid
@@ -46,16 +60,25 @@ const BuilderModalPreview = ({
                         },
                     })}
                 >
-                    <img
-                        src={project?.images[0]?.url}
-                        alt="Interior"
-                        style={{
-                            objectFit: "contain",
-                            objectPosition: "right",
-                            width: "100%",
-                            maxHeight: "80vh",
-                        }}
-                    />
+                    <Carousel settings={settings}>
+                        {project?.images.map((image, index) => {
+                            return (
+                                (
+                                    <img
+                                        key={index}
+                                        src={image.url}
+                                        alt={`Interior ${index + 1}`}
+                                        style={{
+                                            objectFit: "contain",
+                                            objectPosition: "center",
+                                            width: "100%",
+                                            maxHeight: "80vh",
+                                        }}
+                                    />
+                                )
+                            )
+                        })}
+                    </Carousel>
                 </Grid>
 
                 <Grid

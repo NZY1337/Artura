@@ -60,10 +60,8 @@ import { SUPABASE_URL } from "../../secrets";
 //   };
 // }
 
-
 // https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1748797755897.png
 // https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1748888792317-0.png"
-
 
 async function mockGenerateImage(): Promise<Buffer> {
     // Here you would call the OpenAI API, but we mock with reading a local file
@@ -79,7 +77,7 @@ export const designGenerator = async (req: Request, res: Response) => {
     const imgResponse = await openAiClient.images.generate({
         model: "gpt-image-1",
         prompt,
-        n: 2,
+        n: 5,
         size,
         background: "auto",
     });

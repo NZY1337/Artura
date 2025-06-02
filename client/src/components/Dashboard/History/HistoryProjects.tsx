@@ -26,8 +26,7 @@ const HistoryProjects = () => {
         );
     }
 
-    console.log(data?.projects);
-
+    console.log('data', data?.projects);
     return (
         <>
             <Grid container spacing={2} p={1.5}>
@@ -59,7 +58,6 @@ const HistoryProjects = () => {
                                                     cursor: 'pointer',
                                                 }
                                             }}
-
                                         />
                                     </Card>
                                 </Grid>

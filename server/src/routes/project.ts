@@ -13,4 +13,3 @@ projectRouter.post(
 projectRouter.get("/", authMiddleware, errorHandler(getProjects));
 
 export default projectRouter;
-786;
