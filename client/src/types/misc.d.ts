@@ -6,8 +6,8 @@ export type LabelValueItemProps = {
 };
 
 export interface NativeSelectProps {
-    optionLabels: DesignThemeProps[] | SpaceTypeProps[];
-    labels: DesignThemeProps[] | SpaceTypeProps[];
+    optionLabels: DesignThemeProps[] | SpaceTypeProps[] | CategoriesProps[];
+    labels: DesignThemeProps[] | SpaceTypeProps[] | CategoriesProps[];
     labelName: string;
     name: string;
     setBuilderState: React.Dispatch<React.SetStateAction<BuilderState>>;

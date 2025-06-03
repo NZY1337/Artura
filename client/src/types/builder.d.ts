@@ -9,8 +9,8 @@ import {
 } from "./index";
 
 export interface AiBuilderStateProps {
-    spaceType: SpaceTypeProps[];
-    designTheme: DesignThemeProps[];
+    spaceType: SpaceTypeProps;
+    designTheme: DesignThemeProps;
     output_format: OutputFormatProps;
     n: GeneratedImagesCountProps;
     categories: CategoriesProps;

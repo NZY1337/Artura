@@ -19,8 +19,8 @@ const AIBuilder = ({ onHandleSubmit, generatedPreview, isLoading }: AIBuilderPro
     const [builderState, setBuilderState] = useState<AiBuilderStateProps>({
         size: '1536x1024',
         quality: 'high',
-        spaceType: [SPACE_TYPE[0]],
-        designTheme: [DESIGN_THEME[0]],
+        spaceType: SPACE_TYPE[0],
+        designTheme: DESIGN_THEME[0],
         categories: CATEGORIES[0],
         prompt: '',
         n: 1,

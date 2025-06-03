@@ -1,7 +1,6 @@
 import { type Navigation } from '@toolpad/core/AppProvider';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import UserIcon from '@mui/icons-material/Person';
 // import SofaIcon from "@mui/icons-material/Weekend";
 // import DeleteIcon from "@mui/icons-material/Delete";
