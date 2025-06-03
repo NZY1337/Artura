@@ -11,12 +11,14 @@ import path from "path";
 import { prismaClient } from "../services/prismaClient";
 
 import { ProjectValidator } from "../validation/project";
-import { calculateImageGenerationCost, createStorageUrl } from "../utils";
+import { calculateImageGenerationCost, createStorageUrl, isValidUsage, hasValidImageData } from "../utils";
 
 import { SUPABASE_URL } from "../../secrets";
 
+// !! extract Artura to ENV 
 
 // https://yfyiqiqqwgdvmazcgdnv.supabase.co - SUPABASE_URL
+
 // {
 //   path: 'generated-1747863520295.png',
 //   id: 'e413a45c-6cf9-4285-a856-bead89f02f09',
@@ -72,36 +74,31 @@ async function mockGenerateImage(): Promise<Buffer> {
 
 // TODO: must validate the request body with ProjectValidator
 export const designGenerator = async (req: Request, res: Response) => {
-    const { data: { n, prompt, size, output_format } } = req.body;
+    const { data: { n, prompt, size, output_format, quality } } = req.body;
 
     const imgResponse = await openAiClient.images.generate({
         model: "gpt-image-1",
         prompt,
-        n: 5,
+        n: 1,
         size,
+        quality,
         background: "auto",
     });
 
-    if (!imgResponse.data || !imgResponse.data[0]?.b64_json) {
-        throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image data is undefined or invalid.");
+    if (!imgResponse.data) {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image data is undefined.");
     }
 
     const usage = imgResponse.usage;
-    if (
-        usage === undefined ||
-        usage.input_tokens === undefined ||
-        usage.output_tokens === undefined ||
-        usage.total_tokens === undefined ||
-        usage.input_tokens_details?.image_tokens === undefined ||
-        usage.input_tokens_details?.text_tokens === undefined
-    ) {
+
+    if (!isValidUsage(usage)) {
         throw new BadRequestException(ErrorCode.BAD_REQUEST, "Incomplete usage data from OpenAI.");
     }
 
     const upload = await Promise.all(
         imgResponse.data.map(async (data, index) => {
             if (!data.b64_json) {
-                throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image data is missing in the response.");
+                throw new BadRequestException(ErrorCode.BAD_REQUEST, `Image data is missing for image at index ${index}`);
             }
 
             const imageBuffer = Buffer.from(data.b64_json, "base64");
@@ -110,7 +107,7 @@ export const designGenerator = async (req: Request, res: Response) => {
             const { data: filePath, error } = await supabaseClient.storage.from("artura").upload(storagePath, imageBuffer, { contentType: "image/png" });
 
             if (error) {
-                throw new BadRequestException(ErrorCode.BAD_REQUEST, "Failed to upload image to storage.");
+                throw new BadRequestException(ErrorCode.BAD_REQUEST, `Failed to upload image at index ${index} to storage.`);
             }
 
             return filePath;
@@ -119,17 +116,16 @@ export const designGenerator = async (req: Request, res: Response) => {
 
     const imageUrls = upload.map(object => `${SUPABASE_URL}/storage/v1/object/public/${object.fullPath}`);
 
-    console.log({ upload, imageUrls });
-
-    const imgResponseData = {
-        model: "gpt-image-1",
-        size,
-        quality: "high",
-        input_tokens_details: usage.input_tokens_details,
-        output_tokens: usage.output_tokens,
-    };
-
-    const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(imgResponseData, false);
+    const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(
+        {
+            model: "gpt-image-1",
+            size,
+            quality,
+            input_tokens_details: usage.input_tokens_details,
+            output_tokens: usage.output_tokens,
+        },
+        false
+    );
 
     const result = await prismaClient.$transaction(async (tx) => {
         const project = await tx.project.create({
@@ -138,7 +134,7 @@ export const designGenerator = async (req: Request, res: Response) => {
                 userId: req.auth.userId,
                 prompt,
                 size,
-                quality: "HIGH",
+                quality,
             },
         });
 

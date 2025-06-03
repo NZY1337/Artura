@@ -31,5 +31,5 @@ export interface RenderLatestProjectsProps {
 
 export type ProjectResponseProps = ApiResponse<{
     project: ProjectProps;
-    image: ProjectImageProps;
+    images: ProjectImageProps[];
 }>;
