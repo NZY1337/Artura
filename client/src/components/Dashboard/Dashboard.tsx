@@ -8,10 +8,8 @@ import { useUser, useClerk, } from '@clerk/clerk-react';
 // components
 import DashboardTitle from './DashboardTitle';
 import DashboardFooter from './DashboardFooter';
-import DesignGenerator from './Variations/DesignGenerator'; // Ensure the file exists at this path or adjust the path accordingly
+import Playground from './Variations/Playground';
 import Overview from './Overview';
-import Landscaping from './Variations/Landscaping';
-import VirtualStaging from './Variations/VirtualStaging';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import { Users } from './Users';
@@ -81,14 +79,8 @@ export default function Dashboard() {
             case '/dashboard':
                 return <Overview />;
 
-            case '/dashboard/design-generator':
-                return <DesignGenerator />;
-
-            case '/dashboard/virtual-staging':
-                return <VirtualStaging />;
-
-            case '/dashboard/landscaping':
-                return <Landscaping />;
+            case '/dashboard/playground':
+                return <Playground />;
 
             case '/dashboard/profile':
                 return <UserProfile />;

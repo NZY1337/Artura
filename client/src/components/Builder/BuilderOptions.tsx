@@ -12,6 +12,7 @@ import { Send } from '@mui/icons-material';
 import QualityAndSize from './BuilderOptions/QaulityAndSize';
 import SpaceTypes from './BuilderOptions/SpaceTypes';
 import DesignThemes from './BuilderOptions/DesignThemes';
+import Categories from './BuilderOptions/Categories';
 // import AttachFile from '@mui/icons-material/AttachFile';\
 
 import { CHARS_LIMIT } from '../../helpers/constants';
@@ -79,6 +80,7 @@ const BuilderOptions = ({ onHandleSubmit, builderState, setBuilderState, isLoadi
                     <QualityAndSize setBuilderState={setBuilderState} builderState={builderState} />
                     <SpaceTypes setBuilderState={setBuilderState} builderState={builderState} />
                     <DesignThemes setBuilderState={setBuilderState} builderState={builderState} />
+                    <Categories setBuilderState={setBuilderState} builderState={builderState} />
                 </Box>
 
                 <IconButton color='success' loading={isLoading} onClick={() => onHandleSubmit(builderState)}

@@ -17,6 +17,8 @@ export type SpaceTypeProps = 'Living Room' | 'Bedroom' | 'Kitchen' | 'Bathroom' 
     'Home Office' | 'Kids Room' | 'Hallway / Corridor' |
     'Balcony / Terrace' | 'Game Room' | 'Study';
 
+export type CategoriesProps = 'Design Generator' | 'Landscaping' | 'Virtual Staging' | 'Floor Planning'
+
 export type DesignThemeProps = | 'Modern' | 'Contemporary' | 'Minimalist' | 'Scandinavian' | 'Industrial'
     | 'Mid-Century Modern' | 'Traditional' | 'Classic' | 'Baroque' | 'Japanese Zen' | 'Wabi-Sabi' | 'Farmhouse'
     | 'Rustic' | 'Bohemian' | 'Art Deco' | 'Victorian' | 'Coastal' | 'Tropical' | 'Urban' | 'Maximalist' | 'Futuristic';

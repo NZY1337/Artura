@@ -4,7 +4,8 @@ import {
     OutputFormatProps,
     GeneratedImagesCountProps,
     SizeImageProps,
-    QualityFormatProps
+    QualityFormatProps,
+    CategoriesProps
 } from "./index";
 
 export interface AiBuilderStateProps {
@@ -12,6 +13,7 @@ export interface AiBuilderStateProps {
     designTheme: DesignThemeProps[];
     output_format: OutputFormatProps;
     n: GeneratedImagesCountProps;
+    categories: CategoriesProps;
     size: SizeImageProps;
     prompt: string;
     quality: QualityFormatProps;
@@ -41,3 +43,4 @@ export interface AIBuilderProps {
 export type QualityAndSizeBuilderProps = Omit<BuilderOptionsProps, 'isLoading', 'onHandleSubmit'>;
 export type SpaceTypesBuilderProps = QualityAndSizeBuilderProps;
 export type DesignThemesBuilderProps = QualityAndSizeBuilderProps;
+export type CategoriesBuilderProps = QualityAndSizeBuilderProps;

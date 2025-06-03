@@ -11,7 +11,7 @@ import useDesignGeneration from "../../../hooks/variations/useDesignGeneration";
 
 import type { SubmitBuilderProps, ProjectResponseProps } from "../../../types";
 
-export default function DesignGenerator() {
+const Playground = () => {
     const [openWaitingModal, setOpenWaitingModal] = useState<boolean>(false);
     const notifications = useNotifications();
 
@@ -50,3 +50,5 @@ export default function DesignGenerator() {
         </>
     );
 }
+
+export default Playground;
