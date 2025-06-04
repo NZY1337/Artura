@@ -25,7 +25,6 @@ import CustomThemeSwitcher from './CustomThemeSwitcher';
 import { DASHBOARD_NAVIGATION } from '../../helpers/constants';
 import { createTheme } from '@mui/material/styles';
 import { typography, components, colorSchemes, palette } from './context/themeContext';
-import { PageHeader } from '@toolpad/core/PageContainer';
 
 // types
 import { type Router } from '@toolpad/core';
@@ -43,8 +42,6 @@ export default function Dashboard() {
         setMode: (mode: 'light' | 'dark') => void;
         mode: 'light' | 'dark';
     };
-
-    console.log(window.location.pathname)
 
     const dashboardSession = {
         user: {
@@ -106,7 +103,6 @@ export default function Dashboard() {
     //     callProtectedRoute()
     // }, [])
 
-
     return (
         <AppProvider
             session={dashboardSession}
@@ -128,6 +124,7 @@ export default function Dashboard() {
                     }}>
                     <PageContainer
                         maxWidth={false}
+                        title=''
                         breadcrumbs={[]}
                         className='dashboard-page-container'
                         sx={{
