@@ -7,21 +7,23 @@ import { useNotifications, } from '@toolpad/core/useNotifications';
 import Box from "@mui/material/Box";
 
 // hooks
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useDesignGeneration from "../../../hooks/variations/useDesignGeneration";
 
-import type { SubmitBuilderProps, ProjectResponseProps } from "../../../types";
-
+import type { SubmitBuilderProps, ProjectResponseProps, ProjectProps } from "../../../types";
+import BuilderModalPreview from "../../Builder/BuiulderModalPreview";
 import GenerationBox from "../GenerationBox";
 import { mockData } from "../../utils/mockData";
+import { Typography } from "@mui/material";
 
 const Playground = () => {
     const [openWaitingModal, setOpenWaitingModal] = useState<boolean>(false);
+    const [open, setOpen] = useState(false);
+    const [project, setProject] = useState<ProjectProps | null>(null);
     const [grid, setGrid] = useState(Array(24).fill(null));
     const notifications = useNotifications();
 
     const handleCloseWaitingModal = () => setOpenWaitingModal(false);
-    const handleOpenWaitingModal = () => setOpenWaitingModal(true);
 
     const { isPending, mutate, data } = useDesignGeneration({
         closeWaitingModal: handleCloseWaitingModal
@@ -46,64 +48,87 @@ const Playground = () => {
         });
     };
 
-    let generationQueue = Promise.resolve(); // Shared across calls
+    // let generationQueue = Promise.resolve(); // Shared across calls
 
     const onHandleTestSubmit = (data: SubmitBuilderProps) => {
-        // Add this generation to the queue
-        generationQueue = generationQueue.then(() =>
-            handleQueuedGeneration()
-        );
+        // generationQueue = generationQueue.then(() =>
+        //     handleQueuedGeneration()
+        // );
+        handleQueuedGeneration()
     };
 
     const handleQueuedGeneration = async () => {
-        const generated = await mockGenerate(Math.floor(Math.random() * mockData.length));
+        let targetIndex: number | null = null;
 
-        // const firstEmptyIndex = newGrid.findIndex((cell) => cell == null);
-
-
+        // Step 1: Use functional update to safely get index
         setGrid((prevGrid) => {
             const newGrid = [...prevGrid];
             const firstEmptyIndex = newGrid.findIndex((cell) => cell == null);
-            console.log('firstEmptyIndex', firstEmptyIndex);
             if (firstEmptyIndex !== -1) {
-                newGrid[firstEmptyIndex] = generated;
+                newGrid[firstEmptyIndex] = { loading: true };
+                targetIndex = firstEmptyIndex;
             }
+            return newGrid;
+        });
+
+        // Wait a tick to ensure React state update goes through
+        await new Promise((res) => setTimeout(res, 0));
+
+        if (targetIndex === null) return;
+
+        // Step 2: Do the mock generation
+        const generated = await mockGenerate(Math.floor(Math.random() * mockData.length));
+
+        // Step 3: Replace with actual result
+        setGrid((prevGrid) => {
+            const newGrid = [...prevGrid];
+            newGrid[targetIndex!] = generated;
             return newGrid;
         });
     };
 
 
+    const onFullscreen = (index: number) => {
+        setOpen(true);
+        setProject(grid[index]);
+        // Handle fullscreen logic here
+    };
+
+    useEffect(() => {
+        // If data is available, update the grid with the new project
+        console.log('data', grid);
+    }, [grid]);
 
     const generatedPreview = data?.result?.image?.url as ProjectResponseProps['result']['image']['url'];
-    // console.log(mockData[0]);
-
-    console.log(grid)
+    // projectIndex !== null && console.log('projectIndex', projectIndex, 'generatedPreview', generatedPreview);
 
     return (
         <>
             {grid.map((item, index) => {
-                if (grid[index] !== null) {
-                    return (
-                        <GenerationBox key={index} item={grid[index]} />
-                    );
-                } else {
-                    return (
-                        <Box
-                            key={index}
-                            sx={{
-                                aspectRatio: '1 / 1',
-                                width: '100%',
-                                boxSizing: 'border-box',
-                                boxShadow: '0 0 0 1px #000',
-                                display: 'flex',
-                                placeContent: 'center',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        >
-                        </Box>
-                    );
-                }
+                const isLoading = item && 'loading' in item;
+
+                return (
+                    <Box
+                        key={index}
+                        sx={{
+                            aspectRatio: '1 / 1',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            boxShadow: '0 0 0 1px #000',
+                            display: 'flex',
+                            placeContent: 'center',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        {isLoading ? (
+                            <Typography sx={{ color: 'gray' }}>Loading...</Typography>
+                        ) : item ? (
+                            <GenerationBox onFullscreen={() => onFullscreen(index)} item={item} />
+                        ) : null}
+
+                    </Box>
+                );
             })}
 
 
@@ -113,6 +138,7 @@ const Playground = () => {
 
             <HistoryDrawer />
             <WaitingModal open={openWaitingModal} handleClose={handleCloseWaitingModal} />
+            {project !== null ? <BuilderModalPreview open={open} project={project} handleCloseModal={() => setOpen(false)} /> : null}
 
         </>
     );

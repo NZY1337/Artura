@@ -10,7 +10,7 @@ import {
     Button,
 } from "@mui/material";
 import BuilderOptionsPreview from "./BuilderOptionsPreview";
-import type { ProjectProps } from "../../types";
+import type { ProjectProps, QualityFormatProps, SizeImageProps } from "../../types";
 
 import Carousel from "../UtilityComponents/Carousel";
 
@@ -34,6 +34,8 @@ const BuilderModalPreview = ({
         autoplaySpeed: 3000,
 
     };
+
+    console.log("Project in BuilderModalPreview:", project);
 
     return (
         <GenericModal open={open}>
@@ -106,10 +108,11 @@ const BuilderModalPreview = ({
 
                             <BuilderOptionsPreview
                                 builderState={{
-                                    size: "1536x1024",
-                                    quality: "high",
+                                    size: project?.size as SizeImageProps,
+                                    quality: project?.quality as QualityFormatProps,
                                     spaceType: ["Living Room"],
                                     designTheme: ["Modern"],
+                                    category: ["Design Generator"],
                                     prompt: project?.prompt,
                                     n: 1,
                                     output_format: "png",

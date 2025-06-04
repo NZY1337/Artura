@@ -29,7 +29,7 @@ interface Props {
     onRemove?: () => void;
     onEdit?: () => void;
     onDownload?: () => void;
-    onFullscreen?: () => void;
+    onFullscreen?: (index: number) => void;
 }
 
 const GenerationBox: React.FC<Props> = ({
