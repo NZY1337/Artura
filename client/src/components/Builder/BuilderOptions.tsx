@@ -77,10 +77,10 @@ const BuilderOptions = ({ onHandleSubmit, builderState, setBuilderState, isLoadi
                 backgroundColor: '#2e2f38', width: '100%',
             }}>
                 <Box>
-                    <QualityAndSize setBuilderState={setBuilderState} builderState={builderState} />
+                    <Categories setBuilderState={setBuilderState} builderState={builderState} />
                     <SpaceTypes setBuilderState={setBuilderState} builderState={builderState} />
                     <DesignThemes setBuilderState={setBuilderState} builderState={builderState} />
-                    <Categories setBuilderState={setBuilderState} builderState={builderState} />
+                    <QualityAndSize setBuilderState={setBuilderState} builderState={builderState} />
                 </Box>
 
                 <IconButton color='success' loading={isLoading} onClick={() => onHandleSubmit(builderState)}

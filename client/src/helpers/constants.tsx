@@ -13,7 +13,7 @@ import UserIcon from '@mui/icons-material/Person';
 // import badPhoto3 from "../assets/guidelines/badPhoto3.png"
 // import badPhoto4 from "../assets/guidelines/badPhoto4.png"
 
-import type { SpaceTypeProps, DesignThemeProps, CategoriesProps } from '../types';
+import type { SpaceTypeProps, DesignThemeProps, CategoryProps } from '../types';
 const BACKEND_URL = "http://localhost:3010/api";
 
 const EMPTY_YOUR_SPACE = {
@@ -35,7 +35,7 @@ const SPACE_TYPE: SpaceTypeProps[] = [
     'Study',
 ];
 
-const CATEGORIES: CategoriesProps[] = [
+const CATEGORY: CategoryProps[] = [
     'Design Generator',
     'Virtual Staging',
     'Landscaping',
@@ -197,7 +197,7 @@ export {
     BACKEND_URL,
     SPACE_TYPE,
     DESIGN_THEME,
-    CATEGORIES,
+    CATEGORY,
     EMPTY_YOUR_SPACE,
     BUILDER_SIZES,
     BUILDER_QUALITIES,

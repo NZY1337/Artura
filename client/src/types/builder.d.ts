@@ -5,15 +5,15 @@ import {
     GeneratedImagesCountProps,
     SizeImageProps,
     QualityFormatProps,
-    CategoriesProps
+    CategoryProps
 } from "./index";
 
 export interface AiBuilderStateProps {
-    spaceType: SpaceTypeProps;
-    designTheme: DesignThemeProps;
+    spaceType: SpaceTypeProps[];
+    designTheme: DesignThemeProps[];
     output_format: OutputFormatProps;
     n: GeneratedImagesCountProps;
-    categories: CategoriesProps;
+    category: CategoryProps[];
     size: SizeImageProps;
     prompt: string;
     quality: QualityFormatProps;

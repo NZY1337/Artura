@@ -1,11 +1,11 @@
 import * as React from 'react';
-import InputLabel from '@mui/material/InputLabel';
+// import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 import type { NativeSelectProps } from '../../types';
 
-const NativeSelect = ({ optionLabels, labels, labelName, setBuilderState, name }: NativeSelectProps) => {
+const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSelectProps) => {
     const handleChangeMultiple = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { options } = event.target;
         const value: string[] = [];
