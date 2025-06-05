@@ -83,42 +83,37 @@ const BuilderModalPreview = ({
                     </Carousel>
                 </Grid>
 
-                <Grid
-                    size={{ xs: 12, md: 12, lg: 4 }}
-                    sx={{ display: "flex", alignItems: "center", p: 4 }}
-                >
+                <Grid size={{ xs: 12, md: 12, lg: 4 }} sx={{ display: "flex", alignItems: "center", p: 4 }}>
                     <Box>
-                        <Box>
-                            <Stack direction="row" spacing={2} alignItems="center" mb={2}>
-                                <Avatar
-                                    src="/path-to-your-blueprint-thumbnail.png"
-                                    alt="Blueprint"
-                                    sx={{ width: 56, height: 56 }}
-                                />
-                                <Typography variant="caption" color="gray">
-                                    Created on {new Date(project?.createdAt).toLocaleDateString()}
-                                </Typography>
-                            </Stack>
-
-                            <Typography variant="body2" sx={{ color: "#ccc", mb: 3 }}>
-                                {project?.prompt}
-                            </Typography>
-
-                            <Divider sx={{ borderColor: "#333", my: 2 }} />
-
-                            <BuilderOptionsPreview
-                                builderState={{
-                                    size: project?.size as SizeImageProps,
-                                    quality: project?.quality as QualityFormatProps,
-                                    spaceType: ["Living Room"],
-                                    designTheme: ["Modern"],
-                                    category: ["Design Generator"],
-                                    prompt: project?.prompt,
-                                    n: 1,
-                                    output_format: "png",
-                                }}
+                        <Stack direction="row" spacing={2} alignItems="center" mb={2}>
+                            <Avatar
+                                src="/path-to-your-blueprint-thumbnail.png"
+                                alt="Blueprint"
+                                sx={{ width: 56, height: 56 }}
                             />
-                        </Box>
+                            <Typography variant="caption" color="gray">
+                                Created on {new Date(project?.createdAt).toLocaleDateString()}
+                            </Typography>
+                        </Stack>
+
+                        <Typography variant="body2" sx={{ color: "#ccc", mb: 3 }}>
+                            {project?.prompt}
+                        </Typography>
+
+                        <Divider sx={{ borderColor: "#333", my: 2 }} />
+
+                        <BuilderOptionsPreview
+                            builderState={{
+                                size: project?.size as SizeImageProps,
+                                quality: project?.quality as QualityFormatProps,
+                                spaceType: ["Living Room"],
+                                designTheme: ["Modern"],
+                                category: ["Design Generator"],
+                                prompt: project?.prompt,
+                                n: 1,
+                                output_format: "png",
+                            }}
+                        />
                     </Box>
                 </Grid>
 

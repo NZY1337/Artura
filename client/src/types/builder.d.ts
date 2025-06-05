@@ -36,7 +36,6 @@ export type SubmitBuilderProps = Pick<AiBuilderStateProps, "n" | "prompt" | "siz
 
 export interface AIBuilderProps {
     onHandleSubmit: (stateBuilder: SubmitBuilderProps) => void;
-    generatedPreview: string | undefined;
     isLoading: boolean
 };
 

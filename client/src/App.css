@@ -7,3 +7,31 @@ header {
     border-bottom: .5px solid gray;
     border-bottom-style: outset;
 }
+
+.animated-bg {
+    animation: gradientShift 4s ease infinite;
+    background: radial-gradient(circle, #ff9a9e, #fad0c4);
+    background-size: 200% 200%;
+}
+
+@keyframes gradientShift {
+    0% {
+        background: radial-gradient(circle at 20% 30%, #ff9a9e, #fad0c4);
+    }
+
+    25% {
+        background: radial-gradient(circle at 70% 20%, #a1c4fd, #c2e9fb);
+    }
+
+    50% {
+        background: radial-gradient(circle at 80% 70%, #fccb90, #d57eeb);
+    }
+
+    75% {
+        background: radial-gradient(circle at 30% 80%, #fbc2eb, #a6c1ee);
+    }
+
+    100% {
+        background: radial-gradient(circle at 20% 30%, #ff9a9e, #fad0c4);
+    }
+}

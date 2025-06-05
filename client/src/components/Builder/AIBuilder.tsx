@@ -13,8 +13,7 @@ import { DESIGN_THEME, SPACE_TYPE, CATEGORY } from "../../helpers/constants";
 // types
 import type { AiBuilderStateProps, AIBuilderProps } from "../../types";
 
-const AIBuilder = ({ onHandleSubmit, generatedPreview, isLoading }: AIBuilderProps) => {
-    const [preview, setPreview] = useState<string | null>(null);
+const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
 
     const [builderState, setBuilderState] = useState<AiBuilderStateProps>({
         size: '1536x1024',
