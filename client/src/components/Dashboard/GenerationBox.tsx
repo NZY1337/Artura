@@ -33,7 +33,6 @@ interface Props {
 }
 
 const GenerationBox: React.FC<Props> = ({
-    item,
     onRemove,
     onEdit,
     onDownload,

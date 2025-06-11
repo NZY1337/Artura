@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 // import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -6,7 +6,10 @@ import Select from '@mui/material/Select';
 import type { NativeSelectProps } from '../../types';
 
 const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSelectProps) => {
+    const [canSelect, setCanSelect] = useState(true)
     const handleChangeMultiple = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        if (!canSelect) return;
+
         const { options } = event.target;
         const value: string[] = [];
         for (let i = 0, l = options.length; i < l; i += 1) {
@@ -17,12 +20,19 @@ const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSel
         setBuilderState((prev: NativeSelectProps['labels']) => ({ ...prev, [name]: value }));
     };
 
+    const handleStopMultipleEdits = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (event.key === 'Meta' || event.key === 'Shift') {
+            setCanSelect(false);
+        }
+    };
+
+    const handleStartMultipleEditsOnkeyUp = () => {
+        if (!canSelect) setCanSelect(true)
+    }
+
     return (
         <div>
             <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 300 }}>
-                {/* <InputLabel shrink htmlFor="select-multiple-native">
-                    {labelName}
-                </InputLabel> */}
                 <Select<string[]>
                     multiple={true}
                     native
@@ -73,6 +83,8 @@ const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSel
                     value={labels}
                     // @ts-expect-error Typings are not considering `native`
                     onChange={handleChangeMultiple}
+                    onKeyDown={handleStopMultipleEdits}
+                    onKeyUp={handleStartMultipleEditsOnkeyUp}
                     label="Native"
                     name={name}
                     inputProps={{

@@ -139,7 +139,7 @@ export default function Dashboard() {
                                     gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                                     gap: '1px',
                                     placeContent: 'start center',
-                                    padding: '1px'
+                                    padding: '1px',
                                 },
                             } : {}),
                         }}

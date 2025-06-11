@@ -7,12 +7,14 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
+
 import Divider from '@mui/material/Divider';
 import { Send } from '@mui/icons-material';
 import QualityAndSize from './BuilderOptions/QaulityAndSize';
 import SpaceTypes from './BuilderOptions/SpaceTypes';
 import DesignThemes from './BuilderOptions/DesignThemes';
 import Categories from './BuilderOptions/Categories';
+import FileUpload from '../UtilityComponents/FileUpload';
 // import AttachFile from '@mui/icons-material/AttachFile';\
 
 import { CHARS_LIMIT } from '../../helpers/constants';
@@ -72,15 +74,13 @@ const BuilderOptions = ({ onHandleSubmit, builderState, setBuilderState, isLoadi
 
             <Divider sx={{ backgroundColor: '#3c3f47' }} />
 
-            <Box sx={{
-                display: 'flex', justifyContent: 'space-between', padding: '8px',
-                backgroundColor: '#2e2f38', width: '100%',
-            }}>
-                <Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '8px', backgroundColor: '#2e2f38', width: '100%' }}>
+                <Box sx={{ display: 'flex' }}>
                     <Categories setBuilderState={setBuilderState} builderState={builderState} />
                     <SpaceTypes setBuilderState={setBuilderState} builderState={builderState} />
                     <DesignThemes setBuilderState={setBuilderState} builderState={builderState} />
                     <QualityAndSize setBuilderState={setBuilderState} builderState={builderState} />
+                    <FileUpload setBuilderState={setBuilderState} builderState={builderState} />
                 </Box>
 
                 <IconButton color='success' loading={isLoading} onClick={() => onHandleSubmit(builderState)}

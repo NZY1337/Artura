@@ -16,7 +16,6 @@ import BuilderModalPreview from "../../Builder/BuiulderModalPreview";
 import AIBuilder from "../../Builder/AIBuilder";
 import HistoryDrawer from "../History/History";
 import GenerationBox from "../GenerationBox";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 
 type GridCell = | null | { loading: true } | typeof mockData[0];
@@ -24,9 +23,10 @@ type GridCell = | null | { loading: true } | typeof mockData[0];
 const Playground = () => {
     const [open, setOpen] = useState(false);
     const [project, setProject] = useState<ProjectProps | null>(null);
-    const [grid, setGrid] = useState<GridCell[]>(Array(10).fill(null));
+    const [grid, setGrid] = useState<GridCell[]>(Array(18).fill(null));
     const notifications = useNotifications();
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { isPending, mutate, data } = useDesignGeneration();
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,7 +45,7 @@ const Playground = () => {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(mockData[index]);
-            }, 5000);
+            }, 10000);
         });
     };
 
@@ -108,12 +108,11 @@ const Playground = () => {
     const onRemove = (index: number) => {
         setGrid((prevGrid) => {
             const newArr = [...prevGrid];
-            newArr.splice(index, 1);     // remove one element at index, array length is now 9
-            newArr.push(null);            // add null at the end to keep length 10
+            newArr.splice(index, 1);
+            newArr.push(null);
             return newArr;
         });
     };
-
 
     return (
         <>
@@ -141,24 +140,24 @@ const Playground = () => {
                             ...(backgroundImage ? itemResponse : {})
                         }}>
                         {isLoading ? <TypeAnimation
-                            sequence={['Loading...', 1500, 'Hold tight...', 1500, 'This make take a while...', 1500]}
+                            sequence={['Loading...', 1500, 'Hold tight...', 1500, 'This may take a while...', 1500]}
                             wrapper="span"
                             cursor={true}
                             repeat={Infinity}
                             speed={75}
                             style={{ display: 'inline-block', color: '#ffa500' }}
                         /> : item ? <GenerationBox onFullscreen={() => onFullscreen(index)} onRemove={() => onRemove(index)} item={item} /> : null}
-                    </Box >
+                    </Box>
                 );
             })}
 
-            <Grid sx={{ position: 'absolute', bottom: '50px', left: '50%', transform: 'translateX(-50%)' }} size={{ xs: 12, md: 12, lg: 12 }}>
+            <Box sx={{ position: 'absolute', bottom: '50px', left: '50%', transform: 'translateX(-50%)', maxWidth: '800px', minWidth: '100px', width: '100%', }}>
                 <AIBuilder onHandleSubmit={onHandleTestSubmit} isLoading={isPending} />
-            </Grid >
+            </Box>
 
             <HistoryDrawer />
-            {project !== null ? <BuilderModalPreview open={open} project={project} handleCloseModal={() => setOpen(false)} /> : null}
 
+            {project !== null ? <BuilderModalPreview open={open} project={project} handleCloseModal={() => setOpen(false)} /> : null}
         </>
     );
 }

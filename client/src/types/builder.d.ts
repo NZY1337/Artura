@@ -17,6 +17,7 @@ export interface AiBuilderStateProps {
     size: SizeImageProps;
     prompt: string;
     quality: QualityFormatProps;
+    images: string[]
 }
 
 // interface BuilderStateProp {
@@ -43,3 +44,4 @@ export type QualityAndSizeBuilderProps = Omit<BuilderOptionsProps, 'isLoading', 
 export type SpaceTypesBuilderProps = QualityAndSizeBuilderProps;
 export type DesignThemesBuilderProps = QualityAndSizeBuilderProps;
 export type CategoriesBuilderProps = QualityAndSizeBuilderProps;
+export type FileUploadProps = QualityAndSizeBuilderProps
