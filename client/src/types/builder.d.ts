@@ -4,7 +4,8 @@ import {
     OutputFormatProps,
     GeneratedImagesCountProps,
     SizeImageProps,
-    QualityFormatProps
+    QualityFormatProps,
+    CategoryProps
 } from "./index";
 
 export interface AiBuilderStateProps {
@@ -12,9 +13,11 @@ export interface AiBuilderStateProps {
     designTheme: DesignThemeProps[];
     output_format: OutputFormatProps;
     n: GeneratedImagesCountProps;
+    category: CategoryProps[];
     size: SizeImageProps;
     prompt: string;
     quality: QualityFormatProps;
+    images: string[]
 }
 
 // interface BuilderStateProp {
@@ -34,10 +37,11 @@ export type SubmitBuilderProps = Pick<AiBuilderStateProps, "n" | "prompt" | "siz
 
 export interface AIBuilderProps {
     onHandleSubmit: (stateBuilder: SubmitBuilderProps) => void;
-    generatedPreview: string | undefined;
     isLoading: boolean
 };
 
 export type QualityAndSizeBuilderProps = Omit<BuilderOptionsProps, 'isLoading', 'onHandleSubmit'>;
 export type SpaceTypesBuilderProps = QualityAndSizeBuilderProps;
 export type DesignThemesBuilderProps = QualityAndSizeBuilderProps;
+export type CategoriesBuilderProps = QualityAndSizeBuilderProps;
+export type FileUploadProps = QualityAndSizeBuilderProps

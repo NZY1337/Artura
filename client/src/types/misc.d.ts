@@ -6,8 +6,8 @@ export type LabelValueItemProps = {
 };
 
 export interface NativeSelectProps {
-    optionLabels: DesignThemeProps[] | SpaceTypeProps[];
-    labels: DesignThemeProps[] | SpaceTypeProps[];
+    optionLabels: DesignThemeProps[] | SpaceTypeProps[] | CategoryProps[];
+    labels: DesignThemeProps[] | SpaceTypeProps[] | CategoryProps[];
     labelName: string;
     name: string;
     setBuilderState: React.Dispatch<React.SetStateAction<BuilderState>>;
@@ -16,6 +16,8 @@ export interface NativeSelectProps {
 export type SpaceTypeProps = 'Living Room' | 'Bedroom' | 'Kitchen' | 'Bathroom' | 'Dining Room' |
     'Home Office' | 'Kids Room' | 'Hallway / Corridor' |
     'Balcony / Terrace' | 'Game Room' | 'Study';
+
+export type CategoryProps = 'Design Generator' | 'Landscaping' | 'Virtual Staging' | 'Floor Planning'
 
 export type DesignThemeProps = | 'Modern' | 'Contemporary' | 'Minimalist' | 'Scandinavian' | 'Industrial'
     | 'Mid-Century Modern' | 'Traditional' | 'Classic' | 'Baroque' | 'Japanese Zen' | 'Wabi-Sabi' | 'Farmhouse'

@@ -5,21 +5,19 @@ import type { ProjectResponseProps } from '../../types';
 import { useNotifications } from '@toolpad/core';
 
 
-const useDesignGeneration = ({ closeWaitingModal }: { closeWaitingModal: () => void }) => {
+const useDesignGeneration = () => {
     const notifications = useNotifications();
     const [data, setData] = useState<ProjectResponseProps | null>(null);
     const { isPending, mutate, } = useMutation({
         mutationFn: designGenerator,
         onSuccess: (data: ProjectResponseProps) => {
             setData(data);
-            closeWaitingModal();
         },
         onError: (error) => {
             notifications.show(error.message, {
                 severity: 'error',
                 autoHideDuration: 3000
             })
-            closeWaitingModal();
         }
     });
 

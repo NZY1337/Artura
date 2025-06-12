@@ -8,10 +8,8 @@ import { useUser, useClerk, } from '@clerk/clerk-react';
 // components
 import DashboardTitle from './DashboardTitle';
 import DashboardFooter from './DashboardFooter';
-import DesignGenerator from './Variations/DesignGenerator'; // Ensure the file exists at this path or adjust the path accordingly
+import Playground from './Variations/Playground';
 import Overview from './Overview';
-import Landscaping from './Variations/Landscaping';
-import VirtualStaging from './Variations/VirtualStaging';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import { Users } from './Users';
@@ -81,14 +79,8 @@ export default function Dashboard() {
             case '/dashboard':
                 return <Overview />;
 
-            case '/dashboard/design-generator':
-                return <DesignGenerator />;
-
-            case '/dashboard/virtual-staging':
-                return <VirtualStaging />;
-
-            case '/dashboard/landscaping':
-                return <Landscaping />;
+            case '/dashboard/playground': // check more documentation about PageContainer via mui toolpad PageContainer to understand why I did this
+                return <Playground />
 
             case '/dashboard/profile':
                 return <UserProfile />;
@@ -110,7 +102,6 @@ export default function Dashboard() {
     //     callProtectedRoute()
     // }, [])
 
-
     return (
         <AppProvider
             session={dashboardSession}
@@ -130,7 +121,28 @@ export default function Dashboard() {
                         appTitle: DashboardTitle,
                         toolbarActions: () => <CustomThemeSwitcher setMode={setMode} mode={mode} />
                     }}>
-                    <PageContainer breadcrumbs={[]} sx={{ position: 'relative', px: 0, padding: 0 }}>
+                    <PageContainer
+                        maxWidth={false}
+                        title=''
+                        breadcrumbs={[]}
+                        className='dashboard-page-container'
+                        sx={{
+                            px: 0,
+                            padding: 0,
+                            // position: 'relative',
+                            ...(window.location.pathname === '/dashboard/playground' ? {
+                                '& .MuiStack-root>.MuiBox-root': {
+                                    height: '100vh',
+                                    overflowY: 'auto',
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                                    gap: '1px',
+                                    placeContent: 'start center',
+                                    padding: '1px',
+                                },
+                            } : {}),
+                        }}
+                    >
                         {renderContent()}
                     </PageContainer>
                 </DashboardLayout>

@@ -1,7 +1,6 @@
 import { type Navigation } from '@toolpad/core/AppProvider';
-import BarChartIcon from '@mui/icons-material/BarChart';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import UserIcon from '@mui/icons-material/Person';
 // import SofaIcon from "@mui/icons-material/Weekend";
 // import DeleteIcon from "@mui/icons-material/Delete";
@@ -14,7 +13,7 @@ import UserIcon from '@mui/icons-material/Person';
 // import badPhoto3 from "../assets/guidelines/badPhoto3.png"
 // import badPhoto4 from "../assets/guidelines/badPhoto4.png"
 
-import type { SpaceTypeProps, DesignThemeProps } from '../types';
+import type { SpaceTypeProps, DesignThemeProps, CategoryProps } from '../types';
 const BACKEND_URL = "http://localhost:3010/api";
 
 const EMPTY_YOUR_SPACE = {
@@ -34,6 +33,13 @@ const SPACE_TYPE: SpaceTypeProps[] = [
     'Balcony / Terrace',
     'Game Room',
     'Study',
+];
+
+const CATEGORY: CategoryProps[] = [
+    'Design Generator',
+    'Virtual Staging',
+    'Landscaping',
+    'Floor Planning'
 ];
 
 const DESIGN_THEME: DesignThemeProps[] = [
@@ -90,19 +96,9 @@ const DASHBOARD_NAVIGATION: Navigation = [
         // ],
     },
     {
-        segment: 'dashboard/design-generator',
-        title: 'Design Generator',
-        icon: <ShoppingCartIcon />,
-    },
-    {
-        segment: 'dashboard/virtual-staging',
-        title: 'Virtual Staging',
-        icon: <ShoppingCartIcon />,
-    },
-    {
-        segment: 'dashboard/landscaping',
-        title: 'Landscaping',
-        icon: <BarChartIcon />,
+        segment: 'dashboard/playground',
+        title: 'Playground',
+        icon: <AutoAwesomeIcon />,
     },
     {
         segment: 'dashboard/profile',
@@ -201,8 +197,10 @@ export {
     BACKEND_URL,
     SPACE_TYPE,
     DESIGN_THEME,
+    CATEGORY,
     EMPTY_YOUR_SPACE,
     BUILDER_SIZES,
     BUILDER_QUALITIES,
-    DASHBOARD_NAV_BACKGROUND, CHARS_LIMIT
+    DASHBOARD_NAV_BACKGROUND,
+    CHARS_LIMIT
 };

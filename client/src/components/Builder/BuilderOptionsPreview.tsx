@@ -9,22 +9,26 @@ import type { AiBuilderStateProps } from "../../types";
 const BuilderOptionsPreview: React.FC<{ builderState: AiBuilderStateProps }> = ({ builderState }) => {
     const { mode } = useColorScheme();
 
-    const decider = mode === 'light' ? '#000' : '#fff';
+    const chooseMode = mode === 'light' ? '#000' : '#fff';
 
     return (
 
         <Stack direction="row" spacing={3} justifyContent="flex-start" mt={2}>
             <Typography variant="caption" color="gray">
-                quality: <span style={{ color: decider }}>{builderState.quality}</span>
+                category: <span style={{ color: chooseMode }}>{builderState.category[0]}</span>
             </Typography>
             <Typography variant="caption" color="gray">
-                size: <span style={{ color: decider }}>{builderState.size}</span>
+                Space Type: <span style={{ color: chooseMode }}>{builderState.spaceType[0]}</span>
             </Typography>
             <Typography variant="caption" color="gray">
-                Design Theme: <span style={{ color: decider }}>{builderState.designTheme}</span>
+                Design Theme: <span style={{ color: chooseMode }}>{builderState.designTheme[0]}</span>
+            </Typography>
+
+            <Typography variant="caption" color="gray">
+                quality: <span style={{ color: chooseMode }}>{builderState.quality}</span>
             </Typography>
             <Typography variant="caption" color="gray">
-                Space Type: <span style={{ color: decider }}>{builderState.spaceType}</span>
+                size: <span style={{ color: chooseMode }}>{builderState.size}</span>
             </Typography>
         </Stack>
     );
