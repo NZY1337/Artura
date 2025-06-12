@@ -80,7 +80,7 @@ const BuilderOptions = ({ onHandleSubmit, builderState, setBuilderState, isLoadi
                     <SpaceTypes setBuilderState={setBuilderState} builderState={builderState} />
                     <DesignThemes setBuilderState={setBuilderState} builderState={builderState} />
                     <QualityAndSize setBuilderState={setBuilderState} builderState={builderState} />
-                    <FileUpload setBuilderState={setBuilderState} builderState={builderState} />
+                    <FileUpload setBuilderState={setBuilderState} />
                 </Box>
 
                 <IconButton color='success' loading={isLoading} onClick={() => onHandleSubmit(builderState)}

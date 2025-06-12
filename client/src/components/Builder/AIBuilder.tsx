@@ -41,20 +41,21 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
     };
 
     return (
-        <div>
-            <Gallery images={builderState.images} onRemove={handleRemoveImage} />
+        <>
+            {builderState.images.length > 0 && (
+                <Gallery images={builderState.images} onRemove={handleRemoveImage} />
+            )}
             <BuilderOptions onHandleSubmit={onHandleSubmit} setBuilderState={setBuilderState} builderState={builderState} isLoading={isLoading} />
-            {/* <BuilderOptionsPreview builderState={builderState} /> */}
-        </div>
+            <BuilderOptionsPreview builderState={builderState} />
+        </>
     );
 };
 
 export default AIBuilder;
 
-
 const Gallery = ({ images, onRemove }: GalleryProps) => {
     return (
-        <Box sx={{ overflowY: 'auto', display: 'flex', gap: 2, p: 2, backgroundColor: '#2e2f38', borderRadius: 2 }}>
+        <Box sx={{ mb: 2, overflowY: 'auto', display: 'flex', gap: 2, p: 2, backgroundColor: '#2e2f38', borderRadius: 2 }}>
             {images.map((image, index) => (
                 <Box key={index} sx={{ position: 'relative' }}>
                     <Card sx={{ width: 60, height: 60 }}>

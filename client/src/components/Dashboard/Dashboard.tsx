@@ -15,7 +15,6 @@ import { PageContainer } from '@toolpad/core/PageContainer';
 import { Users } from './Users';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { UserProfile } from '@clerk/clerk-react';
-import Box from '@mui/material/Box';
 
 // Providers
 import { NotificationsProvider } from '@toolpad/core/useNotifications';
@@ -80,7 +79,7 @@ export default function Dashboard() {
             case '/dashboard':
                 return <Overview />;
 
-            case '/dashboard/playground': // check mor documentation about PageContainer via mui toolpad PageContainer to understand why I did this
+            case '/dashboard/playground': // check more documentation about PageContainer via mui toolpad PageContainer to understand why I did this
                 return <Playground />
 
             case '/dashboard/profile':
