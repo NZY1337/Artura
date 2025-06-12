@@ -1,10 +1,14 @@
+// hooks
 import { useState } from 'react';
+import useCategory from '../../../hooks/useCategory';
+
+// components
 import { Grid, Card, CardMedia } from '@mui/material';
 import Skeleton from 'react-loading-skeleton';
 import GenericModalPreview from '../../Builder/BuiulderModalPreview';
-import useCategory from '../../../hooks/useCategory';
 
-import type { ProjectProps } from '../../../types';
+// types
+import type { ProjectResponseProps } from '../../../types';
 
 const HistoryProjects = () => {
     const [open, setOpen] = useState(false);
@@ -20,19 +24,17 @@ const HistoryProjects = () => {
                     <Grid size={{ xs: 6, md: 6, lg: 6, xl: 4 }} key={idx}>
                         <Skeleton height={100} borderRadius={10} />
                     </Grid>
-                ))
-                }
+                ))}
             </Grid >
         );
     }
 
-    console.log('data', data?.projects);
     return (
         <>
             <Grid container spacing={2} p={1.5}>
                 {data?.projects && data?.projects.length > 0 ?
                     <>
-                        {data?.projects.map((project: ProjectProps, index: number) => {
+                        {data?.projects.map((project: ProjectResponseProps, index: number) => {
                             return (
                                 <Grid size={{ xs: 6, md: 6, lg: 6, xl: 4 }} key={index}>
                                     <Card
@@ -64,11 +66,9 @@ const HistoryProjects = () => {
                             )
                         })}
                     </> : (
-                        <>
-                            <Grid>
-                                <div>No projects found.</div>
-                            </Grid>
-                        </>
+                        <Grid>
+                            <div>No projects found.</div>
+                        </Grid>
                     )}
             </Grid>
             <GenericModalPreview open={open} handleCloseModal={() => setOpen(false)} project={data?.projects[projectIndex]} />

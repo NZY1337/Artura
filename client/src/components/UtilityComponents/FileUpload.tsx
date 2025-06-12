@@ -6,9 +6,7 @@ import { useNotifications } from '@toolpad/core/useNotifications';
 // types
 import type { FileUploadProps } from "../../types";
 
-//! include WEBp files - accepted by OPENAI
-//! include WEBp files - accepted by OPENAI
-
+//! **** include WEBp files - accepted by OPENAI **** !\\
 const FileUpload = ({ builderState, setBuilderState }: FileUploadProps) => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const notifications = useNotifications();
@@ -18,6 +16,7 @@ const FileUpload = ({ builderState, setBuilderState }: FileUploadProps) => {
         const files = event.target.files;
 
         if (files && files.length > 0) {
+            console.log(builderState.images)
             const images: string[] = [];
             let hasInvalidFiles = false;
 
@@ -38,6 +37,10 @@ const FileUpload = ({ builderState, setBuilderState }: FileUploadProps) => {
 
             setBuilderState((prev: typeof builderState) => ({ ...prev, images }));
         }
+
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
     };
 
     const handleClick = () => {
@@ -50,11 +53,10 @@ const FileUpload = ({ builderState, setBuilderState }: FileUploadProps) => {
         <Stack spacing={2} alignItems="center">
             <IconButton onClick={handleClick}>
                 <UploadFileIcon />
-            </IconButton >
+            </IconButton>
 
-            <input type="file" multiple accept="image/png, image/jpeg, image/jpg, image/webp" style={{ display: "none" }}
-                ref={fileInputRef} onChange={handleFileChange} name="builderImage"
-            />
+            <input type="file" multiple accept="image/png, image/jpeg, image/jpg" style={{ display: "none" }}
+                ref={fileInputRef} onChange={handleFileChange} name="builderImage" />
         </Stack>
     );
 };

@@ -41,7 +41,6 @@ const DesignVariations = () => {
             justify='flex-end'
             innerWidth='lg'
             outerWidth={false}
-
             subtitle1={<SectionWrapper.Subtitle >
                 We are generic frontenders who do generic things for generic people who do generic things. We are generic frontenders who do generic things for
             </SectionWrapper.Subtitle>

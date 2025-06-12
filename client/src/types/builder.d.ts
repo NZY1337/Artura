@@ -33,7 +33,7 @@ interface BuilderOptionsProps {
     onHandleSubmit: (stateBuilder: SubmitBuilderProps) => void;
 }
 
-export type SubmitBuilderProps = Pick<AiBuilderStateProps, "n" | "prompt" | "size" | "output_format">
+export type SubmitBuilderProps = Pick<AiBuilderStateProps, "n" | "prompt" | "size" | "output_format" | "images">
 
 export interface AIBuilderProps {
     onHandleSubmit: (stateBuilder: SubmitBuilderProps) => void;

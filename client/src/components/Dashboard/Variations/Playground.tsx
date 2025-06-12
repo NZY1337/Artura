@@ -5,7 +5,7 @@ import useDesignGeneration from "../../../hooks/variations/useDesignGeneration";
 import { useNotifications, } from '@toolpad/core/useNotifications';
 
 // types
-import type { SubmitBuilderProps, ProjectProps } from "../../../types";
+import type { SubmitBuilderProps, ProjectResponseProps } from "../../../types";
 
 // utils
 import { mockData } from "../../utils/mockData";
@@ -22,7 +22,7 @@ type GridCell = | null | { loading: true } | typeof mockData[0];
 
 const Playground = () => {
     const [open, setOpen] = useState(false);
-    const [project, setProject] = useState<ProjectProps | null>(null);
+    const [project, setProject] = useState<ProjectResponseProps | null>(null);
     const [grid, setGrid] = useState<GridCell[]>(Array(18).fill(null));
     const notifications = useNotifications();
 

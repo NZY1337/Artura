@@ -129,7 +129,7 @@ export default function Dashboard() {
                         sx={{
                             px: 0,
                             padding: 0,
-                            // position: 'relative',
+                            position: 'relative',
                             ...(window.location.pathname === '/dashboard/playground' ? {
                                 '& .MuiStack-root>.MuiBox-root': {
                                     height: '100vh',

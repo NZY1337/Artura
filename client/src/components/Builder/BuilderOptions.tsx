@@ -46,7 +46,7 @@ const BuilderOptions = ({ onHandleSubmit, builderState, setBuilderState, isLoadi
     }
 
     return (
-        <Box sx={{ width: '100%', }} component={'form'}>
+        <Box sx={{ width: '100%' }} component={'form'}>
             <Typography variant='body2' textAlign={'right'} color='orange'>characters: {CHARS_LIMIT - charCount}</Typography>
             <TextareaAutosize
                 placeholder={`Eg: generate a beautiful ${builderState.spaceType} design in a ${builderState.designTheme} style with ...`}
@@ -80,7 +80,7 @@ const BuilderOptions = ({ onHandleSubmit, builderState, setBuilderState, isLoadi
                     <SpaceTypes setBuilderState={setBuilderState} builderState={builderState} />
                     <DesignThemes setBuilderState={setBuilderState} builderState={builderState} />
                     <QualityAndSize setBuilderState={setBuilderState} builderState={builderState} />
-                    <FileUpload setBuilderState={setBuilderState} />
+                    <FileUpload setBuilderState={setBuilderState} builderState={builderState} />
                 </Box>
 
                 <IconButton color='success' loading={isLoading} onClick={() => onHandleSubmit(builderState)}

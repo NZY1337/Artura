@@ -8,11 +8,9 @@ import Typography from "@mui/material/Typography";
 import type { AiBuilderStateProps } from "../../types";
 const BuilderOptionsPreview: React.FC<{ builderState: AiBuilderStateProps }> = ({ builderState }) => {
     const { mode } = useColorScheme();
-
     const chooseMode = mode === 'light' ? '#000' : '#fff';
 
     return (
-
         <Stack direction="row" spacing={3} justifyContent="flex-start" mt={2}>
             <Typography variant="caption" color="gray">
                 category: <span style={{ color: chooseMode }}>{builderState.category[0]}</span>
