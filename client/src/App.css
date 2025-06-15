@@ -35,3 +35,7 @@ header {
         background: radial-gradient(circle at 20% 30%, #ff9a9e, #fad0c4);
     }
 }
+
+.no-overflow {
+    overflow: hidden !important;
+}

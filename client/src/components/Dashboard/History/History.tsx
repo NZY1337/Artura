@@ -66,15 +66,12 @@ export default function History() {
         <>
             <IconButton
                 onClick={toggleDrawer(true)}
+                disableFocusRipple
+                disableRipple
+                disableTouchRipple
                 sx={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '15px',
-                    borderRadius: '5px',
-                    p: .5,
                     '&:hover': {
-                        borderRadius: '5px',
-                        color: 'white',
+                        color: 'orange',
                     }
                 }}>
                 <HistoryIcon sx={{ mr: .5 }} />

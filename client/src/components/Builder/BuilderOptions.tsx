@@ -1,22 +1,24 @@
 
 import { useState } from 'react';
 import { useNotifications } from '@toolpad/core';
+
 // components
 import Box from '@mui/material/Box';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-
-
 import Divider from '@mui/material/Divider';
 import { Send } from '@mui/icons-material';
 import QualityAndSize from './BuilderOptions/QaulityAndSize';
+import NumberOfGenerations from './BuilderOptions/NumberOfGenerations ';
 import SpaceTypes from './BuilderOptions/SpaceTypes';
 import DesignThemes from './BuilderOptions/DesignThemes';
 import Categories from './BuilderOptions/Categories';
 import FileUpload from '../UtilityComponents/FileUpload';
+
 // import AttachFile from '@mui/icons-material/AttachFile';\
 
+// constants
 import { CHARS_LIMIT } from '../../helpers/constants';
 
 // hooks
@@ -25,7 +27,7 @@ import { useColorScheme } from "@mui/material";
 // types
 import type { BuilderOptionsProps } from '../../types';
 
-const BuilderOptions = ({ onHandleSubmit, builderState, setBuilderState, isLoading }: BuilderOptionsProps) => {
+const BuilderOptions = ({ builderState, isLoading, setBuilderState, onHandleSubmit, }: BuilderOptionsProps) => {
     const { prompt } = builderState;
     const { mode } = useColorScheme();
     const [charCount, setCharCount] = useState<number>(0);
@@ -80,6 +82,7 @@ const BuilderOptions = ({ onHandleSubmit, builderState, setBuilderState, isLoadi
                     <SpaceTypes setBuilderState={setBuilderState} builderState={builderState} />
                     <DesignThemes setBuilderState={setBuilderState} builderState={builderState} />
                     <QualityAndSize setBuilderState={setBuilderState} builderState={builderState} />
+                    <NumberOfGenerations setBuilderState={setBuilderState} builderState={builderState} />
                     <FileUpload setBuilderState={setBuilderState} builderState={builderState} />
                 </Box>
 

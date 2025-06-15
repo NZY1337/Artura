@@ -1,9 +1,9 @@
 
 // hooks
-import { useMemo, } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import { useColorScheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { useUser, useClerk, } from '@clerk/clerk-react';
+import { useUser, useClerk, useAuth } from '@clerk/clerk-react';
 
 // components
 import DashboardTitle from './DashboardTitle';
@@ -31,12 +31,14 @@ import { type Session } from '@toolpad/core/AppProvider';
 
 // constants
 import { DASHBOARD_NAV_BACKGROUND } from '../../helpers/constants';
+import HistoryDrawer from "./History/History";
 
 export default function Dashboard() {
     const navigate = useNavigate();
+    const divRef = useRef<HTMLDivElement>(null);
     const { user } = useUser();
     const { signOut } = useClerk();
-    // const { getToken } = useAuth();
+    const { getToken } = useAuth();
     const { setMode, mode } = useColorScheme() as {
         setMode: (mode: 'light' | 'dark') => void;
         mode: 'light' | 'dark';
@@ -73,7 +75,6 @@ export default function Dashboard() {
         signIn: () => { }, signOut
     }), [signOut]);
 
-
     const renderContent = () => {
         switch (router.pathname) {
             case '/dashboard':
@@ -93,14 +94,21 @@ export default function Dashboard() {
         }
     };
 
-    // useEffect(() => {
-    //     async function callProtectedRoute() {
-    //         const token = await getToken();
-    //         console.log(token);  // copy this exact token to Postman
-    //     }
 
-    //     callProtectedRoute()
-    // }, [])
+    useEffect(() => {
+        async function callProtectedRoute() {
+            const token = await getToken();
+            console.log(token);  // copy this exact token to Postman
+        }
+
+        callProtectedRoute()
+
+        const parent = divRef.current?.parentElement;
+        if (parent) {
+            parent.classList.add('no-overflow');
+        }
+    }, [])
+
 
     return (
         <AppProvider
@@ -119,29 +127,35 @@ export default function Dashboard() {
                     slots={{
                         sidebarFooter: DashboardFooter,
                         appTitle: DashboardTitle,
-                        toolbarActions: () => <CustomThemeSwitcher setMode={setMode} mode={mode} />
+                        toolbarActions: () => {
+                            return <>
+                                <HistoryDrawer />
+                                <CustomThemeSwitcher setMode={setMode} mode={mode} />
+                            </>
+                        }
                     }}>
                     <PageContainer
+                        ref={divRef}
                         maxWidth={false}
                         title=''
                         breadcrumbs={[]}
                         className='dashboard-page-container'
-                        sx={{
-                            px: 0,
-                            padding: 0,
-                            position: 'relative',
-                            ...(window.location.pathname === '/dashboard/playground' ? {
-                                '& .MuiStack-root>.MuiBox-root': {
-                                    height: '100vh',
-                                    overflowY: 'auto',
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                                    gap: '1px',
-                                    placeContent: 'start center',
-                                    padding: '1px',
-                                },
-                            } : {}),
-                        }}
+                    // sx={{
+                    //     px: 0,
+                    //     padding: 0,
+                    //     ...(window.location.pathname === '/dashboard/playground' ? {
+                    //         '& .MuiStack-root>.MuiBox-root': {
+                    //             position: 'relative',
+                    //             height: '100vh',
+                    //             overflowY: 'auto',
+                    //             display: 'grid',
+                    //             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                    //             gap: '1px',
+                    //             placeContent: 'start center',
+                    //             padding: '1px',
+                    //         },
+                    //     } : {}),
+                    // }}
                     >
                         {renderContent()}
                     </PageContainer>

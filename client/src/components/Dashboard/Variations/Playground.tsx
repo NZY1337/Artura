@@ -12,9 +12,9 @@ import { mockData } from "../../utils/mockData";
 
 // components
 import { TypeAnimation } from "react-type-animation";
+import { Container } from "@mui/material";
 import BuilderModalPreview from "../../Builder/BuiulderModalPreview";
 import AIBuilder from "../../Builder/AIBuilder";
-import HistoryDrawer from "../History/History";
 import GenerationBox from "../GenerationBox";
 import Box from "@mui/material/Box";
 
@@ -115,50 +115,72 @@ const Playground = () => {
     };
 
     return (
-        <>
-            {grid.map((item, index) => {
-                const isLoading = item && 'loading' in item;
-                const backgroundImage = item !== null && !('loading' in item) && item.images?.[0]?.url;
+        <Box sx={{ position: 'relative', height: '90vh' }}>
+            <Box
+                sx={{
+                    scrollbarWidth: 'thin', // Firefox
+                    scrollbarColor: '#888 transparent',
+                    '&::-webkit-scrollbar': {
+                        width: '6px',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                        backgroundColor: '#888',
+                        borderRadius: '4px',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                        backgroundColor: 'transparent',
+                        marginRight: '5px', // Add spacing to push the thumb left
+                    },
+                    height: '100%',
+                    overflow: 'auto',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                    gap: '1px',
+                    placeContent: 'start center',
+                    padding: '1px',
+                }}>
+                {grid.map((item, index) => {
+                    const isLoading = item && 'loading' in item;
+                    const backgroundImage = item !== null && !('loading' in item) && item.images?.[0]?.url;
 
-                const itemResponse = {
-                    backgroundImage: `url(${backgroundImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                }
+                    const itemResponse = {
+                        backgroundImage: `url(${backgroundImage})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                    }
 
-                return (
-                    <Box key={index}
-                        sx={{
-                            aspectRatio: '1 / 1',
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            boxShadow: '0 0 0 1px #000',
-                            display: 'flex',
-                            placeContent: 'center',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            ...(backgroundImage ? itemResponse : {})
-                        }}>
-                        {isLoading ? <TypeAnimation
-                            sequence={['Loading...', 1500, 'Hold tight...', 1500, 'This may take a while...', 1500]}
-                            wrapper="span"
-                            cursor={true}
-                            repeat={Infinity}
-                            speed={75}
-                            style={{ display: 'inline-block', color: '#ffa500' }}
-                        /> : item ? <GenerationBox onFullscreen={() => onFullscreen(index)} onRemove={() => onRemove(index)} item={item} /> : null}
-                    </Box>
-                );
-            })}
+                    return (
+                        <Box key={index}
+                            sx={{
+                                aspectRatio: '1 / 1',
+                                width: '100%',
+                                boxSizing: 'border-box',
+                                boxShadow: '0 0 0 1px #000',
+                                display: 'flex',
+                                placeContent: 'center',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                ...(backgroundImage ? itemResponse : {})
+                            }}>
+                            {isLoading ? <TypeAnimation
+                                sequence={['Loading...', 1500, 'Hold tight...', 1500, 'This may take a while...', 1500]}
+                                wrapper="span"
+                                cursor={true}
+                                repeat={Infinity}
+                                speed={75}
+                                style={{ display: 'inline-block', color: '#ffa500' }}
+                            /> : item ? <GenerationBox onFullscreen={() => onFullscreen(index)} onRemove={() => onRemove(index)} item={item} /> : null}
+                        </Box>
+                    );
+                })}
+
+                {project !== null ? <BuilderModalPreview open={open} project={project} handleCloseModal={() => setOpen(false)} /> : null}
+            </Box>
 
             <Box sx={{ position: 'absolute', bottom: '50px', left: '50%', transform: 'translateX(-50%)', maxWidth: '800px', minWidth: '100px', width: '100%', }}>
                 <AIBuilder onHandleSubmit={onHandleTestSubmit} isLoading={isPending} />
             </Box>
-
-            <HistoryDrawer />
-
-            {project !== null ? <BuilderModalPreview open={open} project={project} handleCloseModal={() => setOpen(false)} /> : null}
-        </>
+        </Box>
     );
 }
 

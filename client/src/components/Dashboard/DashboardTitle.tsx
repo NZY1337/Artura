@@ -42,7 +42,6 @@ function DashboardTitle() {
     return (
         <Stack direction="row" alignItems="center" spacing={2}>
             <Typography fontWeight={600} color={'warning'} variant="body1" sx={{ cursor: 'pointer' }} onClick={handleClick}>HOME</Typography>
-
             {isPending ? <Skeleton duration={1} height={25} width={80} borderRadius={50} /> : <Tooltip title="credits left">
                 <Chip size="small" label={data?.ammount} icon={<DiamondIcon sx={{ animation: `${pulseAnimation} 3.5s infinite ease-in-out` }} />} />
             </Tooltip>}

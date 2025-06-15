@@ -19,14 +19,16 @@ const DropdownSetting = ({ children, icon }: { children: React.ReactNode, icon: 
                 {icon}
             </IconButton>
 
-            <Menu anchorOrigin={{
-                vertical: 'top',    // position the menu's anchor at the top of the icon
-                horizontal: 'right',
-            }}
+            <Menu
+                sx={{ padding: '10px', background: 'none' }}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
                 transformOrigin={{
                     vertical: 'bottom', // position the menu so it appears above the anchor point
                     horizontal: 'center',
-                }} anchorEl={anchorEl} open={open} onClose={handleClose}>
+                }}>
                 {children}
             </Menu>
         </>
