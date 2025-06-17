@@ -8,7 +8,7 @@ import Skeleton from 'react-loading-skeleton';
 import GenericModalPreview from '../../Builder/BuiulderModalPreview';
 
 // types
-import type { ProjectResponseProps } from '../../../types';
+import type { ProjectProps } from '../../../types';
 
 const HistoryProjects = () => {
     const [open, setOpen] = useState(false);
@@ -34,7 +34,7 @@ const HistoryProjects = () => {
             <Grid container spacing={2} p={1.5}>
                 {data?.projects && data?.projects.length > 0 ?
                     <>
-                        {data?.projects.map((project: ProjectResponseProps, index: number) => {
+                        {data?.projects.map((project: ProjectProps, index: number) => {
                             return (
                                 <Grid size={{ xs: 6, md: 6, lg: 6, xl: 4 }} key={index}>
                                     <Card

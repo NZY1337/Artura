@@ -8,15 +8,15 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import BuilderOptionsPreview from "./BuilderOptionsPreview";
+// import BuilderOptionsPreview from "./BuilderOptionsPreview";
 import Carousel from "../UtilityComponents/Carousel";
 
 // types
-import type { ProjectResponseProps, QualityFormatProps, SizeImageProps } from "../../types";
+import type { ProjectProps, } from "../../types";
 
 const BuilderModalPreview = ({ project, open, handleCloseModal }:
     {
-        project: ProjectResponseProps;
+        project: ProjectProps;
         open: boolean;
         handleCloseModal: () => void;
     }) => {

@@ -10,7 +10,7 @@ interface ProjectImageProps {
     projectId: string;
 }
 
-export interface ProjectResponseProps {
+export interface ProjectProps {
     images: ProjectImageProps[];
     category: string;
     createdAt: string;
@@ -22,14 +22,34 @@ export interface ProjectResponseProps {
     userId: string
 }
 
+export interface ImageGenerationResponseProps {
+    id: string;
+    projectId: string;
+    background: string;
+    outputFormat: string;
+    quality: string;
+    size: string;
+    inputTokens: number;
+    imageTokens: number;
+    textTokens: number;
+    outputTokens: number;
+    totalTokens: number;
+    imageCost: number;
+    tokenCost: number;
+    totalCost: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
 export interface RenderLatestProjectsProps {
-    project: ProjectResponseProps
+    project: ProjectProps
     index: number;
     handleOpenModal: () => void;
     handleSetCurrentIndex: (index: number) => void;
 }
 
 export type ProjectResponseProps = ApiResponse<{
-    project: ProjectResponseProps;
+    project: ProjectProps;
     images: ProjectImageProps[];
+    imageGenerationResponse: ImageGenerationResponseProps
 }>;

@@ -138,12 +138,16 @@ export const designGenerator = async (req: Request, res: Response) => {
             },
         });
 
-        const images = await tx.image.createMany({
-            data: imageUrls.map(url => ({
-                url,
-                projectId: project.id,
-            })),
-        });
+        const images = await Promise.all(
+            imageUrls.map((url) =>
+                tx.image.create({
+                    data: {
+                        url,
+                        projectId: project.id,
+                    },
+                })
+            )
+        );
 
         const imageGenerationResponse = await tx.imageGenerationResponse.create({
             data: {

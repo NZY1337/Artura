@@ -1,10 +1,10 @@
+import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
 import GenericDialog from '../UtilityComponents/modals/GenericDialog';
 import { DataGrid } from '@mui/x-data-grid/DataGrid';
 
@@ -112,7 +112,7 @@ export const Users = () => {
     if (error) return <Container>{`An error has occurred: ${error.message}`}</Container>
 
     return (
-        <Container disableGutters={true}>
+        <Container>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <DataGrid
                     sx={{

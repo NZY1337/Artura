@@ -8,13 +8,13 @@ import { useUser, useClerk, useAuth } from '@clerk/clerk-react';
 // components
 import DashboardTitle from './DashboardTitle';
 import DashboardFooter from './DashboardFooter';
-import Playground from './Variations/Playground';
+import Playground from './Playground';
+import Profile from './Profile';
 import Overview from './Overview';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import { Users } from './Users';
 import { AppProvider } from '@toolpad/core/AppProvider';
-import { UserProfile } from '@clerk/clerk-react';
 
 // Providers
 import { NotificationsProvider } from '@toolpad/core/useNotifications';
@@ -80,11 +80,11 @@ export default function Dashboard() {
             case '/dashboard':
                 return <Overview />;
 
-            case '/dashboard/playground': // check more documentation about PageContainer via mui toolpad PageContainer to understand why I did this
+            case '/dashboard/playground':
                 return <Playground />
 
             case '/dashboard/profile':
-                return <UserProfile />;
+                return <Profile />;
 
             case '/dashboard/users':
                 return <Users />;
@@ -93,7 +93,6 @@ export default function Dashboard() {
                 return null;
         }
     };
-
 
     useEffect(() => {
         async function callProtectedRoute() {
@@ -139,24 +138,7 @@ export default function Dashboard() {
                         maxWidth={false}
                         title=''
                         breadcrumbs={[]}
-                        className='dashboard-page-container'
-                    // sx={{
-                    //     px: 0,
-                    //     padding: 0,
-                    //     ...(window.location.pathname === '/dashboard/playground' ? {
-                    //         '& .MuiStack-root>.MuiBox-root': {
-                    //             position: 'relative',
-                    //             height: '100vh',
-                    //             overflowY: 'auto',
-                    //             display: 'grid',
-                    //             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                    //             gap: '1px',
-                    //             placeContent: 'start center',
-                    //             padding: '1px',
-                    //         },
-                    //     } : {}),
-                    // }}
-                    >
+                        className='dashboard-page-container'>
                         {renderContent()}
                     </PageContainer>
                 </DashboardLayout>

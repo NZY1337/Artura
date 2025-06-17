@@ -62,7 +62,6 @@ const GenerationBox: React.FC<Props> = ({
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-
                 }}
             >
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>

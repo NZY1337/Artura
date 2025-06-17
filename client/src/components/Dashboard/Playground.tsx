@@ -1,62 +1,78 @@
 
 // hooks
 import { useState } from "react";
-import useDesignGeneration from "../../../hooks/variations/useDesignGeneration";
+import useDesignGeneration from "../../hooks/variations/useDesignGeneration";
 import { useNotifications, } from '@toolpad/core/useNotifications';
 
 // types
-import type { SubmitBuilderProps, ProjectResponseProps } from "../../../types";
-
-// utils
-import { mockData } from "../../utils/mockData";
+import type { SubmitBuilderProps, ProjectProps } from "../../types";
 
 // components
 import { TypeAnimation } from "react-type-animation";
-import { Container } from "@mui/material";
-import BuilderModalPreview from "../../Builder/BuiulderModalPreview";
-import AIBuilder from "../../Builder/AIBuilder";
-import GenerationBox from "../GenerationBox";
+import BuilderModalPreview from "../Builder/BuiulderModalPreview";
+import AIBuilder from "../Builder/AIBuilder";
+import GenerationBox from "./GenerationBox";
 import Box from "@mui/material/Box";
 
-type GridCell = | null | { loading: true } | typeof mockData[0];
+import { mapResponseData } from "../utils/utilities";
+
+type GridCell = null | { loading: true } | ProjectProps;
+
+// result = {
+//     "project": {
+//         "id": "a7ee2d7c-baba-4c6c-935e-3a1874221f7e",
+//         "userId": "user_2xrVpetV8CkDDyfbJPSXmsrRe57",
+//         "prompt": "create a victorian bedroom.",
+//         "category": "DESIGN_GENERATION",
+//         "size": "1536x1024",
+//         "quality": "high",
+//         "createdAt": "2025-06-15T22:13:32.904Z",
+//         "updatedAt": "2025-06-15T22:13:32.904Z"
+//     },
+//     "images": {
+//         "count": 1
+//     },
+//     "imageGenerationResponse": {
+//         "id": "700d1d92-5a80-4788-8cd5-5e7d5272526c",
+//         "projectId": "a7ee2d7c-baba-4c6c-935e-3a1874221f7e",
+//         "background": "auto",
+//         "outputFormat": "png",
+//         "quality": "high",
+//         "size": "1536x1024",
+//         "inputTokens": 12,
+//         "imageTokens": 0,
+//         "textTokens": 12,
+//         "outputTokens": 6208,
+//         "totalTokens": 6220,
+//         "imageCost": 0.25,
+//         "tokenCost": 0.24838,
+//         "totalCost": 0.49838
+//     }
+// }
 
 const Playground = () => {
     const [open, setOpen] = useState(false);
-    const [project, setProject] = useState<ProjectResponseProps | null>(null);
+    const [project, setProject] = useState<ProjectProps | null>(null);
     const [grid, setGrid] = useState<GridCell[]>(Array(18).fill(null));
     const notifications = useNotifications();
+    const { isPending, mutate } = useDesignGeneration();
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { isPending, mutate, data } = useDesignGeneration();
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const onHandleSubmit = async (data: SubmitBuilderProps) => {
-        if (data.prompt === '') {
-            notifications.show('Add more details to the prompt for better results.  ', {
-                severity: 'error',
-                autoHideDuration: 3000,
-            })
-            return;
-        }
-        mutate(data);
-    };
-
-    const mockGenerate = (index: number): Promise<typeof mockData[0]> => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(mockData[index]);
-            }, 10000);
-        });
-    };
+    // const mockGenerate = (index: number): Promise<typeof mockData[0]> => {
+    //     return new Promise((resolve) => {
+    //         setTimeout(() => {
+    //             resolve(mockData[index]);
+    //         }, 10000);
+    //     });
+    // };
 
     // let generationQueue = Promise.resolve(); // Shared across calls
 
-    const onHandleTestSubmit = () => {
-        // generationQueue = generationQueue.then(() =>
-        //     handleQueuedGeneration()
-        // );
-        handleQueuedGeneration()
-    };
+    // const onHandleTestSubmit = () => {
+    // generationQueue = generationQueue.then(() =>
+    //     handleQueuedGeneration()
+    // );
+    // handleQueuedGeneration()
+    // };
 
     /*
       - In your first setGrid, I'm setting a loading: true marker.
@@ -70,7 +86,15 @@ const Playground = () => {
         * Once the generation is complete, it updates the grid with the generated project.
         * If no empty cell is found, it does nothing.
     */
-    const handleQueuedGeneration = async () => {
+    const handleQueuedGeneration = async (project: SubmitBuilderProps) => {
+        if (project.prompt === '') {
+            notifications.show('Add more details to the prompt for better results.  ', {
+                severity: 'error',
+                autoHideDuration: 3000,
+            })
+            return;
+        }
+
         let targetIndex: number | null = null;
 
         setGrid((prevGrid) => {
@@ -87,13 +111,17 @@ const Playground = () => {
         await new Promise((res) => setTimeout(res, 0));
 
         if (targetIndex === null) return;
+        // const generated = await mockGenerate(Math.floor(Math.random() * mockData.length));
 
-        const generated = await mockGenerate(Math.floor(Math.random() * mockData.length));
-
-        setGrid((prevGrid) => {
-            const newGrid = [...prevGrid];
-            newGrid[targetIndex!] = generated;
-            return newGrid;
+        mutate(project, {
+            onSuccess: (project) => {
+                console.log(project);
+                setGrid((prevGrid) => {
+                    const newGrid = [...prevGrid];
+                    newGrid[targetIndex!] = mapResponseData(project);
+                    return newGrid;
+                });
+            },
         });
     };
 
@@ -178,7 +206,7 @@ const Playground = () => {
             </Box>
 
             <Box sx={{ position: 'absolute', bottom: '50px', left: '50%', transform: 'translateX(-50%)', maxWidth: '800px', minWidth: '100px', width: '100%', }}>
-                <AIBuilder onHandleSubmit={onHandleTestSubmit} isLoading={isPending} />
+                <AIBuilder onHandleSubmit={handleQueuedGeneration} isLoading={isPending} />
             </Box>
         </Box>
     );

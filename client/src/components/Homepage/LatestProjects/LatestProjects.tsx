@@ -6,12 +6,12 @@ import BuilderModalPreview from "../../Builder/BuiulderModalPreview";
 import Carousel from "../../UtilityComponents/Carousel";
 import RenderLatestProjects from "./RenderLatestProject";
 
-import type { ProjectResponseProps } from "../../../types";
+import type { ProjectProps } from "../../../types";
 
 export default function LatestProjects() {
     const [open, setOpen] = useState(false);
     const { data } = useCategory();
-    const [currentIndex, setCurrentIndex] = useState(0)
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     const settings = {
         dots: false,
@@ -19,8 +19,8 @@ export default function LatestProjects() {
         focusOnSelect: true,
         speed: 3000,
         autoplaySpeed: 0,
-        slidesToShow: data?.projects?.length,
-        infinite: data?.projects?.length >= 3,  // Disable infinite if not enough items
+        slidesToShow: data?.projects?.slice(0, 5)?.length,
+        infinite: data?.projects?.length >= 4,  // Disable infinite if not enough items
         slidesToScroll: 1,
         responsive: [
             {
@@ -73,7 +73,7 @@ export default function LatestProjects() {
                     </Container>
 
                     <Carousel settings={settings}>
-                        {data?.projects.map((project: ProjectResponseProps, index: number) => (
+                        {data?.projects.slice(0, 5)?.map((project: ProjectProps, index: number) => (
                             <RenderLatestProjects project={project} index={index} handleOpenModal={handleOpenModal} handleSetCurrentIndex={handleSetCurrentIndex} />
                         ))}
                     </Carousel>
