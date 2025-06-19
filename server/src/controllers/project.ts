@@ -114,6 +114,8 @@ const mockRes = {
 // !! TODO: must validate the request body with ProjectValidator
 // !! TODO: must validate the request body with ProjectValidator
 
+
+// call the route in FE
 export const designGenerator = async (req: Request, res: Response) => {
     const { files } = req;
     const { n, prompt, size, output_format, quality } = req.body;
@@ -213,15 +215,15 @@ export const designGenerator = async (req: Request, res: Response) => {
         return { project, images, imageGenerationResponse };
     });
 
-
-
     res.status(200).json({ result });
 };
 
 export const designGeneratorUpload = async (req: Request, res: Response) => {
+    console.log('----- triggered -----')
     const { files } = req;
     const { n, prompt, size, output_format, quality } = req.body;
 
+    console.log(files);
     let imagesToBeUploaded = [];
 
     if (Array.isArray(files) && files.length > 0) {
@@ -238,6 +240,8 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
         throw new BadRequestException(ErrorCode.BAD_REQUEST, 'images could not be uploaded or 0 images uploaded')
     }
 
+    console.log(imagesToBeUploaded)
+
     const imgResponse = await openAiClient.images.edit({
         model: "gpt-image-1",
         image: imagesToBeUploaded,
@@ -246,7 +250,7 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
         size,
     });
 
-    console.log(imgResponse);
+    console.log(imgResponse, 'woweaewa');
 
     if (!imgResponse.data) {
         throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image data is undefined.");
@@ -277,7 +281,7 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
         })
     );
 
-    const imageUrls = upload.map(object => `${SUPABASE_URL} /storage/v1 / object / public / ${object.fullPath} `);
+    const imageUrls = upload.map(object => `${SUPABASE_URL}/storage/v1/object/public/${object.fullPath}`);
 
     const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(
         {
@@ -333,7 +337,7 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
         return { project, images, imageGenerationResponse };
     });
 
-    res.status(200).json({ mockRes });
+    res.status(200).json({ result });
 };
 
 // get all projects per user

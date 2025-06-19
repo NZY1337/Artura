@@ -4,6 +4,9 @@ import { Prisma } from "@prisma/client";
 import { ZodError } from "zod";
 import multer from 'multer';
 
+import { OpenAIError } from "openai"; // This does NOT exist currently
+
+
 export enum ErrorCode {
     NOT_FOUND = StatusCodes.NOT_FOUND,
     BAD_REQUEST = StatusCodes.BAD_REQUEST,
@@ -91,6 +94,7 @@ export const errorHandler = (method: Function) => {
         try {
             await method(req, res, next);
         } catch (error: any) {
+            console.log(error)
             let exception: HttpException;
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
                 const modelName = error?.meta?.modelName || "Resource"; // Product, User, Comment, etc...
@@ -98,7 +102,10 @@ export const errorHandler = (method: Function) => {
             } else if (error instanceof HttpException) {
                 exception = error;
             } else if (error instanceof ZodError) {
-                exception = new BadRequestException(ErrorCode.UNPROCESSABLE_ENTITY, "Unprocessed Entity - Validation Error",);
+                exception = new BadRequestException(ErrorCode.UNPROCESSABLE_ENTITY, "Unprocessed Entity - Validation Error");
+            } else if (error instanceof OpenAIError) {
+                console.log('true');
+                exception = new BadRequestException(ErrorCode.UNPROCESSABLE_ENTITY, "Open AI error");
             } else {
                 exception = new InternalException(ErrorCode.INTERNAL_EXCEPTION, "Something went wrong!",);
             }
