@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { openAiClient } from "../services/openai";
+import { toFile } from "openai";
 import { supabaseClient } from "../services/supabase";
 import { writeFile, readFile } from "fs/promises";
 import {
@@ -72,114 +73,267 @@ async function mockGenerateImage(): Promise<Buffer> {
     return imageBuffer;
 }
 
-// TODO: must validate the request body with ProjectValidator
+const mockRes = {
+    "project": {
+        "id": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+        "userId": "user_2xrVpetV8CkDDyfbJPSXmsrRe57",
+        "prompt": "Create a super realistic 3d rendering of this architectural rendering.. Do not change the positions of the walls, and maintain lines in the same exact position as they are in the plan, but add furniture and finishes and textures and depth.",
+        "category": "DESIGN_GENERATION",
+        "size": "1536x1024",
+        "quality": "high",
+        "createdAt": "2025-06-19T13:28:53.399Z",
+        "updatedAt": "2025-06-19T13:28:53.399Z"
+    },
+    "images": [
+        {
+            "id": "e027ce3b-1ae4-4948-87aa-922ed335d3b9",
+            "url": "https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750339732317-0.png",
+            "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+            "createdAt": "2025-06-19T13:28:53.494Z"
+        }
+    ],
+    "imageGenerationResponse": {
+        "id": "93d1f1d9-b68b-45bc-97f9-4c5860eb7f9f",
+        "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+        "background": "auto",
+        "outputFormat": "png",
+        "quality": "high",
+        "size": "1536x1024",
+        "inputTokens": 402,
+        "imageTokens": 323,
+        "textTokens": 79,
+        "outputTokens": 1568,
+        "totalTokens": 1970,
+        "imageCost": 0.25,
+        "tokenCost": 0.06634500000000002,
+        "totalCost": 0.316345
+    }
+}
+
+// !! TODO: must validate the request body with ProjectValidator
+// !! TODO: must validate the request body with ProjectValidator
+// !! TODO: must validate the request body with ProjectValidator
+
 export const designGenerator = async (req: Request, res: Response) => {
-    console.log('-------------------------------');
     const { files } = req;
     const { n, prompt, size, output_format, quality } = req.body;
 
-    if (Array.isArray(files) && files.length > 0) {
-        console.log(files);
-        console.log('files exist');
-    } else {
-        console.log('files does not exist');
+    const imgResponse = await openAiClient.images.generate({
+        model: "gpt-image-1",
+        prompt,
+        n: 1,
+        size,
+        quality,
+        background: "auto",
+    });
+
+    if (!imgResponse.data) {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image data is undefined.");
     }
 
-    // const imgResponse = await openAiClient.images.generate({
-    //     model: "gpt-image-1",
-    //     prompt,
-    //     n: 1,
-    //     size,
-    //     quality,
-    //     background: "auto",
-    // });
+    const usage = imgResponse.usage;
 
-    // if (!imgResponse.data) {
-    //     throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image data is undefined.");
-    // }
+    if (!isValidUsage(usage)) {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "Incomplete usage data from OpenAI.");
+    }
 
-    // const usage = imgResponse.usage;
+    const upload = await Promise.all(
+        imgResponse.data.map(async (data, index) => {
+            if (!data.b64_json) {
+                throw new BadRequestException(ErrorCode.BAD_REQUEST, `Image data is missing for image at index ${index}`);
+            }
 
-    // if (!isValidUsage(usage)) {
-    //     throw new BadRequestException(ErrorCode.BAD_REQUEST, "Incomplete usage data from OpenAI.");
-    // }`
+            const imageBuffer = Buffer.from(data.b64_json, "base64");
+            const storagePath = createStorageUrl(req.auth.userId, index);
 
-    // const upload = await Promise.all(
-    //     imgResponse.data.map(async (data, index) => {
-    //         if (!data.b64_json) {
-    //             throw new BadRequestException(ErrorCode.BAD_REQUEST, `Image data is missing for image at index ${index}`);
-    //         }
+            const { data: filePath, error } = await supabaseClient.storage.from("artura").upload(storagePath, imageBuffer, { contentType: "image/png" });
 
-    //         const imageBuffer = Buffer.from(data.b64_json, "base64");
-    //         const storagePath = createStorageUrl(req.auth.userId, index);
+            if (error) {
+                throw new BadRequestException(ErrorCode.BAD_REQUEST, `Failed to upload image at index ${index} to storage.`);
+            }
 
-    //         const { data: filePath, error } = await supabaseClient.storage.from("artura").upload(storagePath, imageBuffer, { contentType: "image/png" });
+            return filePath;
+        })
+    );
 
-    //         if (error) {
-    //             throw new BadRequestException(ErrorCode.BAD_REQUEST, `Failed to upload image at index ${index} to storage.`);
-    //         }
+    const imageUrls = upload.map(object => `${SUPABASE_URL}/storage/v1/object/public/${object.fullPath}`);
 
-    //         return filePath;
-    //     })
-    // );
+    const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(
+        {
+            model: "gpt-image-1",
+            size,
+            quality,
+            input_tokens_details: usage.input_tokens_details,
+            output_tokens: usage.output_tokens,
+        },
+        false
+    );
 
-    // const imageUrls = upload.map(object => `${SUPABASE_URL}/storage/v1/object/public/${object.fullPath}`);
+    const result = await prismaClient.$transaction(async (tx) => {
+        const project = await tx.project.create({
+            data: {
+                category: "DESIGN_GENERATION",
+                userId: req.auth.userId,
+                prompt,
+                size,
+                quality,
+            },
+        });
 
-    // const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(
-    //     {
-    //         model: "gpt-image-1",
-    //         size,
-    //         quality,
-    //         input_tokens_details: usage.input_tokens_details,
-    //         output_tokens: usage.output_tokens,
-    //     },
-    //     false
-    // );
+        const images = await Promise.all(
+            imageUrls.map((url) =>
+                tx.image.create({
+                    data: {
+                        url,
+                        projectId: project.id,
+                    },
+                })
+            )
+        );
 
-    // const result = await prismaClient.$transaction(async (tx) => {
-    //     const project = await tx.project.create({
-    //         data: {
-    //             category: "DESIGN_GENERATION",
-    //             userId: req.auth.userId,
-    //             prompt,
-    //             size,
-    //             quality,
-    //         },
-    //     });
+        const imageGenerationResponse = await tx.imageGenerationResponse.create({
+            data: {
+                projectId: project.id,
+                background: "auto",
+                outputFormat: output_format,
+                quality: "high",
+                size,
+                inputTokens: usage.input_tokens,
+                imageTokens: usage.input_tokens_details.image_tokens,
+                textTokens: usage.input_tokens_details.text_tokens,
+                outputTokens: usage.output_tokens,
+                totalTokens: usage.total_tokens,
+                imageCost,
+                tokenCost,
+                totalCost,
+            },
+        });
 
-    //     const images = await Promise.all(
-    //         imageUrls.map((url) =>
-    //             tx.image.create({
-    //                 data: {
-    //                     url,
-    //                     projectId: project.id,
-    //                 },
-    //             })
-    //         )
-    //     );
 
-    //     const imageGenerationResponse = await tx.imageGenerationResponse.create({
-    //         data: {
-    //             projectId: project.id,
-    //             background: "auto",
-    //             outputFormat: output_format,
-    //             quality: "high",
-    //             size,
-    //             inputTokens: usage.input_tokens,
-    //             imageTokens: usage.input_tokens_details.image_tokens,
-    //             textTokens: usage.input_tokens_details.text_tokens,
-    //             outputTokens: usage.output_tokens,
-    //             totalTokens: usage.total_tokens,
-    //             imageCost,
-    //             tokenCost,
-    //             totalCost,
-    //         },
-    //     });
+        return { project, images, imageGenerationResponse };
+    });
 
-    //     return { project, images, imageGenerationResponse };
-    // });
 
-    res.status(200).json({ result: 'wow' });
+
+    res.status(200).json({ result });
+};
+
+export const designGeneratorUpload = async (req: Request, res: Response) => {
+    const { files } = req;
+    const { n, prompt, size, output_format, quality } = req.body;
+
+    let imagesToBeUploaded = [];
+
+    if (Array.isArray(files) && files.length > 0) {
+        const openAiFiles = await Promise.all(
+            files.map((file) =>
+                toFile(file.buffer, file.originalname, {
+                    type: file.mimetype,
+                })
+            )
+        );
+
+        imagesToBeUploaded = [...openAiFiles]
+    } else {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, 'images could not be uploaded or 0 images uploaded')
+    }
+
+    const imgResponse = await openAiClient.images.edit({
+        model: "gpt-image-1",
+        image: imagesToBeUploaded,
+        prompt,
+        n,
+        size,
+    });
+
+    console.log(imgResponse);
+
+    if (!imgResponse.data) {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image data is undefined.");
+    }
+
+    const usage = imgResponse.usage;
+
+    if (!isValidUsage(usage)) {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "Incomplete usage data from OpenAI.");
+    }
+
+    const upload = await Promise.all(
+        imgResponse.data.map(async (data, index) => {
+            if (!data.b64_json) {
+                throw new BadRequestException(ErrorCode.BAD_REQUEST, `Image data is missing for image at index ${index} `);
+            }
+
+            const imageBuffer = Buffer.from(data.b64_json, "base64");
+            const storagePath = createStorageUrl(req.auth.userId, index);
+
+            const { data: filePath, error } = await supabaseClient.storage.from("artura").upload(storagePath, imageBuffer, { contentType: "image/png" });
+
+            if (error) {
+                throw new BadRequestException(ErrorCode.BAD_REQUEST, `Failed to upload image at index ${index} to storage.`);
+            }
+
+            return filePath;
+        })
+    );
+
+    const imageUrls = upload.map(object => `${SUPABASE_URL} /storage/v1 / object / public / ${object.fullPath} `);
+
+    const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(
+        {
+            model: "gpt-image-1",
+            size,
+            quality,
+            input_tokens_details: usage.input_tokens_details,
+            output_tokens: usage.output_tokens,
+        },
+        false
+    );
+
+    const result = await prismaClient.$transaction(async (tx) => {
+        const project = await tx.project.create({
+            data: {
+                category: "DESIGN_GENERATION",
+                userId: req.auth.userId,
+                prompt,
+                size,
+                quality,
+            },
+        });
+
+        const images = await Promise.all(
+            imageUrls.map((url) =>
+                tx.image.create({
+                    data: {
+                        url,
+                        projectId: project.id,
+                    },
+                })
+            )
+        );
+
+        const imageGenerationResponse = await tx.imageGenerationResponse.create({
+            data: {
+                projectId: project.id,
+                background: "auto",
+                outputFormat: output_format,
+                quality: "high",
+                size,
+                inputTokens: usage.input_tokens,
+                imageTokens: usage.input_tokens_details.image_tokens,
+                textTokens: usage.input_tokens_details.text_tokens,
+                outputTokens: usage.output_tokens,
+                totalTokens: usage.total_tokens,
+                imageCost,
+                tokenCost,
+                totalCost,
+            },
+        });
+
+        return { project, images, imageGenerationResponse };
+    });
+
+    res.status(200).json({ mockRes });
 };
 
 // get all projects per user

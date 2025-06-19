@@ -39,3 +39,33 @@
 
 # VAKKO WEDDING EFFECT: 
 https://www.vakko.com/wedding
+
+# open ai API call
+
+- To transfer files from frontend → backend, we use Multer.
+- Multer stores uploaded images in memory as Buffer objects.
+- To send these images from the server to OpenAI's image API, we use the toFile() utility from  the OpenAI SDK.
+- When using Multer:
+- We pass each file.buffer (from req.files) into toFile(...).
+- This converts the in-memory buffer into a File-like object compatible with OpenAI's API.
+- The code in the OpenAI documentation (below) assumes that image files are already on disk:
+    # where all the imageFiles are importend from local file system (fs) - not from memory
+    const imageFiles = [
+        "bath-bomb.png",
+        "body-lotion.png",
+        "incense-kit.png",
+        "soap.png",
+    ];
+
+    const images = await Promise.all(
+        imageFiles.map(async (file) =>
+            await toFile(fs.createReadStream(file), null, {
+                type: "image/png",
+            })
+        ),
+    );
+
+ - How Long Do Uploaded Files Stay in Memory?
+    * 🕒 Only for the duration of that HTTP request.
+    * Once your handler/controller finishes processing (e.g., sending to OpenAI), the request  ends and the Buffer is garbage collected.
+    * So it doesn't persist across requests, nor is it stored in disk or database.

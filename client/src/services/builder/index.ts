@@ -14,7 +14,7 @@ export const designGenerator = async (project: SubmitBuilderProps) => {
         formData.append('images', file);
     });
 
-    const response = await fetch(BACKEND_URL + '/project/design-generator', {
+    const response = await fetch(BACKEND_URL + '/project/design-generator/upload', {
         method: 'POST',
         credentials: 'include',
         body: formData,
@@ -22,7 +22,7 @@ export const designGenerator = async (project: SubmitBuilderProps) => {
 
     // error from errorMiddleware - result from the backend res.send({result: project })
     const { error, result } = await response.json();
-
+    console.log(result);
     if (result) return result;
 
     if (error) throw new Error(error || 'Failed to generate design');

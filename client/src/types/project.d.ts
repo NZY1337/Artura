@@ -48,8 +48,8 @@ export interface RenderLatestProjectsProps {
     handleSetCurrentIndex: (index: number) => void;
 }
 
-export type ProjectResponseProps = ApiResponse<{
+export type ProjectResponseProps = {
     project: ProjectProps;
     images: ProjectImageProps[];
     imageGenerationResponse: ImageGenerationResponseProps
-}>;
+};
