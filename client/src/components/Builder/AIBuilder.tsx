@@ -16,7 +16,7 @@ import { DESIGN_THEME, SPACE_TYPE, CATEGORY } from "../../helpers/constants";
 import type { AiBuilderStateProps, AIBuilderProps } from "../../types";
 
 type GalleryProps = {
-    images: string[];
+    images: { file: File; preview: string }[];
     onRemove: (index: number) => void;
 };
 
@@ -32,6 +32,8 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
         output_format: 'png',
         images: []
     });
+
+    console.log(builderState);
 
     const handleRemoveImage = (index: number) => {
         console.log(index);
@@ -60,7 +62,7 @@ const Gallery = ({ images, onRemove }: GalleryProps) => {
             {images.map((image, index) => (
                 <Box key={index} sx={{ position: 'relative' }}>
                     <Card sx={{ width: 60, height: 60 }}>
-                        <CardMedia component="img" image={image} alt={`Image ${index + 1}`} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <CardMedia component="img" image={image.preview} alt={`Image ${index + 1}`} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </Card>
 
                     <IconButton

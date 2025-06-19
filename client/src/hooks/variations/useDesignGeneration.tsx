@@ -2,10 +2,9 @@ import { useMutation } from '@tanstack/react-query';
 import { designGenerator } from '../../services/builder';
 import { useNotifications } from '@toolpad/core';
 
-
 const useDesignGeneration = () => {
     const notifications = useNotifications();
-    const { isPending, mutate, } = useMutation({
+    const { isPending, mutate } = useMutation({
         mutationFn: designGenerator,
         onError: (error) => {
             notifications.show(error.message, {

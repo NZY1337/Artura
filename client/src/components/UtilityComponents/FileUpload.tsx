@@ -17,12 +17,12 @@ const FileUpload = ({ builderState, setBuilderState }: FileUploadProps) => {
 
         if (files && files.length > 0) {
             console.log(builderState.images)
-            const images: string[] = [];
+            const images: { file: File; preview: string }[] = [];
             let hasInvalidFiles = false;
 
             Array.from(files).forEach(file => {
                 if (["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
-                    images.push(URL.createObjectURL(file));
+                    images.push({ file, preview: URL.createObjectURL(file) });
                 } else {
                     hasInvalidFiles = true;
                 }

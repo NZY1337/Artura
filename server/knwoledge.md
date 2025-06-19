@@ -36,3 +36,6 @@
 # MUI CONFIGURATIONS:
 
 - theming: https://codesandbox.io/embed/zhlj7t?module=/src/Demo.tsx&fontsize=12
+
+# VAKKO WEDDING EFFECT: 
+https://www.vakko.com/wedding

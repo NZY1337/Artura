@@ -130,8 +130,7 @@ export const mapThemeOptions = (option: DesignThemeInterface) => {
 
 
 export const mapResponseData = (data: ProjectResponseProps): ProjectProps => {
-    const { project: { id, userId, prompt, category, size, quality, createdAt, updatedAt }, images,
-    } = data.result;
+    const { project: { id, userId, prompt, category, size, quality, createdAt, updatedAt }, images } = data.result;
 
     return { id, userId, prompt, category, size, quality, createdAt, updatedAt, images };
 }

@@ -17,7 +17,7 @@ export interface AiBuilderStateProps {
     size: SizeImageProps;
     prompt: string;
     quality: QualityFormatProps;
-    images: string[]
+    images: string[{ file: File; preview: string }]
 }
 
 // interface BuilderStateProp {
@@ -33,7 +33,7 @@ interface BuilderOptionsProps {
     onHandleSubmit: (stateBuilder: SubmitBuilderProps) => void;
 }
 
-export type SubmitBuilderProps = Pick<AiBuilderStateProps, "n" | "prompt" | "size" | "output_format" | "images">
+export type SubmitBuilderProps = Pick<AiBuilderStateProps, "n" | "prompt" | "size" | "output_format" | "images" | "quality">
 
 export interface AIBuilderProps {
     onHandleSubmit: (stateBuilder: SubmitBuilderProps) => void;

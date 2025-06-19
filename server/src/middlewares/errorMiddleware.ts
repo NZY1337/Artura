@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from "http-status-codes";
 import { Prisma } from "@prisma/client";
 import { ZodError } from "zod";
+import multer from 'multer';
 
 export enum ErrorCode {
     NOT_FOUND = StatusCodes.NOT_FOUND,
@@ -18,6 +19,24 @@ export enum ErrorCode {
 export const errorMiddleware = (err: any, req: Request, res: Response, next: NextFunction) => {
     const statusCode = err.status || 500;
     const message = err.message || 'Internal Server Error';
+    if (err instanceof multer.MulterError) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+            return res.status(ErrorCode.BAD_REQUEST).json({
+                success: false,
+                status: ErrorCode.BAD_REQUEST,
+                error: 'File is too large. Maximum size is 1MB.',
+            });
+        }
+
+        if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+            console.log('LIMIT_UNEXPECTED_FILE');
+            return res.status(ErrorCode.BAD_REQUEST).json({
+                success: false,
+                status: ErrorCode.BAD_REQUEST,
+                error: 'You have exceeded the maximum number of files allowed (2).',
+            });
+        }
+    }
 
     res.status(statusCode).json({
         success: false,
@@ -73,7 +92,6 @@ export const errorHandler = (method: Function) => {
             await method(req, res, next);
         } catch (error: any) {
             let exception: HttpException;
-
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
                 const modelName = error?.meta?.modelName || "Resource"; // Product, User, Comment, etc...
                 exception = new NotFoundException(ErrorCode.NOT_FOUND, `${modelName} not found`);
@@ -83,7 +101,6 @@ export const errorHandler = (method: Function) => {
                 exception = new BadRequestException(ErrorCode.UNPROCESSABLE_ENTITY, "Unprocessed Entity - Validation Error",);
             } else {
                 exception = new InternalException(ErrorCode.INTERNAL_EXCEPTION, "Something went wrong!",);
-
             }
 
             next(exception);

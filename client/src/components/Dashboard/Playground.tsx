@@ -65,15 +65,6 @@ const Playground = () => {
     //     });
     // };
 
-    // let generationQueue = Promise.resolve(); // Shared across calls
-
-    // const onHandleTestSubmit = () => {
-    // generationQueue = generationQueue.then(() =>
-    //     handleQueuedGeneration()
-    // );
-    // handleQueuedGeneration()
-    // };
-
     /*
       - In your first setGrid, I'm setting a loading: true marker.
       - But React state updates are asynchronous — they don’t immediately apply.
@@ -114,14 +105,21 @@ const Playground = () => {
         // const generated = await mockGenerate(Math.floor(Math.random() * mockData.length));
 
         mutate(project, {
-            onSuccess: (project) => {
-                console.log(project);
+            onSuccess: (data) => {
+                // setGrid((prevGrid) => {
+                //     const newGrid = [...prevGrid];
+                //     newGrid[targetIndex!] = mapResponseData(data);
+                //     return newGrid;
+                // });
+            },
+            onError: (error) => {
+                console.log(error);
                 setGrid((prevGrid) => {
                     const newGrid = [...prevGrid];
-                    newGrid[targetIndex!] = mapResponseData(project);
+                    newGrid[targetIndex!] = null;
                     return newGrid;
                 });
-            },
+            }
         });
     };
 
