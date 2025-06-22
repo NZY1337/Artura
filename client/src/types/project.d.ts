@@ -53,3 +53,6 @@ export type ProjectResponseProps = {
     images: ProjectImageProps[];
     imageGenerationResponse: ImageGenerationResponseProps
 };
+
+export type GridCell = null | { loading: true } | ProjectProps;
+

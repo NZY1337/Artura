@@ -119,7 +119,7 @@ const mockRes = {
 export const designGenerator = async (req: Request, res: Response) => {
     const userId = req.auth.userId;
     const { files } = req;
-    const { n, prompt, size, output_format, quality } = req.body;
+    const { n, prompt, size, output_format, quality, category } = req.body;
 
     const imgResponse = await openAiClient.images.generate({
         model: "gpt-image-1",
@@ -156,7 +156,7 @@ export const designGenerator = async (req: Request, res: Response) => {
     const result = await prismaClient.$transaction(async (tx) => {
         const project = await tx.project.create({
             data: {
-                category: "DESIGN_GENERATION",
+                category: category,
                 userId: userId,
                 prompt,
                 size,
@@ -199,7 +199,6 @@ export const designGenerator = async (req: Request, res: Response) => {
     res.status(200).json({ result });
 };
 
-
 /*
  - Handles file uploads and generates images using OpenAI
  - Uploads files to OpenAI and Supabase from client with Multer
@@ -228,6 +227,8 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
         );
 
         openaiUploadedImages = [...openAiFiles]
+    } else {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "No files uploaded.");
     }
 
     const imgResponse = await openAiClient.images.edit({
@@ -251,7 +252,7 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
     }
 
     const generatedImagesUrls = await uploadGeneratedImagesToSupabase(userId, imgResponse.data);
-    const uploadedImagesUrls = await uploadUploadedImagesToSupabase(userId, Array.isArray(files) ? files as Express.Multer.File[] : []);
+    const uploadedImagesUrls = await uploadUploadedImagesToSupabase(userId, files as Express.Multer.File[]);
     const allImages = [...generatedImagesUrls, ...uploadedImagesUrls];
 
     const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(

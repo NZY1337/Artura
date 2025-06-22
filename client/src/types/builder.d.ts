@@ -20,12 +20,6 @@ export interface AiBuilderStateProps {
     images: string[{ file: File; preview: string }]
 }
 
-// interface BuilderStateProp {
-//     size: string;
-//     quality: string;
-//     [key: string]: any;
-// }
-
 interface BuilderOptionsProps {
     builderState: AiBuilderStateProps;
     isLoading: boolean;

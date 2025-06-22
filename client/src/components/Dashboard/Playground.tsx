@@ -1,11 +1,12 @@
 
 // hooks
 import { useState } from "react";
-import useDesignGeneration from "../../hooks/variations/useDesignGeneration";
 import { useNotifications, } from '@toolpad/core/useNotifications';
+import { useDashboardContext } from "./hooks/useDashboardContext";
+import useDesignGeneration from "../../hooks/variations/useDesignGeneration";
 
 // types
-import type { SubmitBuilderProps, ProjectProps } from "../../types";
+import type { SubmitBuilderProps, GridCell } from "../../types";
 
 // components
 import { TypeAnimation } from "react-type-animation";
@@ -17,59 +18,56 @@ import Box from "@mui/material/Box";
 // utils
 import { mapResponseData } from "../utils/utilities";
 
-type GridCell = null | { loading: true } | ProjectProps;
+const result = {
+    "project": {
+        "id": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+        "userId": "user_2xrVpetV8CkDDyfbJPSXmsrRe57",
+        "prompt": "Create a super realistic 3d rendering of this architectural rendering.. Do not change the positions of the walls, and maintain lines in the same exact position as they are in the plan, but add furniture and finishes and textures and depth.",
+        "category": "DESIGN_GENERATION",
+        "size": "1536x1024",
+        "quality": "high",
+        "createdAt": "2025-06-19T13:28:53.399Z",
+        "updatedAt": "2025-06-19T13:28:53.399Z"
+    },
+    "images": [
+        {
+            "id": "e027ce3b-1ae4-4948-87aa-922ed335d3b9",
+            "url": "https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750339732317-0.png",
+            "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+            "createdAt": "2025-06-19T13:28:53.494Z"
+        }
+    ],
+    "imageGenerationResponse": {
+        "id": "93d1f1d9-b68b-45bc-97f9-4c5860eb7f9f",
+        "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+        "background": "auto",
+        "outputFormat": "png",
+        "quality": "high",
+        "size": "1536x1024",
+        "inputTokens": 402,
+        "imageTokens": 323,
+        "textTokens": 79,
+        "outputTokens": 1568,
+        "totalTokens": 1970,
+        "imageCost": 0.25,
+        "tokenCost": 0.06634500000000002,
+        "totalCost": 0.316345
+    }
+}
 
-// const result = {
-//     "project": {
-//         "id": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
-//         "userId": "user_2xrVpetV8CkDDyfbJPSXmsrRe57",
-//         "prompt": "Create a super realistic 3d rendering of this architectural rendering.. Do not change the positions of the walls, and maintain lines in the same exact position as they are in the plan, but add furniture and finishes and textures and depth.",
-//         "category": "DESIGN_GENERATION",
-//         "size": "1536x1024",
-//         "quality": "high",
-//         "createdAt": "2025-06-19T13:28:53.399Z",
-//         "updatedAt": "2025-06-19T13:28:53.399Z"
-//     },
-//     "images": [
-//         {
-//             "id": "e027ce3b-1ae4-4948-87aa-922ed335d3b9",
-//             "url": "https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750339732317-0.png",
-//             "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
-//             "createdAt": "2025-06-19T13:28:53.494Z"
-//         }
-//     ],
-//     "imageGenerationResponse": {
-//         "id": "93d1f1d9-b68b-45bc-97f9-4c5860eb7f9f",
-//         "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
-//         "background": "auto",
-//         "outputFormat": "png",
-//         "quality": "high",
-//         "size": "1536x1024",
-//         "inputTokens": 402,
-//         "imageTokens": 323,
-//         "textTokens": 79,
-//         "outputTokens": 1568,
-//         "totalTokens": 1970,
-//         "imageCost": 0.25,
-//         "tokenCost": 0.06634500000000002,
-//         "totalCost": 0.316345
-//     }
-// }
+// const mockGenerate = (index: number): Promise<typeof mockData[0]> => {
+//     return new Promise((resolve) => {
+//         setTimeout(() => {
+//             resolve(mockData[index]);
+//         }, 10000);
+//     });
+// };
 
 const Playground = () => {
     const [open, setOpen] = useState(false);
-    const [project, setProject] = useState<ProjectProps | null>(null);
-    const [grid, setGrid] = useState<GridCell[]>(Array(18).fill(null));
     const notifications = useNotifications();
     const { isPending, mutate } = useDesignGeneration();
-
-    // const mockGenerate = (index: number): Promise<typeof mockData[0]> => {
-    //     return new Promise((resolve) => {
-    //         setTimeout(() => {
-    //             resolve(mockData[index]);
-    //         }, 10000);
-    //     });
-    // };
+    const { grid, project, setGrid, setProject } = useDashboardContext();
 
     /*
       - In your first setGrid, I'm setting a loading: true marker.
@@ -95,13 +93,14 @@ const Playground = () => {
 
         let targetIndex: number | null = null;
 
-        setGrid((prevGrid) => {
+        setGrid((prevGrid: GridCell[]) => {
             const newGrid = [...prevGrid];
             const firstEmptyIndex = newGrid.findIndex((cell) => cell == null);
             if (firstEmptyIndex !== -1) {
                 newGrid[firstEmptyIndex] = { loading: true };
                 targetIndex = firstEmptyIndex;
             }
+
             return newGrid;
         });
 
@@ -110,11 +109,15 @@ const Playground = () => {
 
         if (targetIndex === null) return;
         // const generated = await mockGenerate(Math.floor(Math.random() * mockData.length));
+        // setGrid((prevGrid: GridCell[]) => {
+        //     const newGrid = [...prevGrid];
+        //     newGrid[targetIndex!] = mapResponseData(result);
+        //     return newGrid;
+        // });
 
         mutate(project, {
             onSuccess: (data) => {
-                console.log(data)
-                setGrid((prevGrid) => {
+                setGrid((prevGrid: GridCell[]) => {
                     const newGrid = [...prevGrid];
                     newGrid[targetIndex!] = mapResponseData(data);
                     return newGrid;
@@ -122,7 +125,7 @@ const Playground = () => {
             },
             onError: (error) => {
                 console.log(error);
-                setGrid((prevGrid) => {
+                setGrid((prevGrid: GridCell[]) => {
                     const newGrid = [...prevGrid];
                     newGrid[targetIndex!] = null;
                     return newGrid;

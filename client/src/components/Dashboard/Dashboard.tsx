@@ -1,4 +1,7 @@
 
+// ctx
+import { DashboardProvider } from './context/dashboardContext';
+
 // hooks
 import { useMemo, useRef, useEffect } from 'react';
 import { useColorScheme } from '@mui/material/styles';
@@ -108,7 +111,6 @@ export default function Dashboard() {
         }
     }, [])
 
-
     return (
         <AppProvider
             session={dashboardSession}
@@ -116,33 +118,35 @@ export default function Dashboard() {
             navigation={DASHBOARD_NAVIGATION}
             router={router}
             theme={memoizedTheme}>
-            <NotificationsProvider slotProps={{ snackbar: { anchorOrigin: { vertical: 'bottom', horizontal: 'right' } } }}>
-                <DashboardLayout
-                    sx={{
-                        'nav.MuiBox-root': {
-                            ...DASHBOARD_NAV_BACKGROUND.setBackgroundNav(mode)
-                        }
-                    }}
-                    slots={{
-                        sidebarFooter: DashboardFooter,
-                        appTitle: DashboardTitle,
-                        toolbarActions: () => {
-                            return <>
-                                <HistoryDrawer />
-                                <CustomThemeSwitcher setMode={setMode} mode={mode} />
-                            </>
-                        }
-                    }}>
-                    <PageContainer
-                        ref={divRef}
-                        maxWidth={false}
-                        title=''
-                        breadcrumbs={[]}
-                        className='dashboard-page-container'>
-                        {renderContent()}
-                    </PageContainer>
-                </DashboardLayout>
-            </NotificationsProvider>
+            <DashboardProvider>
+                <NotificationsProvider slotProps={{ snackbar: { anchorOrigin: { vertical: 'bottom', horizontal: 'right' } } }}>
+                    <DashboardLayout
+                        sx={{
+                            'nav.MuiBox-root': {
+                                ...DASHBOARD_NAV_BACKGROUND.setBackgroundNav(mode)
+                            }
+                        }}
+                        slots={{
+                            sidebarFooter: DashboardFooter,
+                            appTitle: DashboardTitle,
+                            toolbarActions: () => {
+                                return <>
+                                    <HistoryDrawer />
+                                    <CustomThemeSwitcher setMode={setMode} mode={mode} />
+                                </>
+                            }
+                        }}>
+                        <PageContainer
+                            ref={divRef}
+                            maxWidth={false}
+                            title=''
+                            breadcrumbs={[]}
+                            className='dashboard-page-container'>
+                            {renderContent()}
+                        </PageContainer>
+                    </DashboardLayout>
+                </NotificationsProvider>
+            </DashboardProvider>
         </AppProvider >
     );
 }

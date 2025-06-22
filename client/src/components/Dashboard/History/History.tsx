@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import HistoryIcon from '@mui/icons-material/History';
 import Close from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
-import UserLatestProjects from './HistoryProjects';
+import HistoryProjects from './HistoryProjects';
 
 const DashboardDrawer = styled(Drawer)(({ theme }) => ({
     '.MuiPaper-root': {
@@ -54,10 +54,10 @@ export default function History() {
     };
 
     const DrawerContent = (
-        <Box sx={{ width: '20vw', height: '100%' }} onClick={toggleDrawer(false)} className='dashboard-history'>
+        <Box sx={{ width: '25vw', height: '100%' }} onClick={toggleDrawer(false)} className='dashboard-history'>
             <Button sx={{ zIndex: 1 }} color="warning" className='close-drawer'><Close />Close</Button>
             <Box onClick={(e) => e.stopPropagation()}>
-                <UserLatestProjects />
+                <HistoryProjects />
             </Box>
         </Box>
     );
@@ -78,7 +78,7 @@ export default function History() {
                 <Typography>History</Typography>
             </IconButton>
 
-            <DashboardDrawer sx={{ position: 'relative', width: '20vw' }} anchor='right' open={open} onClose={toggleDrawer(false)}>
+            <DashboardDrawer anchor='right' open={open} onClose={toggleDrawer(false)}>
                 {DrawerContent}
             </DashboardDrawer>
         </>

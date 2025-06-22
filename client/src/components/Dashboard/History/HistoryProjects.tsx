@@ -1,19 +1,22 @@
 // hooks
-import { useState } from 'react';
+import { useDashboardContext } from '../hooks/useDashboardContext';
 import useCategory from '../../../hooks/useCategory';
 
+// types
+import type { GridCell } from '../../../types';
+
 // components
-import { Grid, Card, CardMedia } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 import Skeleton from 'react-loading-skeleton';
-import GenericModalPreview from '../../Builder/BuiulderModalPreview';
 
 // types
 import type { ProjectProps } from '../../../types';
 
 const HistoryProjects = () => {
-    const [open, setOpen] = useState(false);
-    const [projectIndex, setProjectIndex] = useState(0);
     const { isPending, data } = useCategory();
+    const { setGrid } = useDashboardContext();
 
     const skeletonCount = data?.projects?.length || 6;
 
@@ -39,8 +42,12 @@ const HistoryProjects = () => {
                                 <Grid size={{ xs: 6, md: 6, lg: 6, xl: 4 }} key={index}>
                                     <Card
                                         onClick={() => {
-                                            setOpen(true);
-                                            setProjectIndex(index);
+                                            setGrid((prevGrid: GridCell[]) => {
+                                                const newGrid = [...prevGrid];
+                                                const firstEmptyIndex = newGrid.findIndex((cell) => cell == null);
+                                                newGrid[firstEmptyIndex] = project;
+                                                return newGrid;
+                                            });
                                         }}
                                         sx={{
                                             borderRadius: '2px',
@@ -71,7 +78,6 @@ const HistoryProjects = () => {
                         </Grid>
                     )}
             </Grid>
-            <GenericModalPreview open={open} handleCloseModal={() => setOpen(false)} project={data?.projects[projectIndex]} />
         </>
 
     );
