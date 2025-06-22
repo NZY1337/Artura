@@ -19,42 +19,42 @@ import { mapResponseData } from "../utils/utilities";
 
 type GridCell = null | { loading: true } | ProjectProps;
 
-const result = {
-    "project": {
-        "id": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
-        "userId": "user_2xrVpetV8CkDDyfbJPSXmsrRe57",
-        "prompt": "Create a super realistic 3d rendering of this architectural rendering.. Do not change the positions of the walls, and maintain lines in the same exact position as they are in the plan, but add furniture and finishes and textures and depth.",
-        "category": "DESIGN_GENERATION",
-        "size": "1536x1024",
-        "quality": "high",
-        "createdAt": "2025-06-19T13:28:53.399Z",
-        "updatedAt": "2025-06-19T13:28:53.399Z"
-    },
-    "images": [
-        {
-            "id": "e027ce3b-1ae4-4948-87aa-922ed335d3b9",
-            "url": "https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750339732317-0.png",
-            "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
-            "createdAt": "2025-06-19T13:28:53.494Z"
-        }
-    ],
-    "imageGenerationResponse": {
-        "id": "93d1f1d9-b68b-45bc-97f9-4c5860eb7f9f",
-        "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
-        "background": "auto",
-        "outputFormat": "png",
-        "quality": "high",
-        "size": "1536x1024",
-        "inputTokens": 402,
-        "imageTokens": 323,
-        "textTokens": 79,
-        "outputTokens": 1568,
-        "totalTokens": 1970,
-        "imageCost": 0.25,
-        "tokenCost": 0.06634500000000002,
-        "totalCost": 0.316345
-    }
-}
+// const result = {
+//     "project": {
+//         "id": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+//         "userId": "user_2xrVpetV8CkDDyfbJPSXmsrRe57",
+//         "prompt": "Create a super realistic 3d rendering of this architectural rendering.. Do not change the positions of the walls, and maintain lines in the same exact position as they are in the plan, but add furniture and finishes and textures and depth.",
+//         "category": "DESIGN_GENERATION",
+//         "size": "1536x1024",
+//         "quality": "high",
+//         "createdAt": "2025-06-19T13:28:53.399Z",
+//         "updatedAt": "2025-06-19T13:28:53.399Z"
+//     },
+//     "images": [
+//         {
+//             "id": "e027ce3b-1ae4-4948-87aa-922ed335d3b9",
+//             "url": "https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750339732317-0.png",
+//             "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+//             "createdAt": "2025-06-19T13:28:53.494Z"
+//         }
+//     ],
+//     "imageGenerationResponse": {
+//         "id": "93d1f1d9-b68b-45bc-97f9-4c5860eb7f9f",
+//         "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+//         "background": "auto",
+//         "outputFormat": "png",
+//         "quality": "high",
+//         "size": "1536x1024",
+//         "inputTokens": 402,
+//         "imageTokens": 323,
+//         "textTokens": 79,
+//         "outputTokens": 1568,
+//         "totalTokens": 1970,
+//         "imageCost": 0.25,
+//         "tokenCost": 0.06634500000000002,
+//         "totalCost": 0.316345
+//     }
+// }
 
 const Playground = () => {
     const [open, setOpen] = useState(false);

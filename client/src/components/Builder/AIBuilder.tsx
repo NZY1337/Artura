@@ -33,10 +33,7 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
         images: []
     });
 
-    console.log(builderState);
-
     const handleRemoveImage = (index: number) => {
-        console.log(index);
         const newImages = [...builderState.images];
         newImages.splice(index, 1);
         setBuilderState({ ...builderState, images: newImages });

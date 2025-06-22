@@ -3,9 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { Prisma } from "@prisma/client";
 import { ZodError } from "zod";
 import multer from 'multer';
-
 import { OpenAIError } from "openai"; // This does NOT exist currently
-
 
 export enum ErrorCode {
     NOT_FOUND = StatusCodes.NOT_FOUND,
@@ -32,7 +30,6 @@ export const errorMiddleware = (err: any, req: Request, res: Response, next: Nex
         }
 
         if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-            console.log('LIMIT_UNEXPECTED_FILE');
             return res.status(ErrorCode.BAD_REQUEST).json({
                 success: false,
                 status: ErrorCode.BAD_REQUEST,
@@ -89,12 +86,17 @@ export class UnprocessableEntity extends HttpException {
     }
 }
 
+export class OpenAiErrorException extends HttpException {
+    constructor(status: ErrorCode, message: string) {
+        super(status, message);
+    }
+}
+
 export const errorHandler = (method: Function) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await method(req, res, next);
         } catch (error: any) {
-            console.log(error)
             let exception: HttpException;
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
                 const modelName = error?.meta?.modelName || "Resource"; // Product, User, Comment, etc...
@@ -104,8 +106,9 @@ export const errorHandler = (method: Function) => {
             } else if (error instanceof ZodError) {
                 exception = new BadRequestException(ErrorCode.UNPROCESSABLE_ENTITY, "Unprocessed Entity - Validation Error");
             } else if (error instanceof OpenAIError) {
-                console.log('true');
-                exception = new BadRequestException(ErrorCode.UNPROCESSABLE_ENTITY, "Open AI error");
+                const status = (error as any).status || ErrorCode.UNPROCESSABLE_ENTITY;
+                const detailedMessage = (error as any)?.error?.message || error.message || 'OpenAI Error';
+                exception = new OpenAiErrorException(status, detailedMessage);
             } else {
                 exception = new InternalException(ErrorCode.INTERNAL_EXCEPTION, "Something went wrong!",);
             }

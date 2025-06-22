@@ -1,17 +1,11 @@
-export * from "./costs";
-import { BadRequestException } from "../middlewares/errorMiddleware";
-import { ErrorCode } from "../middlewares/errorMiddleware";
-import { Response } from "openai/core";
-import { ImagesResponse, } from "openai/resources/images";
+export * from "./constCalculation";
+import { ImagesResponse } from "openai/resources/images";
+export * from "./uploadToSupabaseStorage";
 
-export const createStorageUrl = (userId: string, index: number): string => {
-    return `${userId}/generated-${userId}-${Date.now()}-${index}.png`;
-}
 
 export const hasValidImageData = (data: ImagesResponse['data'] | undefined): data is Required<ImagesResponse['data']> => {
     return Array.isArray(data) && !!data[0]?.b64_json;
 };
-
 
 export const isValidUsage = (usage: ImagesResponse.Usage | undefined): usage is Required<ImagesResponse.Usage> => {
     return (

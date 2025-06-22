@@ -9,7 +9,9 @@ export const designGenerator = async (project: SubmitBuilderProps) => {
     formData.append('output_format', project.output_format);
     formData.append('n', String(project.n));
     formData.append('quality', String(project.quality));
+    formData.append('category', String(project.category));
 
+    console.log(project.images)
     project.images.forEach(({ file }: { file: File }) => {
         formData.append('images', file);
     });

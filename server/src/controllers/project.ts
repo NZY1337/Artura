@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { openAiClient } from "../services/openai";
-import { toFile } from "openai";
+import { toFile, } from "openai";
+import type { FileLike } from "openai/uploads";
 import { supabaseClient } from "../services/supabase";
 import { writeFile, readFile } from "fs/promises";
 import {
@@ -12,7 +13,7 @@ import path from "path";
 import { prismaClient } from "../services/prismaClient";
 
 import { ProjectValidator } from "../validation/project";
-import { calculateImageGenerationCost, createStorageUrl, isValidUsage, hasValidImageData } from "../utils";
+import { calculateImageGenerationCost, createStorageUrl, isValidUsage, uploadGeneratedImagesToSupabase, uploadUploadedImagesToSupabase, hasValidImageData } from "../utils";
 
 import { SUPABASE_URL } from "../../secrets";
 
@@ -88,13 +89,13 @@ const mockRes = {
         {
             "id": "e027ce3b-1ae4-4948-87aa-922ed335d3b9",
             "url": "https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750339732317-0.png",
-            "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+            "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc3",
             "createdAt": "2025-06-19T13:28:53.494Z"
         }
     ],
     "imageGenerationResponse": {
         "id": "93d1f1d9-b68b-45bc-97f9-4c5860eb7f9f",
-        "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+        "projectId": "bbb7b7b2-4468-4329-a11e-b9eccdc6afc3",
         "background": "auto",
         "outputFormat": "png",
         "quality": "high",
@@ -114,9 +115,9 @@ const mockRes = {
 // !! TODO: must validate the request body with ProjectValidator
 // !! TODO: must validate the request body with ProjectValidator
 
-
 // call the route in FE
 export const designGenerator = async (req: Request, res: Response) => {
+    const userId = req.auth.userId;
     const { files } = req;
     const { n, prompt, size, output_format, quality } = req.body;
 
@@ -139,26 +140,7 @@ export const designGenerator = async (req: Request, res: Response) => {
         throw new BadRequestException(ErrorCode.BAD_REQUEST, "Incomplete usage data from OpenAI.");
     }
 
-    const upload = await Promise.all(
-        imgResponse.data.map(async (data, index) => {
-            if (!data.b64_json) {
-                throw new BadRequestException(ErrorCode.BAD_REQUEST, `Image data is missing for image at index ${index}`);
-            }
-
-            const imageBuffer = Buffer.from(data.b64_json, "base64");
-            const storagePath = createStorageUrl(req.auth.userId, index);
-
-            const { data: filePath, error } = await supabaseClient.storage.from("artura").upload(storagePath, imageBuffer, { contentType: "image/png" });
-
-            if (error) {
-                throw new BadRequestException(ErrorCode.BAD_REQUEST, `Failed to upload image at index ${index} to storage.`);
-            }
-
-            return filePath;
-        })
-    );
-
-    const imageUrls = upload.map(object => `${SUPABASE_URL}/storage/v1/object/public/${object.fullPath}`);
+    const generatedImagesUrls = await uploadGeneratedImagesToSupabase(userId, imgResponse.data);
 
     const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(
         {
@@ -175,7 +157,7 @@ export const designGenerator = async (req: Request, res: Response) => {
         const project = await tx.project.create({
             data: {
                 category: "DESIGN_GENERATION",
-                userId: req.auth.userId,
+                userId: userId,
                 prompt,
                 size,
                 quality,
@@ -183,7 +165,7 @@ export const designGenerator = async (req: Request, res: Response) => {
         });
 
         const images = await Promise.all(
-            imageUrls.map((url) =>
+            generatedImagesUrls.map((url) =>
                 tx.image.create({
                     data: {
                         url,
@@ -211,20 +193,30 @@ export const designGenerator = async (req: Request, res: Response) => {
             },
         });
 
-
         return { project, images, imageGenerationResponse };
     });
 
     res.status(200).json({ result });
 };
 
-export const designGeneratorUpload = async (req: Request, res: Response) => {
-    console.log('----- triggered -----')
-    const { files } = req;
-    const { n, prompt, size, output_format, quality } = req.body;
 
-    console.log(files);
-    let imagesToBeUploaded = [];
+/*
+ - Handles file uploads and generates images using OpenAI
+ - Uploads files to OpenAI and Supabase from client with Multer
+ - Calculates image generation cost using OpenAI's pricing model
+ - Creates project and image records in the database using Prisma's transaction model
+ - Returns a JSON response with project, images, and image generation response data 
+
+ * after the response is successfully returned by openai -> we save everything inside db
+*/
+
+export const designGeneratorUpload = async (req: Request, res: Response) => {
+    const userId = req.auth.userId;
+    const { files } = req;
+    const { n, prompt, size, output_format, quality, category } = req.body;
+
+    // if the user uploads refference images -> these need to be uploaded to openai -> and then we need to upload them to supabase
+    let openaiUploadedImages: FileLike[] = [];
 
     if (Array.isArray(files) && files.length > 0) {
         const openAiFiles = await Promise.all(
@@ -235,23 +227,19 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
             )
         );
 
-        imagesToBeUploaded = [...openAiFiles]
-    } else {
-        throw new BadRequestException(ErrorCode.BAD_REQUEST, 'images could not be uploaded or 0 images uploaded')
+        openaiUploadedImages = [...openAiFiles]
     }
-
-    console.log(imagesToBeUploaded)
 
     const imgResponse = await openAiClient.images.edit({
         model: "gpt-image-1",
-        image: imagesToBeUploaded,
+        image: openaiUploadedImages,
         prompt,
         n,
         size,
+        quality,
     });
 
-    console.log(imgResponse, 'woweaewa');
-
+    // if the openai response is valid -> do the rest of computation
     if (!imgResponse.data) {
         throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image data is undefined.");
     }
@@ -262,26 +250,9 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
         throw new BadRequestException(ErrorCode.BAD_REQUEST, "Incomplete usage data from OpenAI.");
     }
 
-    const upload = await Promise.all(
-        imgResponse.data.map(async (data, index) => {
-            if (!data.b64_json) {
-                throw new BadRequestException(ErrorCode.BAD_REQUEST, `Image data is missing for image at index ${index} `);
-            }
-
-            const imageBuffer = Buffer.from(data.b64_json, "base64");
-            const storagePath = createStorageUrl(req.auth.userId, index);
-
-            const { data: filePath, error } = await supabaseClient.storage.from("artura").upload(storagePath, imageBuffer, { contentType: "image/png" });
-
-            if (error) {
-                throw new BadRequestException(ErrorCode.BAD_REQUEST, `Failed to upload image at index ${index} to storage.`);
-            }
-
-            return filePath;
-        })
-    );
-
-    const imageUrls = upload.map(object => `${SUPABASE_URL}/storage/v1/object/public/${object.fullPath}`);
+    const generatedImagesUrls = await uploadGeneratedImagesToSupabase(userId, imgResponse.data);
+    const uploadedImagesUrls = await uploadUploadedImagesToSupabase(userId, Array.isArray(files) ? files as Express.Multer.File[] : []);
+    const allImages = [...generatedImagesUrls, ...uploadedImagesUrls];
 
     const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(
         {
@@ -298,7 +269,7 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
         const project = await tx.project.create({
             data: {
                 category: "DESIGN_GENERATION",
-                userId: req.auth.userId,
+                userId: userId,
                 prompt,
                 size,
                 quality,
@@ -306,7 +277,7 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
         });
 
         const images = await Promise.all(
-            imageUrls.map((url) =>
+            allImages.map((url) =>
                 tx.image.create({
                     data: {
                         url,
