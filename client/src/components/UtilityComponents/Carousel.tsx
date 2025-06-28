@@ -9,7 +9,7 @@ export default function Carousel({ children, settings }: CarouselProps) {
                 <Slider {...settings}>
                     {children}
                 </Slider>
-            </Container>
+            </Container >
         </>
     );
 }

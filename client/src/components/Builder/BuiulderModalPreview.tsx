@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 // components
 import Close from "@mui/icons-material/Close";
 import GenericModal from "../UtilityComponents/modals/GenericModal";
@@ -8,28 +10,41 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-// import BuilderOptionsPreview from "./BuilderOptionsPreview";
+import BuilderOptionsPreview from "./BuilderOptionsPreview";
 import Carousel from "../UtilityComponents/Carousel";
 
 // types
 import type { ProjectProps, } from "../../types";
 
-const BuilderModalPreview = ({ project, open, handleCloseModal }:
-    {
-        project: ProjectProps;
-        open: boolean;
-        handleCloseModal: () => void;
-    }) => {
+const BuilderModalPreview = ({ project, open, handleCloseModal }: { project: ProjectProps; open: boolean; handleCloseModal: () => void; }) => {
+    const [previewImage, setPreviewImage] = useState<string | null>(null);
+    const [isPreviewVisible, setIsPreviewVisible] = useState<boolean>(false);
+
+
+    const imagesUploadedByUser = project?.images.filter(({ url }) => url.includes('uploaded-'));
+    const imagesGeneratedByAI = project?.images.filter(({ url }) => url.includes('generated-'));
+
+    console.log(imagesGeneratedByAI);
 
     const settings = {
-        dots: false,
         slidesToShow: 1,  // make sure it's 1 if you want only one image at a time
         slidesToScroll: 1,
-        infinite: project.images.length > 1, // infinite scroll only if more than one image
-        autoplay: true,
-        speed: 1000,
-        autoplaySpeed: 3000,
+        infinite: false, // infinite scroll only if more than one image
+        autoplay: false,
+        // arrows: false
     };
+
+    // let timeout: NodeJS.Timeout;
+
+    const handleMouseEnter = (url: string) => {
+        setPreviewImage(url);
+        setIsPreviewVisible(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsPreviewVisible(false);
+    };
+
 
     return (
         <GenericModal open={open}>
@@ -49,26 +64,69 @@ const BuilderModalPreview = ({ project, open, handleCloseModal }:
                         },
                     })}>
 
-                    <Carousel settings={settings}>
-                        {project?.images.map((image, index) => {
-                            return (
-                                (
-                                    <img key={index} src={image.url} alt={`Interior ${index + 1}`}
-                                        style={{ objectFit: "contain", objectPosition: "center", width: "100%", maxHeight: "80vh", }}
-                                    />
-                                )
-                            )
-                        })}
-                    </Carousel>
+                    <Box sx={{ position: 'relative', width: '100%' }}>
+                        <Carousel settings={settings}>
+                            {imagesGeneratedByAI.map((image, index) => (
+                                <img
+                                    key={image.url}
+                                    src={image.url}
+                                    alt={`Interior ${index + 1}`}
+                                    style={{
+                                        objectFit: "contain",
+                                        objectPosition: "center",
+                                        width: "100%",
+                                    }}
+                                />
+                            ))}
+                        </Carousel>
+
+                        {/* <Box
+                            sx={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                height: "100%",
+                                zIndex: 10,
+                                backgroundColor: isPreviewVisible ? "rgba(57, 57, 57, 0.9)" : "transparent",
+                                opacity: isPreviewVisible ? 1 : 0,
+                                transition: "opacity 0.4s ease-in-out, background-color 0.4s ease-in-out",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                pointerEvents: "none", // avoid blocking interactions
+                            }}
+                        >
+                            <img
+                                src={previewImage ?? ""}
+                                alt="Preview"
+                                style={{
+                                    objectFit: "contain",
+                                    objectPosition: "center",
+                                    width: "100%",
+                                    height: "100%",
+                                    opacity: isPreviewVisible ? 1 : 0,
+                                    transition: "opacity 0.4s ease-in-out",
+                                    pointerEvents: "none",
+                                }}
+                            />
+                        </Box> */}
+                    </Box>
                 </Grid>
 
                 <Grid size={{ xs: 12, md: 12, lg: 4 }} sx={{ display: "flex", alignItems: "center", p: 4 }}>
                     <Box>
-                        <Stack direction="row" spacing={2} alignItems="center" mb={2}>
-                            <Avatar src="/path-to-your-blueprint-thumbnail.png" alt="Blueprint" sx={{ width: 56, height: 56 }} />
-                            <Typography variant="caption" color="gray">
-                                Created on {new Date(project?.createdAt).toLocaleDateString()}
-                            </Typography>
+                        <Stack direction="row" spacing={1} alignItems="center" mb={2}>
+                            {imagesGeneratedByAI.map((image) => (
+                                <Avatar
+                                    key={image.url}
+                                    variant="rounded"
+                                    src={image.url}
+                                    onMouseEnter={() => handleMouseEnter(image.url)}
+                                    onMouseLeave={handleMouseLeave}
+                                    sx={{ width: 80, height: 80, cursor: 'pointer' }}
+                                />
+                            ))}
                         </Stack>
 
                         <Typography variant="body2" sx={{ color: "#ccc", mb: 3 }}>
@@ -77,10 +135,10 @@ const BuilderModalPreview = ({ project, open, handleCloseModal }:
 
                         <Divider sx={{ borderColor: "#333", my: 2 }} />
 
-                        {/* <BuilderOptionsPreview
+                        <BuilderOptionsPreview
                             builderState={{
-                                size: project?.size as SizeImageProps,
-                                quality: project?.quality as QualityFormatProps,
+                                size: project?.size,
+                                quality: project?.quality,
                                 spaceType: ["Living Room"],
                                 designTheme: ["Modern"],
                                 category: ["Design Generator"],
@@ -88,7 +146,7 @@ const BuilderModalPreview = ({ project, open, handleCloseModal }:
                                 n: 1,
                                 output_format: "png",
                             }}
-                        /> */}
+                        />
                     </Box>
                 </Grid>
 
