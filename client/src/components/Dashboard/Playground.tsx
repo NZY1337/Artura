@@ -204,9 +204,6 @@ const Playground = () => {
         {grid.map((item, index) => {
           console.log(item);
           const isLoading = item && "loading" in item;
-          const backgroundImage =
-            item !== null && !("loading" in item) && item.images?.[0]?.url;
-
           const backgroundImages =
             item !== null && !("loading" in item) && item.images;
 

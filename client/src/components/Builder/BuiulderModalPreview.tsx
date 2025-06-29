@@ -26,26 +26,17 @@ const BuilderModalPreview = ({
   handleCloseModal: () => void;
 }) => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [isPreviewVisible, setIsPreviewVisible] = useState<boolean>(false);
 
   const imagesUploadedByUser = project?.images.filter(({ url }) =>
     url.includes("uploaded-")
   );
-  const imagesGeneratedByAI = project?.images.filter(({ url }) =>
-    url.includes("generated-")
-  );
-
-  console.log(imagesGeneratedByAI);
-
-  // let timeout: NodeJS.Timeout;
 
   const handleMouseEnter = (url: string) => {
     setPreviewImage(url);
-    setIsPreviewVisible(true);
   };
 
   const handleMouseLeave = () => {
-    setIsPreviewVisible(false);
+    setPreviewImage(project.images[0].url);
   };
 
   return (
@@ -75,18 +66,17 @@ const BuilderModalPreview = ({
           <Box sx={{ position: "relative", width: "100%" }}>
             <Box
               sx={{
-                position: "absolute",
                 top: 0,
                 left: 0,
                 width: "100%",
                 height: "100%",
                 zIndex: 10,
-                backgroundColor: isPreviewVisible
-                  ? "rgba(57, 57, 57, 0.9)"
-                  : "transparent",
-                opacity: isPreviewVisible ? 1 : 0,
-                transition:
-                  "opacity 0.4s ease-in-out, background-color 0.4s ease-in-out",
+                // backgroundColor: isPreviewVisible
+                //   ? "rgba(57, 57, 57, 0.9)"
+                //   : "transparent",
+                // opacity: isPreviewVisible ? 1 : 0,
+                // transition:
+                //   "opacity 0.4s ease-in-out, background-color 0.4s ease-in-out",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -94,14 +84,14 @@ const BuilderModalPreview = ({
               }}
             >
               <img
-                src={previewImage ?? ""}
+                src={previewImage || project.images[0].url}
                 alt="Preview"
                 style={{
                   objectFit: "contain",
                   objectPosition: "center",
                   width: "100%",
                   height: "100%",
-                  opacity: isPreviewVisible ? 1 : 0,
+                  //   opacity: isPreviewVisible ? 1 : 0,
                   transition: "opacity 0.4s ease-in-out",
                   pointerEvents: "none",
                 }}
@@ -116,7 +106,7 @@ const BuilderModalPreview = ({
         >
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" mb={2}>
-              {imagesGeneratedByAI.map((image) => (
+              {imagesUploadedByUser.map((image) => (
                 <Avatar
                   key={image.url}
                   variant="rounded"
