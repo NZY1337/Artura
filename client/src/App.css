@@ -4,38 +4,64 @@ html {
 } */
 
 header {
-    border-bottom: .5px solid gray;
-    border-bottom-style: outset;
+  border-bottom: 0.5px solid gray;
+  border-bottom-style: outset;
 }
 
 .animated-bg {
-    animation: gradientShift 4s ease infinite;
-    background: radial-gradient(circle, #ff9a9e, #fad0c4);
-    background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+  background: radial-gradient(circle, #ff9a9e, #fad0c4);
+  background-size: 200% 200%;
 }
 
 @keyframes gradientShift {
-    0% {
-        background: radial-gradient(circle at 20% 30%, #ff9a9e, #fad0c4);
-    }
+  0% {
+    background: radial-gradient(circle at 20% 30%, #ff9a9e, #fad0c4);
+  }
 
-    25% {
-        background: radial-gradient(circle at 70% 20%, #a1c4fd, #c2e9fb);
-    }
+  25% {
+    background: radial-gradient(circle at 70% 20%, #a1c4fd, #c2e9fb);
+  }
 
-    50% {
-        background: radial-gradient(circle at 80% 70%, #fccb90, #d57eeb);
-    }
+  50% {
+    background: radial-gradient(circle at 80% 70%, #fccb90, #d57eeb);
+  }
 
-    75% {
-        background: radial-gradient(circle at 30% 80%, #fbc2eb, #a6c1ee);
-    }
+  75% {
+    background: radial-gradient(circle at 30% 80%, #fbc2eb, #a6c1ee);
+  }
 
-    100% {
-        background: radial-gradient(circle at 20% 30%, #ff9a9e, #fad0c4);
-    }
+  100% {
+    background: radial-gradient(circle at 20% 30%, #ff9a9e, #fad0c4);
+  }
 }
 
 .no-overflow {
-    overflow: hidden !important;
+  overflow: hidden !important;
+}
+
+.playground-carousel-container {
+  width: 100%;
+  height: 100%;
+}
+
+.playground-carousel-container img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.playground-carousel-container .slick-next {
+  right: 0px;
+}
+
+.playground-carousel-container .slick-next:hover {
+  color: orange;
+}
+
+.playground-carousel-container .slick-prev {
+  left: 0px;
+}
+
+.playground-carousel-container .slick-prev:hover {
+  color: orange;
 }
