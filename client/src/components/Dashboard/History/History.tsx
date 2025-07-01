@@ -10,9 +10,6 @@ import { IconButton } from '@mui/material';
 import HistoryProjects from './HistoryProjects';
 
 const DashboardDrawer = styled(Drawer)(({ theme }) => ({
-    '.MuiPaper-root': {
-        top: '65px'
-    },
     '.MuiList-root': {
         display: 'flex',
         flexDirection: 'column',
@@ -54,7 +51,15 @@ export default function History() {
     };
 
     const DrawerContent = (
-        <Box sx={{ width: '25vw', height: '100%' }} onClick={toggleDrawer(false)} className='dashboard-history'>
+        <Box sx={{
+            width: {
+                xs: '100%',
+                sm: '60vw',
+                md: '40vw',
+                lg: '30vw',
+                xl: '25vw',
+            }, height: '100%', pt: "4.5rem"
+        }} onClick={toggleDrawer(false)} className='dashboard-history'>
             <Button sx={{ zIndex: 1 }} color="warning" className='close-drawer'><Close />Close</Button>
             <Box onClick={(e) => e.stopPropagation()}>
                 <HistoryProjects />
