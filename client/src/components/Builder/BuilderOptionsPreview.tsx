@@ -5,7 +5,9 @@ import { useColorScheme } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+//types
 import type { AiBuilderStateProps } from "../../types";
+
 const BuilderOptionsPreview: React.FC<{ builderState: AiBuilderStateProps }> = ({ builderState }) => {
     const { mode } = useColorScheme();
     const chooseMode = mode === 'light' ? '#000' : '#fff';

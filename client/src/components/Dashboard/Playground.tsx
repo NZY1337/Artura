@@ -231,11 +231,6 @@ const Playground = () => {
                                                 key={image.url}
                                                 src={image.url}
                                                 alt={`Interior ${index + 1}`}
-                                                style={{
-                                                    objectFit: "contain",
-                                                    objectPosition: "center",
-                                                    width: "100%",
-                                                }}
                                             />
                                         ))}
                                     </Carousel>
@@ -267,7 +262,6 @@ const Playground = () => {
                         project={project}
                         handleCloseModal={() => setOpen(false)}
                         slideIndex={slideIndex}
-                        setSlideIndex={setSlideIndex}
                     />
                 ) : null}
             </Box>

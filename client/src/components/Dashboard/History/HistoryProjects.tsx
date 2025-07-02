@@ -16,11 +16,11 @@ import type { ProjectProps } from '../../../types';
 
 const HistoryProjects = () => {
     const { isPending, data } = useCategory();
-    const { setGrid } = useDashboardContext();
+    const { setGrid, grid } = useDashboardContext();
 
     const skeletonCount = data?.projects?.length || 6;
 
-    if (isPending) {
+    if (isPending && skeletonCount) {
         return (
             <Grid container spacing={2} p={1}>
                 {[...Array(skeletonCount)].map((_, idx) => (
@@ -39,8 +39,14 @@ const HistoryProjects = () => {
                     <>
                         {data?.projects.map((project: ProjectProps, index: number) => {
                             return (
-                                <Grid size={{ xs: 6, md: 6, lg: 6, xl: 4 }} key={index}>
-                                    <Card
+                                <Grid size={{ xs: 6, md: 6, lg: 6, xl: 4 }} key={index} sx={{
+                                    aspectRatio: '1 / 1',
+                                    pointerEvents: grid.includes(project) ? 'none' : 'auto',
+                                    opacity: grid.includes(project) ? 0.5 : 1,
+                                    filter: grid.includes(project) ? 'grayscale(100%)' : 'none',
+                                    transition: 'opacity 0.3s ease, filter 0.3s ease-in-out',
+                                }}>
+                                    <Card sx={{ borderRadius: '2px', boxShadow: 3, }}
                                         onClick={() => {
                                             setGrid((prevGrid: GridCell[]) => {
                                                 const newGrid = [...prevGrid];
@@ -48,17 +54,14 @@ const HistoryProjects = () => {
                                                 newGrid[firstEmptyIndex] = project;
                                                 return newGrid;
                                             });
-                                        }}
-                                        sx={{
-                                            borderRadius: '2px',
-                                            boxShadow: 3,
                                         }}>
                                         <CardMedia
                                             component="img"
-                                            height="100"
+                                            height="100%"
                                             image={project.images[0]?.url}
                                             alt={`Pexels image ${index + 1}`}
                                             sx={{
+                                                aspectRatio: '1 / 1',
                                                 objectFit: 'cover',
                                                 transition: 'transform 0.15s ease-in-out',
                                                 '&:hover': {

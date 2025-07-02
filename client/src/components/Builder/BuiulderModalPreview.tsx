@@ -14,19 +14,18 @@ import BuilderOptionsPreview from "./BuilderOptionsPreview";
 
 // types
 import type { ProjectProps } from "../../types";
+import type { SizeImageProps, QualityFormatProps } from "../../types";
 
 const BuilderModalPreview = ({
     project,
     open,
     handleCloseModal,
     slideIndex,
-    setSlideIndex
 }: {
     project: ProjectProps;
     open: boolean;
     slideIndex: number;
     handleCloseModal: () => void;
-    setSlideIndex: (index: number) => void
 }) => {
     const [previewImage, setPreviewImage] = useState<string | null>(null);
 
@@ -49,13 +48,6 @@ const BuilderModalPreview = ({
     };
 
     useEffect(() => {
-        // if (!open) {
-        //     setPreviewImage(null);
-        //     setSlideIndex(0)
-        // } else {
-        //     setPreviewImage(imagesUploadedByAi[slideIndex]?.url || null);
-        // }
-
         if (open) {
             setPreviewImage(imagesUploadedByAi[slideIndex]?.url || null);
         }
@@ -69,12 +61,11 @@ const BuilderModalPreview = ({
                     position: "relative",
                     [theme.breakpoints.down("lg")]: {
                         height: "unset",
-                        // marginTop: "2rem",
                         padding: '0'
                     },
                 })}>
                 <Grid
-                    size={{ xs: 12, md: 12, lg: 7 }}
+                    size={{ xs: 12, md: 12, lg: 6 }}
                     sx={(theme) => ({
                         p: 4,
                         display: "flex",
@@ -91,19 +82,20 @@ const BuilderModalPreview = ({
                             sx={{
                                 top: 0,
                                 left: 0,
-                                objectPosition: "center",
+                                objectPosition: "right",
                                 width: "100%",
                                 height: "100%",
+                                objectFit: "contain",
                                 zIndex: 10,
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 pointerEvents: "none",
                                 maxHeight: {
-                                    xs: "30vh",   // on small screens
-                                    sm: "500px",  // on small+
-                                    md: "600px",  // on medium+
-                                    lg: "700px",  // on large+
+                                    xs: "30vh",
+                                    sm: "500px",
+                                    md: "600px",
+                                    lg: "700px",
                                 },
                             }}>
 
@@ -134,14 +126,15 @@ const BuilderModalPreview = ({
 
                         <BuilderOptionsPreview
                             builderState={{
-                                size: project?.size,
-                                quality: project?.quality,
+                                size: project?.size as SizeImageProps,
+                                quality: project?.quality as QualityFormatProps,
                                 spaceType: ["Living Room"],
                                 designTheme: ["Modern"],
                                 category: ["Design Generator"],
                                 prompt: project?.prompt,
                                 n: 1,
                                 output_format: "png",
+                                images: project?.images || [],
                             }}
                         />
                     </Box>
@@ -159,7 +152,7 @@ const BuilderModalPreview = ({
                     <Close />
                 </Button>
             </Grid>
-        </GenericModal>
+        </GenericModal >
     );
 };
 

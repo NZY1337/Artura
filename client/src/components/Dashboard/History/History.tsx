@@ -51,19 +51,20 @@ export default function History() {
     };
 
     const DrawerContent = (
-        <Box sx={{
-            width: {
-                xs: '100%',
-                sm: '60vw',
-                md: '40vw',
-                lg: '30vw',
-                xl: '25vw',
-            }, height: '100%', pt: "4.5rem"
-        }} onClick={toggleDrawer(false)} className='dashboard-history'>
-            <Button sx={{ zIndex: 1 }} color="warning" className='close-drawer'><Close />Close</Button>
-            <Box onClick={(e) => e.stopPropagation()}>
-                <HistoryProjects />
-            </Box>
+        <Box onClick={(e) => { e.stopPropagation() }}
+            sx={{
+                width: {
+                    xs: '100%',
+                    sm: '60vw',
+                    md: '40vw',
+                    lg: '30vw',
+                    xl: '25vw',
+                },
+                height: '100%'
+            }}
+            className='dashboard-history'>
+            {/* <Button sx={{ zIndex: 1 }} color="warning" className='close-drawer'><Close />Close</Button> */}
+            <HistoryProjects />
         </Box>
     );
 
@@ -83,7 +84,7 @@ export default function History() {
                 <Typography>History</Typography>
             </IconButton>
 
-            <DashboardDrawer anchor='right' open={open} onClose={toggleDrawer(false)}>
+            <DashboardDrawer anchor='right' open={open} onClose={toggleDrawer(false)} className='dashboard-history-drawer' sx={{ zIndex: 10000 }}>
                 {DrawerContent}
             </DashboardDrawer>
         </>

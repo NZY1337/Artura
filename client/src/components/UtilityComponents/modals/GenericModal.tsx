@@ -7,7 +7,6 @@ interface GenericModalProps {
     sx?: object
 }
 
-
 const GenericModal = ({ children, open, }: GenericModalProps) => {
     return (
         <Dialog open={open} fullScreen={true} >
