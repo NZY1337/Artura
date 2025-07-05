@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { designGenerator } from '../../services/builder';
 import { useNotifications } from '@toolpad/core';
 

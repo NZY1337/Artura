@@ -2,10 +2,8 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import HistoryIcon from '@mui/icons-material/History';
-import Close from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
 import HistoryProjects from './HistoryProjects';
 

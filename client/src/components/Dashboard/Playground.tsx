@@ -1,8 +1,10 @@
 // hooks
-import { lazy, useState, type SetStateAction } from "react";
+import { useState, type SetStateAction } from "react";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { useDashboardContext } from "./hooks/useDashboardContext";
 import useDesignGeneration from "../../hooks/variations/useDesignGeneration";
+
+import { useQueryClient } from "@tanstack/react-query";
 
 // types
 import type { SubmitBuilderProps, GridCell } from "../../types";
@@ -25,7 +27,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const result = {
     project: {
-        id: "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+        id: "bbb7b7b2-4468-4329-a11e-b9eccdc6a333",
         userId: "user_2xrVpetV8CkDDyfbJPSXmsrRe57",
         prompt:
             "Create a super realistic 3d rendering of this architectural rendering.. Do not change the positions of the walls, and maintain lines in the same exact position as they are in the plan, but add furniture and finishes and textures and depth.",
@@ -70,6 +72,8 @@ const result = {
 // };
 
 const Playground = () => {
+    const queryClient = useQueryClient();
+
     const [open, setOpen] = useState(false);
     const notifications = useNotifications();
     const { isPending, mutate } = useDesignGeneration();
@@ -135,18 +139,21 @@ const Playground = () => {
         //   Math.floor(Math.random() * mockData.length)
         // );
         // setGrid((prevGrid: GridCell[]) => {
-        //   const newGrid = [...prevGrid];
-        //   newGrid[targetIndex!] = mapResponseData(result);
-        //   return newGrid;
+        //     const newGrid = [...prevGrid];
+        //     newGrid[targetIndex!] = mapResponseData(result);
+        //     return newGrid;
         // });
 
         mutate(project, {
             onSuccess: (data) => {
+
                 setGrid((prevGrid: GridCell[]) => {
                     const newGrid = [...prevGrid];
                     newGrid[targetIndex!] = mapResponseData(data);
                     return newGrid;
                 });
+
+                queryClient.invalidateQueries({ queryKey: ['projects'] });
             },
             onError: () => {
                 setGrid((prevGrid: GridCell[]) => {

@@ -2,9 +2,6 @@
 import { useDashboardContext } from '../hooks/useDashboardContext';
 import useCategory from '../../../hooks/useCategory';
 
-// types
-import type { GridCell } from '../../../types';
-
 // components
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -12,7 +9,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Skeleton from 'react-loading-skeleton';
 
 // types
-import type { ProjectProps } from '../../../types';
+import type { ProjectProps, GridCell } from '../../../types';
 
 const HistoryProjects = () => {
     const { isPending, data } = useCategory();
@@ -38,12 +35,14 @@ const HistoryProjects = () => {
                 {data?.projects && data?.projects.length > 0 ?
                     <>
                         {data?.projects.map((project: ProjectProps, index: number) => {
+                            const isProjectInGrid = grid.some((p: GridCell) => p && 'id' in p && p.id === project.id);
+
                             return (
                                 <Grid size={{ xs: 6, md: 6, lg: 6, xl: 4 }} key={index} sx={{
                                     aspectRatio: '1 / 1',
-                                    pointerEvents: grid.includes(project) ? 'none' : 'auto',
-                                    opacity: grid.includes(project) ? 0.5 : 1,
-                                    filter: grid.includes(project) ? 'grayscale(100%)' : 'none',
+                                    pointerEvents: isProjectInGrid ? 'none' : 'auto',
+                                    opacity: isProjectInGrid ? 0.5 : 1,
+                                    filter: isProjectInGrid ? 'grayscale(100%)' : 'none',
                                     transition: 'opacity 0.3s ease, filter 0.3s ease-in-out',
                                 }}>
                                     <Card sx={{ borderRadius: '2px', boxShadow: 3, }}
