@@ -6,7 +6,7 @@ import BuilderModalPreview from "../../Builder/BuiulderModalPreview";
 import Carousel from "../../UtilityComponents/Carousel";
 import RenderLatestProjects from "./RenderLatestProject";
 
-import type { ProjectProps } from "../../../types";
+import type { ProjectApiProps } from "../../../types";
 
 export default function LatestProjects() {
     const [open, setOpen] = useState(false);
@@ -72,14 +72,14 @@ export default function LatestProjects() {
                         </Grid>
                     </Container>
 
-                    <Carousel settings={settings}>
-                        {data?.projects.slice(0, 5)?.map((project: ProjectProps, index: number) => (
+                    <Carousel className="latest-projects-carousel" settings={settings}>
+                        {data?.projects.slice(0, 5)?.map((project: ProjectApiProps, index: number) => (
                             <RenderLatestProjects project={project} index={index} handleOpenModal={handleOpenModal} handleSetCurrentIndex={handleSetCurrentIndex} />
                         ))}
                     </Carousel>
                 </Container>
 
-                <BuilderModalPreview open={open} project={data?.projects[currentIndex]} handleCloseModal={() => setOpen(false)} />
+                {/* <BuilderModalPreview currentIndex={currentIndex} open={open} project={data?.projects[currentIndex]} handleCloseModal={() => setOpen(false)} /> */}
             </> : null}
         </>
     );

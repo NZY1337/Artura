@@ -6,9 +6,9 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 //types
-import type { AiBuilderStateProps } from "../../types";
+import type { EditableProjectProps } from "../../types";
 
-const BuilderOptionsPreview: React.FC<{ builderState: AiBuilderStateProps }> = ({ builderState }) => {
+const BuilderOptionsPreview: React.FC<{ builderState: EditableProjectProps }> = ({ builderState }) => {
     const { mode } = useColorScheme();
     const chooseMode = mode === 'light' ? '#000' : '#fff';
 

@@ -3,11 +3,10 @@ import { useState, type SetStateAction } from "react";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { useDashboardContext } from "./hooks/useDashboardContext";
 import useDesignGeneration from "../../hooks/variations/useDesignGeneration";
-
 import { useQueryClient } from "@tanstack/react-query";
 
 // types
-import type { SubmitBuilderProps, GridCell } from "../../types";
+import type { EditableProjectProps, GridCell, ImageProps, ProjectResponseProps } from "../../types";
 
 // components
 import { TypeAnimation } from "react-type-animation";
@@ -25,43 +24,44 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const result = {
-    project: {
-        id: "bbb7b7b2-4468-4329-a11e-b9eccdc6a333",
-        userId: "user_2xrVpetV8CkDDyfbJPSXmsrRe57",
-        prompt:
-            "Create a super realistic 3d rendering of this architectural rendering.. Do not change the positions of the walls, and maintain lines in the same exact position as they are in the plan, but add furniture and finishes and textures and depth.",
-        category: "DESIGN_GENERATION",
-        size: "1536x1024",
-        quality: "high",
-        createdAt: "2025-06-19T13:28:53.399Z",
-        updatedAt: "2025-06-19T13:28:53.399Z",
-    },
-    images: [
-        {
-            id: "e027ce3b-1ae4-4948-87aa-922ed335d3b9",
-            url: "https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750339732317-0.png",
-            projectId: "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
-            createdAt: "2025-06-19T13:28:53.494Z",
-        },
-    ],
-    imageGenerationResponse: {
-        id: "93d1f1d9-b68b-45bc-97f9-4c5860eb7f9f",
-        projectId: "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
-        background: "auto",
-        outputFormat: "png",
-        quality: "high",
-        size: "1536x1024",
-        inputTokens: 402,
-        imageTokens: 323,
-        textTokens: 79,
-        outputTokens: 1568,
-        totalTokens: 1970,
-        imageCost: 0.25,
-        tokenCost: 0.06634500000000002,
-        totalCost: 0.316345,
-    },
-};
+// const result = {
+//     project: {
+//         id: "bbb7b7b2-4468-4329-a11e-b9eccdc6a333",
+//         userId: "user_2xrVpetV8CkDDyfbJPSXmsrRe57",
+//         category: "DESIGN_GENERATION",
+//         createdAt: "2025-06-19T13:28:53.399Z",
+//         updatedAt: "2025-06-19T13:28:53.399Z",
+//         prompt:
+//             "Create a super realistic 3d rendering of this architectural rendering.. Do not change the positions of the walls, and maintain lines in the same exact position as they are in the plan, but add furniture and finishes and textures and depth.",
+//         background: "auto",
+//         outputFormat: "png",
+//         quality: "high",
+//         size: "1536x1024",
+//         designTheme: "MODERN",
+//         spaceType: "LIVING_ROOM",
+//         n: 1
+//     },
+//     images: [
+//         {
+//             id: "e027ce3b-1ae4-4948-87aa-922ed335d3b9",
+//             url: "https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750339732317-0.png",
+//             projectId: "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+//             createdAt: "2025-06-19T13:28:53.494Z",
+//         },
+//     ],
+//     imageGenerationResponse: {
+//         id: "93d1f1d9-b68b-45bc-97f9-4c5860eb7f9f",
+//         projectId: "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+//         inputTokens: 402,
+//         imageTokens: 323,
+//         textTokens: 79,
+//         outputTokens: 1568,
+//         totalTokens: 1970,
+//         imageCost: 0.25,
+//         tokenCost: 0.06634500000000002,
+//         totalCost: 0.316345,
+//     },
+// };
 
 // const mockGenerate = (index: number): Promise<typeof mockData[0]> => {
 //     return new Promise((resolve) => {
@@ -72,14 +72,13 @@ const result = {
 // };
 
 const Playground = () => {
-    const queryClient = useQueryClient();
-
     const [open, setOpen] = useState(false);
-    const notifications = useNotifications();
     const { isPending, mutate } = useDesignGeneration();
     const { grid, project, setGrid, setProject } = useDashboardContext();
     const [slideIndex, setSlideIndex] = useState(0);
-    // const [updateCount, setUpdateCount] = useState(0);
+
+    const queryClient = useQueryClient();
+    const notifications = useNotifications();
 
     const settings = {
         lazyLoad: true,
@@ -105,8 +104,8 @@ const Playground = () => {
           * and then simulates a generation process by calling mockGenerate.
           * Once the generation is complete, it updates the grid with the generated project.
           * If no empty cell is found, it does nothing.
-      */
-    const handleQueuedGeneration = async (project: SubmitBuilderProps) => {
+    */
+    const handleQueuedGeneration = async (project: EditableProjectProps) => {
         if (project.prompt === "") {
             notifications.show(
                 "Add more details to the prompt for better results.  ",
@@ -145,11 +144,11 @@ const Playground = () => {
         // });
 
         mutate(project, {
-            onSuccess: (data) => {
-
+            onSuccess: (data: ProjectResponseProps) => {
                 setGrid((prevGrid: GridCell[]) => {
                     const newGrid = [...prevGrid];
                     newGrid[targetIndex!] = mapResponseData(data);
+                    // newGrid[targetIndex!] = data;
                     return newGrid;
                 });
 
@@ -167,9 +166,10 @@ const Playground = () => {
 
     const onFullscreen = (index: number) => {
         const selectedProject = grid[index];
+
         if (selectedProject && selectedProject !== null && !("loading" in selectedProject)) {
             setOpen(true);
-            setProject(prevProject => {
+            setProject((prevProject) => {
                 if (prevProject && prevProject.id !== selectedProject.id) {
                     setSlideIndex(0);
                 }
@@ -214,7 +214,8 @@ const Playground = () => {
                 }}>
                 {grid.map((item, index) => {
                     const isLoading = item && "loading" in item;
-                    const generatedImages = item !== null && !("loading" in item) && Array.isArray(item.images) && item.images.filter(image => !image.url.includes("uploaded-"));
+                    const generatedImages = item !== null && !("loading" in item) && Array.isArray(item.images) && item.images.filter((image): image is ImageProps => 'url' in image && !image.url.includes("uploaded-")
+                    );
 
                     return (
                         <Box key={index}
@@ -235,18 +236,14 @@ const Playground = () => {
                                     <Carousel className="playground-carousel-container" settings={settings}>
                                         {generatedImages.map((image, index) => (
                                             <img
-                                                key={image.url}
-                                                src={image.url}
+                                                key={'url' in image ? image.url : index}
+                                                src={'url' in image ? image.url : ''}
                                                 alt={`Interior ${index + 1}`}
                                             />
                                         ))}
                                     </Carousel>
 
-                                    <GenerationBox
-                                        onFullscreen={() => onFullscreen(index)}
-                                        onRemove={() => onRemove(index)}
-                                        item={item}
-                                    />
+                                    <GenerationBox onFullscreen={() => onFullscreen(index)} onRemove={() => onRemove(index)} />
                                 </>
                             ) : null}
 

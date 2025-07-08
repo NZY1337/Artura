@@ -9,7 +9,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Skeleton from 'react-loading-skeleton';
 
 // types
-import type { ProjectProps, GridCell } from '../../../types';
+import type { ProjectApiProps, GridCell } from '../../../types';
 
 const HistoryProjects = () => {
     const { isPending, data } = useCategory();
@@ -34,7 +34,7 @@ const HistoryProjects = () => {
             <Grid container spacing={2} p={1.5}>
                 {data?.projects && data?.projects.length > 0 ?
                     <>
-                        {data?.projects.map((project: ProjectProps, index: number) => {
+                        {data?.projects.map((project: ProjectApiProps, index: number) => {
                             const isProjectInGrid = grid.some((p: GridCell) => p && 'id' in p && p.id === project.id);
 
                             return (
@@ -57,7 +57,7 @@ const HistoryProjects = () => {
                                         <CardMedia
                                             component="img"
                                             height="100%"
-                                            image={project.images[0]?.url}
+                                            image={'url' in project.images[0] ? project.images[0].url : ''}
                                             alt={`Pexels image ${index + 1}`}
                                             sx={{
                                                 aspectRatio: '1 / 1',

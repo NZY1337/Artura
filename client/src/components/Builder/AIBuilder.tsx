@@ -9,28 +9,30 @@ import { Card, CardMedia, Box, IconButton } from '@mui/material';
 import BuilderOptions from "./BuilderOptions";
 import BuilderOptionsPreview from "./BuilderOptionsPreview";
 
-// utils
-import { DESIGN_THEME, SPACE_TYPE, CATEGORY } from "../../helpers/constants";
-
 // types
-import type { AiBuilderStateProps, AIBuilderProps } from "../../types";
+import type { EditableProjectProps } from "../../types";
 
 type GalleryProps = {
-    images: { file: File; preview: string }[];
+    images: EditableProjectProps['images'];
     onRemove: (index: number) => void;
 };
 
+export interface AIBuilderProps {
+    isLoading: boolean;
+    onHandleSubmit: (stateBuilder: EditableProjectProps) => void;
+};
+
 const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
-    const [builderState, setBuilderState] = useState<AiBuilderStateProps>({
+    const [builderState, setBuilderState] = useState<EditableProjectProps>({
         size: '1536x1024',
         quality: 'high',
-        spaceType: [SPACE_TYPE[0]],
-        designTheme: [DESIGN_THEME[0]],
-        category: [CATEGORY[0]],
+        spaceType: ['Living Room'],
+        designTheme: ['Modern'],
+        category: ['Design Generator'],
         prompt: '',
         n: 1,
-        output_format: 'png',
-        images: []
+        outputFormat: 'png',
+        images: [],
     });
 
     const handleRemoveImage = (index: number) => {
@@ -57,9 +59,12 @@ const Gallery = ({ images, onRemove }: GalleryProps) => {
     return (
         <Box sx={{ mb: 2, overflowY: 'auto', display: 'flex', gap: 2, p: 2, backgroundColor: '#2e2f38', borderRadius: 2 }}>
             {images.map((image, index) => (
+                console.log(image),
                 <Box key={index} sx={{ position: 'relative' }}>
                     <Card sx={{ width: 60, height: 60 }}>
-                        <CardMedia component="img" image={image.preview} alt={`Image ${index + 1}`} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        {'preview' in image &&
+                            <CardMedia component="img" image={image.preview} alt={`Image ${index + 1}`} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        }
                     </Card>
 
                     <IconButton

@@ -1,18 +1,22 @@
 import { BACKEND_URL } from '../../helpers/constants';
 
-import type { SubmitBuilderProps } from '../../types';
+import type { ProjectApiProps } from '../../types';
 
-export const designGenerator = async (project: SubmitBuilderProps) => {
+export const designGenerator = async (project: ProjectApiProps) => {
     const formData = new FormData();
     formData.append('prompt', project.prompt);
     formData.append('size', project.size);
-    formData.append('output_format', project.output_format);
+    formData.append('outputFormat', project.outputFormat);
     formData.append('n', String(project.n));
     formData.append('quality', String(project.quality));
     formData.append('category', String(project.category));
+    formData.append('spaceType', String(project.spaceType));
+    formData.append('designTheme', String(project.designTheme));
 
-    project.images.forEach(({ file }: { file: File }) => {
-        formData.append('images', file);
+    project.images.forEach((image) => {
+        if ('file' in image && image.file) {
+            formData.append('images', image.file);
+        }
     });
 
     const response = await fetch(BACKEND_URL + '/project/design-generator/upload', {

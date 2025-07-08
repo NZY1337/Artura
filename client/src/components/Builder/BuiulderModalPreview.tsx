@@ -13,8 +13,7 @@ import Button from "@mui/material/Button";
 import BuilderOptionsPreview from "./BuilderOptionsPreview";
 
 // types
-import type { ProjectProps } from "../../types";
-import type { SizeImageProps, QualityFormatProps } from "../../types";
+import type { SizeImageProps, QualityFormatProps, ProjectApiProps, ImageProps } from "../../types";
 
 const BuilderModalPreview = ({
     project,
@@ -22,19 +21,21 @@ const BuilderModalPreview = ({
     handleCloseModal,
     slideIndex,
 }: {
-    project: ProjectProps;
+    project: ProjectApiProps;
     open: boolean;
     slideIndex: number;
     handleCloseModal: () => void;
 }) => {
     const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-    const imagesUploadedByUser = project?.images.filter(({ url }) =>
-        url.includes("uploaded-")
+    const imagesUploadedByUser = project?.images.filter(
+        (image): image is ImageProps =>
+            'url' in image && image.url.includes('uploaded-')
     );
 
-    const imagesUploadedByAi = project?.images.filter(({ url }) =>
-        !url.includes("uploaded-")
+    const imagesUploadedByAi = project?.images.filter(
+        (image): image is ImageProps =>
+            'url' in image && !image.url.includes('uploaded-')
     );
 
     // image uploaded by user
@@ -133,7 +134,7 @@ const BuilderModalPreview = ({
                                 category: ["Design Generator"],
                                 prompt: project?.prompt,
                                 n: 1,
-                                output_format: "png",
+                                outputFormat: "png",
                                 images: project?.images || [],
                             }}
                         />

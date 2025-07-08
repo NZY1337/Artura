@@ -1,4 +1,4 @@
-import type { ProjectProps, ProjectResponseProps } from "../../types";
+import type { ProjectResponseProps, } from "../../types";
 
 // design theme options
 interface Design {
@@ -129,8 +129,8 @@ export const mapThemeOptions = (option: DesignThemeInterface) => {
 // },
 
 
-export const mapResponseData = (data: ProjectResponseProps): ProjectProps => {
-    const { project: { id, userId, prompt, category, size, quality, createdAt, updatedAt }, images } = data;
+export const mapResponseData = (data: ProjectResponseProps) => {
+    const { project: { id, userId, prompt, category, size, quality, createdAt, updatedAt, background, outputFormat, designTheme, spaceType, n }, images } = data;
 
-    return { id, userId, prompt, category, size, quality, createdAt, updatedAt, images };
+    return { id, userId, prompt, category, size, quality, createdAt, updatedAt, images, background, outputFormat, designTheme, spaceType, n };
 }

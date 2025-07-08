@@ -5,34 +5,21 @@ import {
     GeneratedImagesCountProps,
     SizeImageProps,
     QualityFormatProps,
-    CategoryProps
+    CategoryProps,
+    EditableProjectProps,
+    type ProjectApiProps
 } from "./index";
 
-export interface AiBuilderStateProps {
-    spaceType: SpaceTypeProps[];
-    designTheme: DesignThemeProps[];
-    output_format: OutputFormatProps;
-    n: GeneratedImagesCountProps;
-    category: CategoryProps[];
-    size: SizeImageProps;
-    prompt: string;
-    quality: QualityFormatProps;
-    images: string[{ file: File; preview: string }]
-}
-
 interface BuilderOptionsProps {
-    builderState: AiBuilderStateProps;
+    builderState: EditableProjectProps;
     isLoading: boolean;
     setBuilderState: React.Dispatch<React.SetStateAction<BuilderState>>;
-    onHandleSubmit: (stateBuilder: SubmitBuilderProps) => void;
+    onHandleSubmit: (stateBuilder: EditableProjectProps) => void;
 }
 
-export type SubmitBuilderProps = Pick<AiBuilderStateProps, "n" | "prompt" | "size" | "output_format" | "images" | "quality" | "category">
+export type SubmitBuilderProps = Pick<ProjectApiProps, "n" | "prompt" | "size" | "output_format" | "images" | "quality" | "category">
 
-export interface AIBuilderProps {
-    onHandleSubmit: (stateBuilder: SubmitBuilderProps) => void;
-    isLoading: boolean
-};
+
 
 export type QualityAndSizeBuilderProps = Omit<BuilderOptionsProps, 'isLoading', 'onHandleSubmit'>;
 export type SpaceTypesBuilderProps = QualityAndSizeBuilderProps;

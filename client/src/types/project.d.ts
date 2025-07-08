@@ -1,34 +1,45 @@
+import type { CategoryProps, DesignThemeProps, SpaceTypeProps, SizeImageProps } from "./misc";
+
 interface ApiResponse<T> {
     result: T;
 }
 
-interface ProjectImageProps {
+
+interface ImageProps {
     url: string;
-    createdAt: string;
-    projectId: string;
     id: string;
+    createdAt: string;
     projectId: string;
 }
 
+interface PreviewImageProps {
+    file: File;
+    preview: string
+}
+
 export interface ProjectProps {
-    images: ProjectImageProps[];
-    category: string;
+    id: string;
+    userId: string;
+    category: CategoryProps[];
     createdAt: string;
     updatedAt: string;
     prompt: string;
-    size: string;
+    background: string;
+    images: (ImageProps | PreviewImageProps)[];
+    outputFormat: string;
     quality: string;
-    id: string;
-    userId: string
+    size: string;
+    designTheme: DesignThemeProps[];
+    spaceType: SpaceTypeProps[];
+    n: number;
 }
+// EditableProjectProps
+export type EditableProjectProps = Omit<ProjectProps, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'background'> &
+    Partial<Pick<ProjectProps, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'background'>>;
 
 export interface ImageGenerationResponseProps {
     id: string;
     projectId: string;
-    background: string;
-    outputFormat: string;
-    quality: string;
-    size: string;
     inputTokens: number;
     imageTokens: number;
     textTokens: number;
@@ -54,5 +65,5 @@ export type ProjectResponseProps = {
     imageGenerationResponse: ImageGenerationResponseProps
 };
 
-export type GridCell = null | { loading: true } | ProjectProps;
+export type GridCell = null | { loading: true } | ProjectProps
 

@@ -14,82 +14,81 @@ enum Role {
 }
 
 enum SpaceType {
-  LIVING_ROOM
-  BEDROOM
-  KITCHEN
-  BATHROOM
-  DINING_ROOM
-  HOME_OFFICE
-  KIDS_ROOM
-  HALLWAY_CORRIDOR
-  BALCONY_TERRACE
-  GAME_ROOM
-  STUDY
+    LIVING_ROOM
+    BEDROOM
+    KITCHEN
+    BATHROOM
+    DINING_ROOM
+    HOME_OFFICE
+    KIDS_ROOM
+    HALLWAY_CORRIDOR
+    BALCONY_TERRACE
+    GAME_ROOM
+    STUDY
 }
 
 enum Category {
-  DESIGN_GENERATOR
-  LANDSCAPING
-  VIRTUAL_STAGING
-  FLOOR_PLANNING
+    DESIGN_GENERATOR
+    LANDSCAPING
+    VIRTUAL_STAGING
+    FLOOR_PLANNING
 }
 
 enum DesignTheme {
-  MODERN
-  CONTEMPORARY
-  MINIMALIST
-  SCANDINAVIAN
-  INDUSTRIAL
-  MID_CENTURY_MODERN
-  TRADITIONAL
-  CLASSIC
-  BAROQUE
-  JAPANESE_ZEN
-  WABI_SABI
-  FARMHOUSE
-  RUSTIC
-  BOHEMIAN
-  ART_DECO
-  VICTORIAN
-  COASTAL
-  TROPICAL
-  URBAN
-  MAXIMALIST
-  FUTURISTIC
+    MODERN
+    CONTEMPORARY
+    MINIMALIST
+    SCANDINAVIAN
+    INDUSTRIAL
+    MID_CENTURY_MODERN
+    TRADITIONAL
+    CLASSIC
+    BAROQUE
+    JAPANESE_ZEN
+    WABI_SABI
+    FARMHOUSE
+    RUSTIC
+    BOHEMIAN
+    ART_DECO
+    VICTORIAN
+    COASTAL
+    TROPICAL
+    URBAN
+    MAXIMALIST
+    FUTURISTIC
 }
 
 enum OutputFormat {
-  PNG
-  JPEG
-  WEBP
+    PNG
+    JPEG
+    WEBP
 }
 
 enum QualityFormat {
-  HIGH
-  MEDIUM
-  LOW
+    HIGH
+    MEDIUM
+    LOW
 }
 
 enum SizeImage {
-  SIZE_1024x1024
-  SIZE_1024x1536
-  SIZE_1536x1024
-  AUTO
+    SIZE_1024x1024
+    SIZE_1024x1536
+    SIZE_1536x1024
+    AUTO
 }
 
 enum GeneratedImagesCount {
-  ONE
-  TWO
-  THREE
-  FOUR
-  FIVE
-  SIX
-  SEVEN
-  EIGHT
-  NINE
-  TEN
+    ONE
+    TWO
+    THREE
+    FOUR
+    FIVE
+    SIX
+    SEVEN
+    EIGHT
+    NINE
+    TEN
 }
-
 
 model User {
     id          String   @id @default(uuid())
@@ -105,42 +104,42 @@ model User {
 }
 
 model Project {
-  id            String                   @id @default(uuid())
-  userId        String
-  prompt        String                   @db.Text
-  category      Category                 @default(DESIGN_GENERATOR)
-  designTheme   DesignTheme              @default(MODERN)
-  spaceType     SpaceType                @default(LIVING_ROOM)
-  size          SizeImage                @default(SIZE_1024x1024)
-  quality       QualityFormat            @default(MEDIUM)
-  background    String                   @default("auto")
-  outputFormat  OutputFormat             @default(PNG)
+    id           String               @id @default(uuid())
+    userId       String
+    prompt       String               @db.Text
+    category     Category             @default(DESIGN_GENERATOR)
+    designTheme  DesignTheme          @default(MODERN)
+    spaceType    SpaceType            @default(LIVING_ROOM)
+    size         SizeImage            @default(SIZE_1024x1024)
+    quality      QualityFormat        @default(MEDIUM)
+    background   String               @default("auto")
+    outputFormat OutputFormat         @default(PNG)
+    n            GeneratedImagesCount @default(ONE)
+    createdAt    DateTime             @default(now())
+    updatedAt    DateTime             @updatedAt
 
-  createdAt     DateTime                 @default(now())
-  updatedAt     DateTime                 @updatedAt
+    user     User                     @relation("UserProjects", fields: [userId], references: [id])
+    images   Image[]                  @relation("ProjectImages")
+    response ImageGenerationResponse? @relation("ImageGenerationResponse")
 
-  user          User                     @relation("UserProjects", fields: [userId], references: [id])
-  images        Image[]                  @relation("ProjectImages")
-  response      ImageGenerationResponse? @relation("ImageGenerationResponse")
-
-  @@index([userId, category, designTheme, spaceType])
+    @@index([userId, category, designTheme, spaceType])
 }
 
 model ImageGenerationResponse {
-  id           String @id @default(uuid())
-  projectId    String @unique
+    id        String @id @default(uuid())
+    projectId String @unique
 
-  inputTokens  Int
-  imageTokens  Int
-  textTokens   Int
-  outputTokens Int
-  totalTokens  Int
+    inputTokens  Int
+    imageTokens  Int
+    textTokens   Int
+    outputTokens Int
+    totalTokens  Int
 
-  imageCost    Float
-  tokenCost    Float
-  totalCost    Float
+    imageCost Float
+    tokenCost Float
+    totalCost Float
 
-  project      Project @relation(fields: [projectId], references: [id], name: "ImageGenerationResponse")
+    project Project @relation(fields: [projectId], references: [id], name: "ImageGenerationResponse")
 }
 
 model Image {
