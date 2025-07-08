@@ -212,7 +212,9 @@ export const designGenerator = async (req: Request, res: Response) => {
 export const designGeneratorUpload = async (req: Request, res: Response) => {
     const userId = req.auth.userId;
     const { files } = req;
-    const { n, prompt, size, output_format, quality, category } = req.body;
+    const { n, prompt, size, output_format, quality, category, spaceType, designTheme } = req.body;
+
+    console.log("Received files:", files);
 
     // if the user uploads refference images -> these need to be uploaded to openai -> and then we need to upload them to supabase
     let openaiUploadedImages: FileLike[] = [];
@@ -269,8 +271,10 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
     const result = await prismaClient.$transaction(async (tx) => {
         const project = await tx.project.create({
             data: {
-                category: "DESIGN_GENERATION",
-                userId: userId,
+                category,
+                spaceType,
+                designTheme,
+                userId,
                 prompt,
                 size,
                 quality,
