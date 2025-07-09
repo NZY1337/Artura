@@ -1,9 +1,8 @@
-import type { CategoryProps, DesignThemeProps, SpaceTypeProps, SizeImageProps } from "./misc";
+import type { CategoryProps, DesignThemeProps, SpaceTypeProps, SizeImageProps, QualityFormatProps, OutputFormatProps, GeneratedImagesCountProps } from "./misc";
 
-interface ApiResponse<T> {
-    result: T;
-}
-
+// interface ApiResponse<T> {
+//     result: T;
+// }
 
 interface ImageProps {
     url: string;
@@ -26,12 +25,12 @@ export interface ProjectProps {
     prompt: string;
     background: string;
     images: (ImageProps | PreviewImageProps)[];
-    outputFormat: string;
-    quality: string;
+    outputFormat: OutputFormatProps;
+    quality: QualityFormatProps;
     size: string;
     designTheme: DesignThemeProps[];
     spaceType: SpaceTypeProps[];
-    n: number;
+    n: GeneratedImagesCountProps;
 }
 // EditableProjectProps
 export type EditableProjectProps = Omit<ProjectProps, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'background'> &

@@ -4,7 +4,6 @@ import { createContext, useState, type Dispatch, type ReactNode, type SetStateAc
 // types
 import type { ProjectProps, GridCell, } from '../../../types';
 
-
 type DashboardContextType = {
     value: string;
     project: ProjectProps | null;

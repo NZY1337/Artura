@@ -212,105 +212,106 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
     const { files } = req;
     const { n, prompt, size, outputFormat, quality, category, spaceType, designTheme } = req.body;
 
-    console.log("Received files:", files);
-    console.log("Received body:", req.body);
+    console.log({ userId, files, body: req.body })
 
     // if the user uploads refference images -> these need to be uploaded to openai -> and then we need to upload them to supabase
-    // let openaiUploadedImages: FileLike[] = [];
+    let openaiUploadedImages: FileLike[] = [];
 
-    // if (Array.isArray(files) && files.length > 0) {
-    //     const openAiFiles = await Promise.all(
-    //         files.map((file) =>
-    //             toFile(file.buffer, file.originalname, {
-    //                 type: file.mimetype,
-    //             })
-    //         )
-    //     );
+    if (Array.isArray(files) && files.length > 0) {
+        const openAiFiles = await Promise.all(
+            files.map((file) =>
+                toFile(file.buffer, file.originalname, {
+                    type: file.mimetype,
+                })
+            )
+        );
 
-    //     openaiUploadedImages = [...openAiFiles]
-    // } else {
-    //     throw new BadRequestException(ErrorCode.BAD_REQUEST, "No files uploaded.");
-    // }
+        openaiUploadedImages = [...openAiFiles]
+    } else {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "No files uploaded.");
+    }
 
-    // const imgResponse = await openAiClient.images.edit({
-    //     model: "gpt-image-1",
-    //     image: openaiUploadedImages,
-    //     prompt,
-    //     n,
-    //     size,
-    //     quality,
-    // });
+    const imgResponse = await openAiClient.images.edit({
+        model: "gpt-image-1",
+        image: openaiUploadedImages,
+        prompt,
+        n,
+        size,
+        quality,
+    });
 
-    // // if the openai response is valid -> do the rest of computation
-    // if (!imgResponse.data) {
-    //     throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image data is undefined.");
-    // }
+    console.log(imgResponse, 'img Response')
 
-    // const usage = imgResponse.usage;
+    // if the openai response is valid -> do the rest of computation
+    if (!imgResponse.data) {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "Image data is undefined.");
+    }
 
-    // if (!isValidUsage(usage)) {
-    //     throw new BadRequestException(ErrorCode.BAD_REQUEST, "Incomplete usage data from OpenAI.");
-    // }
+    const usage = imgResponse.usage;
 
-    // const generatedImagesUrls = await uploadGeneratedImagesToSupabase(userId, imgResponse.data);
-    // const uploadedImagesUrls = await uploadUploadedImagesToSupabase(userId, files as Express.Multer.File[]);
-    // const allImages = [...generatedImagesUrls, ...uploadedImagesUrls];
+    if (!isValidUsage(usage)) {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "Incomplete usage data from OpenAI.");
+    }
 
-    // const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(
-    //     {
-    //         model: "gpt-image-1",
-    //         size,
-    //         quality,
-    //         input_tokens_details: usage.input_tokens_details,
-    //         output_tokens: usage.output_tokens,
-    //     },
-    //     false
-    // );
+    const generatedImagesUrls = await uploadGeneratedImagesToSupabase(userId, imgResponse.data);
+    const uploadedImagesUrls = await uploadUploadedImagesToSupabase(userId, files as Express.Multer.File[]);
+    const allImages = [...generatedImagesUrls, ...uploadedImagesUrls];
 
-    // const result = await prismaClient.$transaction(async (tx) => {
-    //     const project = await tx.project.create({
-    //         data: {
-    //             category,
-    //             spaceType,
-    //             designTheme,
-    //             userId,
-    //             prompt,
-    //             size,
-    //             quality,
-    //             background: "auto",
-    //             outputFormat,
-    //         },
-    //     });
+    const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(
+        {
+            model: "gpt-image-1",
+            size,
+            quality,
+            input_tokens_details: usage.input_tokens_details,
+            output_tokens: usage.output_tokens,
+        },
+        false
+    );
 
-    //     const images = await Promise.all(
-    //         allImages.map((url) =>
-    //             tx.image.create({
-    //                 data: {
-    //                     url,
-    //                     projectId: project.id,
-    //                 },
-    //             })
-    //         )
-    //     );
+    const result = await prismaClient.$transaction(async (tx) => {
+        const project = await tx.project.create({
+            data: {
+                category,
+                spaceType,
+                designTheme,
+                userId,
+                prompt,
+                size,
+                quality,
+                background: "auto",
+                outputFormat,
+            },
+        });
 
-    //     const imageGenerationResponse = await tx.imageGenerationResponse.create({
-    //         data: {
-    //             projectId: project.id,
-    //             inputTokens: usage.input_tokens,
-    //             imageTokens: usage.input_tokens_details.image_tokens,
-    //             textTokens: usage.input_tokens_details.text_tokens,
-    //             outputTokens: usage.output_tokens,
-    //             totalTokens: usage.total_tokens,
-    //             imageCost,
-    //             tokenCost,
-    //             totalCost,
-    //         },
-    //     });
+        const images = await Promise.all(
+            allImages.map((url) =>
+                tx.image.create({
+                    data: {
+                        url,
+                        projectId: project.id,
+                    },
+                })
+            )
+        );
 
-    //     return { project, images, imageGenerationResponse };
-    // });
+        const imageGenerationResponse = await tx.imageGenerationResponse.create({
+            data: {
+                projectId: project.id,
+                inputTokens: usage.input_tokens,
+                imageTokens: usage.input_tokens_details.image_tokens,
+                textTokens: usage.input_tokens_details.text_tokens,
+                outputTokens: usage.output_tokens,
+                totalTokens: usage.total_tokens,
+                imageCost,
+                tokenCost,
+                totalCost,
+            },
+        });
 
-    res.status(200).json({ result: mockRes });
+        return { project, images, imageGenerationResponse };
+    });
+
+    res.status(200).json({ result });
 };
 
 // get all projects per user

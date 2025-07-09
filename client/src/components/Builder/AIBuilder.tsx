@@ -24,14 +24,14 @@ export interface AIBuilderProps {
 
 const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
     const [builderState, setBuilderState] = useState<EditableProjectProps>({
-        size: '1536x1024',
-        quality: 'high',
-        spaceType: ['Living Room'],
-        designTheme: ['Modern'],
-        category: ['Design Generator'],
+        size: 'SIZE_1024x1024',
+        quality: 'HIGH',
+        spaceType: ['LIVING_ROOM'],
+        designTheme: ['MODERN'],
+        category: ['DESIGN_GENERATOR'],
         prompt: '',
         n: 1,
-        outputFormat: 'png',
+        outputFormat: 'PNG',
         images: [],
     });
 

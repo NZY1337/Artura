@@ -13,7 +13,7 @@ import UserIcon from '@mui/icons-material/Person';
 // import badPhoto3 from "../assets/guidelines/badPhoto3.png"
 // import badPhoto4 from "../assets/guidelines/badPhoto4.png"
 
-import type { SpaceTypeProps, DesignThemeProps, CategoryProps } from '../types';
+import type { SpaceTypeProps, DesignThemeProps, CategoryProps, SizeImageProps, QualityFormatProps } from '../types';
 const BACKEND_URL = "http://localhost:3010/api";
 
 const EMPTY_YOUR_SPACE = {
@@ -21,54 +21,63 @@ const EMPTY_YOUR_SPACE = {
     segment: "empty-your-space"
 }
 
-const SPACE_TYPE: SpaceTypeProps[] = [
-    'Living Room',
-    'Bedroom',
-    'Kitchen',
-    'Bathroom',
-    'Dining Room',
-    'Home Office',
-    'Kids Room',
-    'Hallway / Corridor',
-    'Balcony / Terrace',
-    'Game Room',
-    'Study',
+const SPACE_TYPE: Record<string, SpaceTypeProps> = {
+    "Living Room": "LIVING_ROOM",
+    "Bedroom": "BEDROOM",
+    "Kitchen": "KITCHEN",
+    "Bathroom": "BATHROOM",
+    "Dining Room": "DINING_ROOM",
+    "Home Office": "HOME_OFFICE",
+    "Kids Room": "KIDS_ROOM",
+    "Hallway / Corridor": "HALLWAY_CORRIDOR",
+    "Balcony / Terrace": "BALCONY_TERRACE",
+    "Game Room": "GAME_ROOM",
+    "Study": "STUDY"
+};
+
+const CATEGORY: Record<string, CategoryProps> = {
+    'Design Generator': 'DESIGN_GENERATOR',
+    'Virtual Staging': 'VIRTUAL_STAGING',
+    'Landscaping': 'LANDSCAPING',
+    'Floor Planning': 'FLOOR_PLANNING',
+};
+
+const DESIGN_THEME: Record<string, DesignThemeProps> = {
+    'Modern': 'MODERN',
+    'Contemporary': 'CONTEMPORARY',
+    'Minimalist': 'MINIMALIST',
+    'Scandinavian': 'SCANDINAVIAN',
+    'Industrial': 'INDUSTRIAL',
+    'Mid-Century Modern': 'MID_CENTURY_MODERN',
+    'Traditional': 'TRADITIONAL',
+    'Classic': 'CLASSIC',
+    'Baroque': 'BAROQUE',
+    'Japanese Zen': 'JAPANESE_ZEN',
+    'Wabi-Sabi': 'WABI_SABI',
+    'Farmhouse': 'FARMHOUSE',
+    'Rustic': 'RUSTIC',
+    'Bohemian': 'BOHEMIAN',
+    'Art Deco': 'ART_DECO',
+    'Victorian': 'VICTORIAN',
+    'Coastal': 'COASTAL',
+    'Tropical': 'TROPICAL',
+    'Urban': 'URBAN',
+    'Maximalist': 'MAXIMALIST',
+    'Futuristic': 'FUTURISTIC',
+};
+
+const BUILDER_SIZES: { value: SizeImageProps; label: string }[] = [
+    { value: 'SIZE_1024x1024', label: 'Square (1024×1024)' },
+    { value: 'SIZE_1024x1536', label: 'Portrait (1024×1536)' },
+    { value: 'SIZE_1536x1024', label: 'Landscape (1536x1024)' },
+    { value: 'AUTO', label: 'Auto (let AI decide)' },
 ];
 
-const CATEGORY: CategoryProps[] = [
-    'Design Generator',
-    'Virtual Staging',
-    'Landscaping',
-    'Floor Planning'
+const BUILDER_QUALITIES: { value: QualityFormatProps; label: string }[] = [
+    { value: 'HIGH', label: 'High' },
+    { value: 'MEDIUM', label: 'Medium' },
+    { value: 'LOW', label: 'Low' },
 ];
-
-const DESIGN_THEME: DesignThemeProps[] = [
-    'Modern',
-    'Contemporary',
-    'Minimalist',
-    'Scandinavian',
-    'Industrial',
-    'Mid-Century Modern',
-    'Traditional',
-    'Classic',
-    'Baroque',
-    'Japanese Zen',
-    'Wabi-Sabi',
-    'Farmhouse',
-    'Rustic',
-    'Bohemian',
-    'Art Deco',
-    'Victorian',
-    'Coastal',
-    'Tropical',
-    'Urban',
-    'Maximalist',
-    'Futuristic'
-];
-
-
-// const REDESIGN_FURNISHED_ROOMS_LABEL = "Redesign Furnished Rooms";
-// const RENDER_EXTERIOR_STRUCTURES_LABEL = "Render Exterior Structures";
 
 const ROTATION: number[] = [90, 180, 270, 360];
 const CHARS_LIMIT: number = 500;
@@ -112,44 +121,8 @@ const DASHBOARD_NAVIGATION: Navigation = [
     },
 ];
 
-// // Example data arrays
-// const badPhotosData = [
-//     {
-//       label: "People in the photo",
-//       src: badPhoto1
-//     },
-//     {
-//       label: "Close-up shots",
-//       src: badPhoto2
-//     },
-//     {
-//       label: "Tilted angles",
-//       src: badPhoto3
-//     },
-//     {
-//       label: "Floor plans",
-//       src: badPhoto4
-//     }
-// ];
 
-//   const goodPhotosData = [
-//     {
-//       label: "Wide angle photo",
-//       src: goodPhoto1
-//     },
-//     {
-//       label: "Straightened photo",
-//       src: goodPhoto2
-//     },
-//     {
-//       label: "Good resolution",
-//       src: goodPhoto3
-//     },
-//     {
-//       label: "Better depth",
-//       src: goodPhoto4
-//     }
-// ];
+
 
 const builderHouseAngle = ["side of house", "front of house", "back of house"];
 const builderModeOptions = ["Beautiful Redesign", "Minimalist", "Luxury"];
@@ -157,12 +130,10 @@ const builderModeStyle = ["Modern", "Traditional", "Contemporary"];
 const builderNumberOfDesigns = [1, 2, 3, 4];
 const builderAiIntervention = [1, 2, 3, 4];
 
-const BUILDER_SIZES = [
-    { value: '1024x1024', label: 'Square (1024×1024)' },
-    { value: '1024x1536', label: 'Portrait (1024×1536)' },
-    { value: '1536x1024', label: 'Landscape (1536x1024)' },
-    { value: 'auto', label: 'Auto (let AI decide)' },
-];
+
+
+
+
 
 const DASHBOARD_NAV_BACKGROUND = {
     dark: {
@@ -178,11 +149,7 @@ const DASHBOARD_NAV_BACKGROUND = {
     },
 }
 
-const BUILDER_QUALITIES = [
-    { value: 'high', label: 'High' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'low', label: 'Low' },
-];
+
 
 export {
     DASHBOARD_NAVIGATION,

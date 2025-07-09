@@ -104,19 +104,19 @@ model User {
 }
 
 model Project {
-    id           String               @id @default(uuid())
+    id           String        @id @default(uuid())
     userId       String
-    prompt       String               @db.Text
-    category     Category             @default(DESIGN_GENERATOR)
-    designTheme  DesignTheme          @default(MODERN)
-    spaceType    SpaceType            @default(LIVING_ROOM)
-    size         SizeImage            @default(SIZE_1024x1024)
-    quality      QualityFormat        @default(MEDIUM)
-    background   String               @default("auto")
-    outputFormat OutputFormat         @default(PNG)
-    n            GeneratedImagesCount @default(ONE)
-    createdAt    DateTime             @default(now())
-    updatedAt    DateTime             @updatedAt
+    prompt       String        @db.Text
+    category     Category      @default(DESIGN_GENERATOR)
+    designTheme  DesignTheme   @default(MODERN)
+    spaceType    SpaceType     @default(LIVING_ROOM)
+    size         SizeImage     @default(SIZE_1024x1024)
+    quality      QualityFormat @default(MEDIUM)
+    background   String        @default("auto")
+    outputFormat OutputFormat  @default(PNG)
+    n            Int           @default(1)
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
 
     user     User                     @relation("UserProjects", fields: [userId], references: [id])
     images   Image[]                  @relation("ProjectImages")

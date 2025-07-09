@@ -3,7 +3,7 @@ import { useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-import type { NativeSelectProps } from '../../types';
+import type { NativeSelectProps, SpaceTypeProps } from '../../types';
 
 const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSelectProps) => {
     const [canSelect, setCanSelect] = useState(true)
@@ -91,8 +91,8 @@ const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSel
                         id: 'select-multiple-native',
                     }}
                 >
-                    {optionLabels.map((label: string) => (
-                        <option key={label} value={label}>
+                    {Object.entries(optionLabels as SpaceTypeProps[]).map(([label, value]) => (
+                        <option key={value} value={value}>
                             {label}
                         </option>
                     ))}

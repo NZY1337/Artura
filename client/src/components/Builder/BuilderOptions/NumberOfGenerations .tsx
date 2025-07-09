@@ -4,10 +4,6 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import DropdownSetting from '../../UtilityComponents/DropdownSetting';
 
-// constants
-import { BUILDER_SIZES, BUILDER_QUALITIES } from '../../../helpers/constants';
-
-// types
 import type { QualityAndSizeBuilderProps } from '../../../types';
 
 // icons
@@ -18,6 +14,8 @@ function valuetext(value: number) {
 
 const NumberOfGenerations: React.FC<QualityAndSizeBuilderProps> = ({ builderState, setBuilderState }) => {
     const { n } = builderState;
+
+    console.log(n)
 
     return (
         <DropdownSetting icon={<Icon><Typography fontWeight={'bold'} variant='body1'>{n}x</Typography></Icon>}>

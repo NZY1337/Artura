@@ -107,8 +107,7 @@ const Playground = () => {
     */
     const handleQueuedGeneration = async (project: EditableProjectProps) => {
         if (project.prompt === "") {
-            notifications.show(
-                "Add more details to the prompt for better results.  ",
+            notifications.show("Add more details to the prompt for better results.",
                 {
                     severity: "error",
                     autoHideDuration: 3000,
@@ -131,7 +130,7 @@ const Playground = () => {
         });
 
         // Wait a tick to ensure React state update goes through
-        await new Promise((res) => setTimeout(res, 3000));
+        await new Promise((res) => setTimeout(res, 0));
 
         if (targetIndex === null) return;
         // const generated = await mockGenerate(
@@ -148,7 +147,6 @@ const Playground = () => {
                 setGrid((prevGrid: GridCell[]) => {
                     const newGrid = [...prevGrid];
                     newGrid[targetIndex!] = mapResponseData(data);
-                    // newGrid[targetIndex!] = data;
                     return newGrid;
                 });
 
