@@ -101,7 +101,3 @@ const BuilderOptions = ({ builderState, isLoading, setBuilderState, onHandleSubm
 };
 
 export default BuilderOptions;
-
-{/* <IconButton sx={{ color: '#b0b3c0' }}>
-    <AttachFile />
-</IconButton> */}

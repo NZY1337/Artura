@@ -1,19 +1,11 @@
-import { type Navigation } from '@toolpad/core/AppProvider';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import UserIcon from '@mui/icons-material/Person';
-// import SofaIcon from "@mui/icons-material/Weekend";
-// import DeleteIcon from "@mui/icons-material/Delete";
-// import goodPhoto1 from "../assets/guidelines/goodPhoto1.png"
-// import goodPhoto2 from "../assets/guidelines/goodPhoto2.png"
-// import goodPhoto3 from "../assets/guidelines/goodPhoto3.png"
-// import goodPhoto4 from "../assets/guidelines/goodPhoto4.png"
-// import badPhoto1 from "../assets/guidelines/badPhoto1.png"
-// import badPhoto2 from "../assets/guidelines/badPhoto2.png"
-// import badPhoto3 from "../assets/guidelines/badPhoto3.png"
-// import badPhoto4 from "../assets/guidelines/badPhoto4.png"
 
+// types
+import type { Navigation } from '@toolpad/core/AppProvider';
 import type { SpaceTypeProps, DesignThemeProps, CategoryProps, SizeImageProps, QualityFormatProps } from '../types';
+
 const BACKEND_URL = "http://localhost:3010/api";
 
 const EMPTY_YOUR_SPACE = {
@@ -21,50 +13,50 @@ const EMPTY_YOUR_SPACE = {
     segment: "empty-your-space"
 }
 
-const SPACE_TYPE: Record<string, SpaceTypeProps> = {
-    "Living Room": "LIVING_ROOM",
-    "Bedroom": "BEDROOM",
-    "Kitchen": "KITCHEN",
-    "Bathroom": "BATHROOM",
-    "Dining Room": "DINING_ROOM",
-    "Home Office": "HOME_OFFICE",
-    "Kids Room": "KIDS_ROOM",
-    "Hallway / Corridor": "HALLWAY_CORRIDOR",
-    "Balcony / Terrace": "BALCONY_TERRACE",
-    "Game Room": "GAME_ROOM",
-    "Study": "STUDY"
-};
+const SPACE_TYPE = [
+    { label: "Living room", value: "LIVING_ROOM" },
+    { label: "Bedroom", value: "BEDROOM" },
+    { label: "Kitchen", value: "KITCHEN" },
+    { label: "Bathroom", value: "BATHROOM" },
+    { label: "Dining room", value: "DINING_ROOM" },
+    { label: "Home office", value: "HOME_OFFICE" },
+    { label: "Kids room", value: "KIDS_ROOM" },
+    { label: "Hallway / corridor", value: "HALLWAY_CORRIDOR" },
+    { label: "Balcony / terrace", value: "BALCONY_TERRACE" },
+    { label: "Game room", value: "GAME_ROOM" },
+    { label: "Study", value: "STUDY" },
+] satisfies Array<{ label: string; value: SpaceTypeProps }>;
 
-const CATEGORY: Record<string, CategoryProps> = {
-    'Design Generator': 'DESIGN_GENERATOR',
-    'Virtual Staging': 'VIRTUAL_STAGING',
-    'Landscaping': 'LANDSCAPING',
-    'Floor Planning': 'FLOOR_PLANNING',
-};
+const CATEGORY = [
+    { label: "Design Generator", value: "DESIGN_GENERATOR" },
+    { label: "Virtual Staging", value: "VIRTUAL_STAGING" },
+    { label: "Landscaping", value: "LANDSCAPING" },
+    { label: "Floor Planning", value: "FLOOR_PLANNING" },
+] satisfies Array<{ label: string; value: CategoryProps }>;
 
-const DESIGN_THEME: Record<string, DesignThemeProps> = {
-    'Modern': 'MODERN',
-    'Contemporary': 'CONTEMPORARY',
-    'Minimalist': 'MINIMALIST',
-    'Scandinavian': 'SCANDINAVIAN',
-    'Industrial': 'INDUSTRIAL',
-    'Mid-Century Modern': 'MID_CENTURY_MODERN',
-    'Traditional': 'TRADITIONAL',
-    'Classic': 'CLASSIC',
-    'Baroque': 'BAROQUE',
-    'Japanese Zen': 'JAPANESE_ZEN',
-    'Wabi-Sabi': 'WABI_SABI',
-    'Farmhouse': 'FARMHOUSE',
-    'Rustic': 'RUSTIC',
-    'Bohemian': 'BOHEMIAN',
-    'Art Deco': 'ART_DECO',
-    'Victorian': 'VICTORIAN',
-    'Coastal': 'COASTAL',
-    'Tropical': 'TROPICAL',
-    'Urban': 'URBAN',
-    'Maximalist': 'MAXIMALIST',
-    'Futuristic': 'FUTURISTIC',
-};
+const DESIGN_THEME = [
+    { label: 'Modern', value: 'MODERN' },
+    { label: 'Contemporary', value: 'CONTEMPORARY' },
+    { label: 'Minimalist', value: 'MINIMALIST' },
+    { label: 'Scandinavian', value: 'SCANDINAVIAN' },
+    { label: 'Industrial', value: 'INDUSTRIAL' },
+    { label: 'Mid-Century Modern', value: 'MID_CENTURY_MODERN' },
+    { label: 'Traditional', value: 'TRADITIONAL' },
+    { label: 'Classic', value: 'CLASSIC' },
+    { label: 'Baroque', value: 'BAROQUE' },
+    { label: 'Japanese Zen', value: 'JAPANESE_ZEN' },
+    { label: 'Wabi-Sabi', value: 'WABI_SABI' },
+    { label: 'Farmhouse', value: 'FARMHOUSE' },
+    { label: 'Rustic', value: 'RUSTIC' },
+    { label: 'Bohemian', value: 'BOHEMIAN' },
+    { label: 'Art Deco', value: 'ART_DECO' },
+    { label: 'Victorian', value: 'VICTORIAN' },
+    { label: 'Coastal', value: 'COASTAL' },
+    { label: 'Tropical', value: 'TROPICAL' },
+    { label: 'Urban', value: 'URBAN' },
+    { label: 'Maximalist', value: 'MAXIMALIST' },
+    { label: 'Futuristic', value: 'FUTURISTIC' },
+] satisfies Array<{ label: string; value: DesignThemeProps }>
 
 const BUILDER_SIZES: { value: SizeImageProps; label: string }[] = [
     { value: 'SIZE_1024x1024', label: 'Square (1024×1024)' },
@@ -79,30 +71,13 @@ const BUILDER_QUALITIES: { value: QualityFormatProps; label: string }[] = [
     { value: 'LOW', label: 'Low' },
 ];
 
-const ROTATION: number[] = [90, 180, 270, 360];
 const CHARS_LIMIT: number = 500;
+
 const DASHBOARD_NAVIGATION: Navigation = [
     {
         segment: 'dashboard',
         title: 'Dashboard',
         icon: <DashboardIcon />,
-        // children: [
-        //     {
-        //         segment: 'overview',  // 👈 Add an empty segment to allow navigating back to /builder
-        //         title: 'Overview',
-        //         icon: <DashboardIcon />,
-        //     },
-        //     {
-        //         segment: EMPTY_YOUR_SPACE.segment,
-        //         title: EMPTY_YOUR_SPACE.label,
-        //         icon: <DescriptionOutlined />,
-        //     },
-        //     {
-        //         segment: VIRTUAL_STAGING.segment,
-        //         title: VIRTUAL_STAGING.label,
-        //         icon: <DescriptionOutlined />,
-        //     },
-        // ],
     },
     {
         segment: 'dashboard/playground',
@@ -121,20 +96,6 @@ const DASHBOARD_NAVIGATION: Navigation = [
     },
 ];
 
-
-
-
-const builderHouseAngle = ["side of house", "front of house", "back of house"];
-const builderModeOptions = ["Beautiful Redesign", "Minimalist", "Luxury"];
-const builderModeStyle = ["Modern", "Traditional", "Contemporary"];
-const builderNumberOfDesigns = [1, 2, 3, 4];
-const builderAiIntervention = [1, 2, 3, 4];
-
-
-
-
-
-
 const DASHBOARD_NAV_BACKGROUND = {
     dark: {
         backgroundColor: '#e5e5f7',
@@ -149,18 +110,8 @@ const DASHBOARD_NAV_BACKGROUND = {
     },
 }
 
-
-
 export {
     DASHBOARD_NAVIGATION,
-    ROTATION,
-    builderAiIntervention,
-    builderModeOptions,
-    builderHouseAngle,
-    builderModeStyle,
-    builderNumberOfDesigns,
-    // goodPhotosData,
-    // badPhotosData,
     BACKEND_URL,
     SPACE_TYPE,
     DESIGN_THEME,

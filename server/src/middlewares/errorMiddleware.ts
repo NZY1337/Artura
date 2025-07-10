@@ -97,6 +97,7 @@ export const errorHandler = (method: Function) => {
         try {
             await method(req, res, next);
         } catch (error: any) {
+            console.log(error)
             let exception: HttpException;
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
                 const modelName = error?.meta?.modelName || "Resource"; // Product, User, Comment, etc...

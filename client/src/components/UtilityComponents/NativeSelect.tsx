@@ -1,9 +1,29 @@
+// hooks
 import { useState } from 'react';
-// import InputLabel from '@mui/material/InputLabel';
+
+// components
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-import type { NativeSelectProps, SpaceTypeProps } from '../../types';
+// tpes
+import type { DesignThemeProps, SpaceTypeProps, CategoryProps } from '../../types';
+
+interface NativeSelectProps {
+    optionLabels: DesignThemeProps | SpaceTypeProps | CategoryProps;
+    labels: DesignThemeProps | SpaceTypeProps | CategoryProps;
+    labelName: string;
+    name: string;
+    setBuilderState: React.Dispatch<React.SetStateAction<DesignThemeProps | SpaceTypeProps | CategoryProps>>;
+}
+
+type BuilderKeys = 'designTheme' | 'spaceType' | 'category'; // adjust as needed
+
+
+// ! this is not good
+type OptionLabel = {
+    label: string;
+    value: string;
+};
 
 const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSelectProps) => {
     const [canSelect, setCanSelect] = useState(true)
@@ -91,9 +111,9 @@ const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSel
                         id: 'select-multiple-native',
                     }}
                 >
-                    {Object.entries(optionLabels as SpaceTypeProps[]).map(([label, value]) => (
-                        <option key={value} value={value}>
-                            {label}
+                    {optionLabels.map((opt: OptionLabel) => (
+                        <option key={opt.value} value={opt.value}>
+                            {opt.label}
                         </option>
                     ))}
                 </Select>

@@ -5,14 +5,6 @@ export type LabelValueItemProps = {
     value: string;
 };
 
-export interface NativeSelectProps {
-    optionLabels: DesignThemeProps | SpaceTypeProps | CategoryProps;
-    labels: DesignThemeProps | SpaceTypeProps | CategoryProps;
-    labelName: string;
-    name: string;
-    setBuilderState: React.Dispatch<React.SetStateAction<BuilderState>>;
-}
-
 export type SpaceTypeProps =
     | 'LIVING_ROOM'
     | 'BEDROOM'

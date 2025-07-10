@@ -19,19 +19,20 @@ interface PreviewImageProps {
 export interface ProjectProps {
     id: string;
     userId: string;
-    category: CategoryProps[];
+    category: CategoryProps;
     createdAt: string;
     updatedAt: string;
     prompt: string;
     background: string;
-    images: (ImageProps | PreviewImageProps)[];
+    images: (ImageProps | PreviewImageProps);
     outputFormat: OutputFormatProps;
     quality: QualityFormatProps;
     size: string;
-    designTheme: DesignThemeProps[];
-    spaceType: SpaceTypeProps[];
+    designTheme: DesignThemeProps;
+    spaceType: SpaceTypeProps;
     n: GeneratedImagesCountProps;
 }
+
 // EditableProjectProps
 export type EditableProjectProps = Omit<ProjectProps, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'background'> &
     Partial<Pick<ProjectProps, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'background'>>;

@@ -1,47 +1,39 @@
 import { Request, Response } from "express";
 import { openAiClient } from "../services/openai";
 import { toFile, } from "openai";
-import type { FileLike } from "openai/uploads";
 import { supabaseClient } from "../services/supabase";
 import { writeFile, readFile } from "fs/promises";
+import path from "path";
+import { prismaClient } from "../services/prismaClient";
+import { ProjectValidator } from "../validation/project";
+
+// middleware
 import {
     BadRequestException,
     ErrorCode,
     NotFoundException,
 } from "../middlewares/errorMiddleware";
-import path from "path";
-import { prismaClient } from "../services/prismaClient";
 
-import { ProjectValidator } from "../validation/project";
-import { calculateImageGenerationCost, createStorageUrl, isValidUsage, uploadGeneratedImagesToSupabase, uploadUploadedImagesToSupabase, hasValidImageData } from "../utils";
+// types
+import type { SizeImageProps, QualityFormatProps } from "../../types";
+import type { FileLike } from "openai/uploads";
+
+// helpers
+import {
+    calculateImageGenerationCost,
+    createStorageUrl,
+    isValidUsage,
+    uploadGeneratedImagesToSupabase,
+    uploadUploadedImagesToSupabase,
+    hasValidImageData,
+    sizeMap, qualityMap
+} from "../utils";
 
 import { SUPABASE_URL } from "../../secrets";
 
 // !! extract Artura to ENV 
 
 // https://yfyiqiqqwgdvmazcgdnv.supabase.co - SUPABASE_URL
-
-// {
-//   path: 'generated-1747863520295.png',
-//   id: 'e413a45c-6cf9-4285-a856-bead89f02f09',
-//   fullPath: 'artura/generated-1747863520295.png'
-// }
-
-// const mockFilepath = SUPABASE_URL + '/storage/v1/object/public/' + fullPath
-
-// https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/generated-1747863520295.png
-
-// const validatedData = ProjectValidator.parse(data);
-
-// Removed invalid prismaClient.project.create call with incorrect data shape
-// const asd = await prismaClient.project.create({
-//     data: {
-//         ...validatedData
-//     }
-// })
-
-// const prompt = `A stunning modern kitchen interior with a minimalist design, featuring sleek white cabinets with matte finish, a large central island with a marble countertop, built-in stainless steel appliances, soft ambient lighting under cabinets, wooden flooring in a light oak tone, and large floor-to-ceiling windows that flood the space with natural light. Accents of black and brushed gold add elegance, with a few green plants for a touch of nature.
-// Scandinavian and contemporary design elements combined in a spacious, luxurious layout - ultra-clean, airy, and functional`;
 
 // // Types for the response
 // export interface ImageResponse {
@@ -67,12 +59,6 @@ import { SUPABASE_URL } from "../../secrets";
 // https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1748797755897.png
 // https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1748888792317-0.png"
 
-async function mockGenerateImage(): Promise<Buffer> {
-    // Here you would call the OpenAI API, but we mock with reading a local file
-    const absolutePath = path.resolve(__dirname, "../../../server/output.png");
-    const imageBuffer = await readFile(absolutePath);
-    return imageBuffer;
-}
 
 const mockRes = {
     project: {
@@ -83,10 +69,10 @@ const mockRes = {
         updatedAt: "2025-06-19T13:28:53.399Z",
         prompt:
             "Create a super realistic 3d rendering of this architectural rendering.. Do not change the positions of the walls, and maintain lines in the same exact position as they are in the plan, but add furniture and finishes and textures and depth.",
-        background: "auto",
-        outputFormat: "png",
-        quality: "high",
-        size: "1536x1024",
+        background: "AUTO",
+        outputFormat: "PNG",
+        quality: "HIGH",
+        size: "SIZE_1536x1024",
         designTheme: "MODERN",
         spaceType: "LIVING_ROOM",
         n: 1
@@ -94,14 +80,20 @@ const mockRes = {
     images: [
         {
             id: "e027ce3b-1ae4-4948-87aa-922ed335d3b9",
-            url: "https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750339732317-0.png",
-            projectId: "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+            url: "https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/uploaded-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750017353067-0.png",
+            projectId: "bbb7b7b2-4468-4329-a11e-b9eccdc6a333",
+            createdAt: "2025-06-19T13:28:53.494Z",
+        },
+        {
+            id: "e027ce3b-1ae4-4948-87aa-922ed335d3b1",
+            url: "https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750024202715-0.png",
+            projectId: "bbb7b7b2-4468-4329-a11e-b9eccdc6a333",
             createdAt: "2025-06-19T13:28:53.494Z",
         },
     ],
     imageGenerationResponse: {
         id: "93d1f1d9-b68b-45bc-97f9-4c5860eb7f9f",
-        projectId: "bbb7b7b2-4468-4329-a11e-b9eccdc6afc2",
+        projectId: "bbb7b7b2-4468-4329-a11e-b9eccdc6a333",
         inputTokens: 402,
         imageTokens: 323,
         textTokens: 79,
@@ -112,6 +104,13 @@ const mockRes = {
         totalCost: 0.316345,
     },
 }
+
+const mockedImages = [
+    'https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/uploaded-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750017353067-0.png',
+    'https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750024202715-0.png'
+]
+
+const prompt = "Design a realistic and serene modern backyard landscape with a mix of grass, stone pathways, minimalistic outdoor furniture, small trees, and ambient lighting. Include a wooden deck area with lounge chairs, soft shadows, and natural sunlight. The setting should feel peaceful, clean, and ideal for relaxation."
 
 // !! TODO: must validate the request body with ProjectValidator
 // !! TODO: must validate the request body with ProjectValidator
@@ -212,10 +211,8 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
     const { files } = req;
     const { n, prompt, size, outputFormat, quality, category, spaceType, designTheme } = req.body;
 
-    console.log({ userId, files, body: req.body })
-
     // if the user uploads refference images -> these need to be uploaded to openai -> and then we need to upload them to supabase
-    let openaiUploadedImages: FileLike[] = [];
+    let imagesUploadedToOpenAI: FileLike[] = [];
 
     if (Array.isArray(files) && files.length > 0) {
         const openAiFiles = await Promise.all(
@@ -226,21 +223,19 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
             )
         );
 
-        openaiUploadedImages = [...openAiFiles]
+        imagesUploadedToOpenAI = [...openAiFiles]
     } else {
         throw new BadRequestException(ErrorCode.BAD_REQUEST, "No files uploaded.");
     }
 
     const imgResponse = await openAiClient.images.edit({
         model: "gpt-image-1",
-        image: openaiUploadedImages,
         prompt,
+        image: imagesUploadedToOpenAI,
         n,
-        size,
-        quality,
+        size: sizeMap[size as SizeImageProps],
+        quality: qualityMap[quality as QualityFormatProps],
     });
-
-    console.log(imgResponse, 'img Response')
 
     // if the openai response is valid -> do the rest of computation
     if (!imgResponse.data) {
@@ -260,8 +255,8 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
     const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost(
         {
             model: "gpt-image-1",
-            size,
-            quality,
+            size: sizeMap[size as SizeImageProps],
+            quality: qualityMap[quality as QualityFormatProps],
             input_tokens_details: usage.input_tokens_details,
             output_tokens: usage.output_tokens,
         },

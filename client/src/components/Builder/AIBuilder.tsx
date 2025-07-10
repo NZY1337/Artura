@@ -26,9 +26,9 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
     const [builderState, setBuilderState] = useState<EditableProjectProps>({
         size: 'SIZE_1024x1024',
         quality: 'HIGH',
-        spaceType: ['LIVING_ROOM'],
-        designTheme: ['MODERN'],
-        category: ['DESIGN_GENERATOR'],
+        spaceType: 'LIVING_ROOM',
+        designTheme: 'MODERN',
+        category: 'DESIGN_GENERATOR',
         prompt: '',
         n: 1,
         outputFormat: 'PNG',
