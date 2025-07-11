@@ -103,7 +103,7 @@ export default function Dashboard() {
             console.log(token);  // copy this exact token to Postman
         }
 
-        callProtectedRoute()
+        // callProtectedRoute()
 
         const parent = divRef.current?.parentElement;
         if (parent) {
@@ -147,6 +147,6 @@ export default function Dashboard() {
                     </DashboardLayout>
                 </NotificationsProvider>
             </DashboardProvider>
-        </AppProvider >
+        </AppProvider>
     );
 }

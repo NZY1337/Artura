@@ -19,7 +19,7 @@ import FileUpload from '../UtilityComponents/FileUpload';
 // import AttachFile from '@mui/icons-material/AttachFile';\
 
 // constants
-import { CHARS_LIMIT } from '../../helpers/constants';
+import { CHARS_LIMIT, CATEGORY } from '../../helpers/constants';
 
 // hooks
 import { useColorScheme } from "@mui/material";
@@ -83,7 +83,10 @@ const BuilderOptions = ({ builderState, isLoading, setBuilderState, onHandleSubm
                     <DesignThemes setBuilderState={setBuilderState} builderState={builderState} />
                     <QualityAndSize setBuilderState={setBuilderState} builderState={builderState} />
                     <NumberOfGenerations setBuilderState={setBuilderState} builderState={builderState} />
-                    <FileUpload setBuilderState={setBuilderState} builderState={builderState} />
+
+                    {builderState.category !== CATEGORY[0].value && (
+                        <FileUpload setBuilderState={setBuilderState} builderState={builderState} />
+                    )}
                 </Box>
 
                 <IconButton color='success' loading={isLoading} onClick={() => onHandleSubmit(builderState)}

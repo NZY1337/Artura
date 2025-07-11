@@ -6,7 +6,6 @@ import FormLabel from '@mui/material/FormLabel';
 
 // components
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 
 // tpes
 import type { DesignThemeProps, SpaceTypeProps, CategoryProps, EditableProjectProps } from '../../types';
@@ -34,78 +33,16 @@ const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSel
 
     return (
         <div>
-            {/* <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 300 }}>
-                <Select<string>
-                    multiple={true}
-                    native
-                    variant='standard'
-                    sx={(theme) => ({
-                        '& select': {
-                            pr: '10px!important',
-                        },
-                        borderRadius: 1,
-                        '& option:checked': {
-                            backgroundColor: 'transparent',
-                            fontWeight: 'bold', borderRadius: '5px'
-                        },
-
-                        '& option:hover': {
-                            backgroundColor: '#000',
-                            borderRadius: '5px',
-                            color: '#eee', // may not work reliably
-                        },
-                        '& option': {
-                            color: theme.palette.mode === 'light' ? 'black' : 'white',
-                            padding: '8px',
-                        },
-                        overflowY: 'auto',
-                        // maxHeight: 300,
-                        scrollbarWidth: 'thin',
-                        scrollbarColor: '#888 transparent',
-
-                        '&::-webkit-scrollbar-track': {
-                            background: 'transparent',
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                            backgroundColor: '#888',
-                            borderRadius: '8px',
-                            border: '2px solid transparent',
-                            backgroundClip: 'content-box',
-                        },
-                        '&::before': {
-                            borderBottom: 'none !important',
-                        },
-                        '&::after': {
-                            borderBottom: 'none !important',
-                        },
-                        '&:hover:not(.Mui-disabled)::before': {
-                            borderBottom: 'none',
-                        },
-                    })}
-                    value={labels}
-                    // @ts-expect-error Typings are not considering `native`
-                    onChange={handleChangeMultiple}
-                    onKeyDown={handleStopMultipleEdits}
-                    onKeyUp={handleStartMultipleEditsOnkeyUp}
-                    label="Native"
-                    name={name}
-                    inputProps={{
-                        id: 'select-multiple-native',
-                    }}
-                >
-
-                    <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                    </option>
-
-                </Select>
-            </FormControl> */}
-
-            <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 300 }}>
+            <FormControl sx={{ px: 2 }} variant="standard">
                 <FormLabel id="demo-radio-buttons-group-label">{name}</FormLabel>
                 <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="female" name="radio-buttons-group">
                     {optionLabels.map((opt) => (
                         <FormControlLabel
+                            sx={{
+                                ':hover span': {
+                                    color: 'primary.main',
+                                },
+                            }}
                             value={opt.value}
                             control={<Radio />}
                             checked={opt.value === labels}
@@ -113,11 +50,8 @@ const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSel
                             onChange={onHandleChange}
                         />
                     ))}
-
                 </RadioGroup>
             </FormControl>
-
-
         </div>
     );
 };

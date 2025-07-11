@@ -211,6 +211,11 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
     const { files } = req;
     const { n, prompt, size, outputFormat, quality, category, spaceType, designTheme } = req.body;
 
+    // validate the request body with Zod
+
+    // if it is image generation - no images are uploaded - else it should be image editing
+    const isGeneration = category === "DESIGN_GENERATION";
+
     // if the user uploads refference images -> these need to be uploaded to openai -> and then we need to upload them to supabase
     let imagesUploadedToOpenAI: FileLike[] = [];
 
@@ -228,14 +233,29 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
         throw new BadRequestException(ErrorCode.BAD_REQUEST, "No files uploaded.");
     }
 
-    const imgResponse = await openAiClient.images.edit({
-        model: "gpt-image-1",
-        prompt,
-        image: imagesUploadedToOpenAI,
-        n,
-        size: sizeMap[size as SizeImageProps],
-        quality: qualityMap[quality as QualityFormatProps],
-    });
+    let imgResponse = null;
+
+    if (isGeneration) {
+        imgResponse = await openAiClient.images.generate({
+            model: "gpt-image-1",
+            prompt,
+            n: 1,
+            size: sizeMap[size as SizeImageProps],
+            quality: qualityMap[quality as QualityFormatProps],
+            background: "auto",
+        });
+    } else {
+        imgResponse = await openAiClient.images.edit({
+            model: "gpt-image-1",
+            prompt,
+            n,
+            size: sizeMap[size as SizeImageProps],
+            quality: qualityMap[quality as QualityFormatProps],
+            background: "auto",
+            image: imagesUploadedToOpenAI,
+        });
+    }
+
 
     // if the openai response is valid -> do the rest of computation
     if (!imgResponse.data) {
