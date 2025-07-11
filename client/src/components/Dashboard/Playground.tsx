@@ -6,7 +6,7 @@ import useDesignGeneration from "../../hooks/variations/useDesignGeneration";
 import { useQueryClient } from "@tanstack/react-query";
 
 // types
-import type { EditableProjectProps, GridCell, ImageProps, ProjectResponseProps } from "../../types";
+import type { GridCell, ProjectResponseProps, EditableProjectProps } from "../../types";
 
 // components
 import { TypeAnimation } from "react-type-animation";
@@ -212,8 +212,10 @@ const Playground = () => {
                 }}>
                 {grid.map((item, index) => {
                     const isLoading = item && "loading" in item;
-                    const generatedImages = item !== null && !("loading" in item) && Array.isArray(item.images) && item.images.filter((image): image is ImageProps => 'url' in image && !image.url.includes("uploaded-")
-                    );
+                    const generatedImages = item !== null 
+                        && !("loading" in item) 
+                        && Array.isArray(item.images) 
+                        && item.images.filter((image) => 'url' in image && !image.url.includes("uploaded-"));
 
                     return (
                         <Box key={index}
@@ -234,8 +236,8 @@ const Playground = () => {
                                     <Carousel className="playground-carousel-container" settings={settings}>
                                         {generatedImages.map((image, index) => (
                                             <img
-                                                key={'url' in image ? image.url : index}
-                                                src={'url' in image ? image.url : ''}
+                                                key={image.url}
+                                                src={image.url}
                                                 alt={`Interior ${index + 1}`}
                                             />
                                         ))}
@@ -258,14 +260,9 @@ const Playground = () => {
                     );
                 })}
 
-                {project !== null ? (
-                    <BuilderModalPreview
-                        open={open}
-                        project={project}
-                        handleCloseModal={() => setOpen(false)}
-                        slideIndex={slideIndex}
-                    />
-                ) : null}
+                {project !== null && (
+                    <BuilderModalPreview open={open} project={project} handleCloseModal={() => setOpen(false)} slideIndex={slideIndex} />
+                )}
             </Box>
 
             <Box sx={{

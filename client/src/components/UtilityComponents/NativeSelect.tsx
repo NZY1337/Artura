@@ -6,24 +6,17 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 // tpes
-import type { DesignThemeProps, SpaceTypeProps, CategoryProps } from '../../types';
+import type { DesignThemeProps, SpaceTypeProps, CategoryProps, EditableProjectProps } from '../../types';
+
+type OptionItem<T extends string> = { label: string; value: T };
 
 interface NativeSelectProps {
-    optionLabels: DesignThemeProps | SpaceTypeProps | CategoryProps;
+    optionLabels: OptionItem<DesignThemeProps | SpaceTypeProps | CategoryProps>[];
     labels: DesignThemeProps | SpaceTypeProps | CategoryProps;
     labelName: string;
     name: string;
-    setBuilderState: React.Dispatch<React.SetStateAction<DesignThemeProps | SpaceTypeProps | CategoryProps>>;
+    setBuilderState: React.Dispatch<React.SetStateAction<EditableProjectProps>>;
 }
-
-type BuilderKeys = 'designTheme' | 'spaceType' | 'category'; // adjust as needed
-
-
-// ! this is not good
-type OptionLabel = {
-    label: string;
-    value: string;
-};
 
 const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSelectProps) => {
     const [canSelect, setCanSelect] = useState(true)
@@ -37,7 +30,7 @@ const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSel
                 value.push(options[i].value);
             }
         }
-        setBuilderState((prev: NativeSelectProps['labels']) => ({ ...prev, [name]: value }));
+        setBuilderState((prev: EditableProjectProps) => ({ ...prev, [name]: value }));
     };
 
     const handleStopMultipleEdits = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -53,7 +46,7 @@ const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSel
     return (
         <div>
             <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 300 }}>
-                <Select<string[]>
+                <Select<string>
                     multiple={true}
                     native
                     variant='standard'
@@ -111,7 +104,7 @@ const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSel
                         id: 'select-multiple-native',
                     }}
                 >
-                    {optionLabels.map((opt: OptionLabel) => (
+                    {optionLabels.map((opt) => (
                         <option key={opt.value} value={opt.value}>
                             {opt.label}
                         </option>

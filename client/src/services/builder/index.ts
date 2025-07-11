@@ -1,8 +1,8 @@
 import { BACKEND_URL } from '../../helpers/constants';
 
-import type { ProjectApiProps } from '../../types';
+import type { EditableProjectProps } from '../../types';
 
-export const designGenerator = async (project: ProjectApiProps) => {
+export const designGenerator = async (project: EditableProjectProps) => {
     const formData = new FormData();
     formData.append('prompt', project.prompt);
     formData.append('size', project.size);
@@ -27,7 +27,6 @@ export const designGenerator = async (project: ProjectApiProps) => {
 
     // error from errorMiddleware - result from the backend res.send({result: project })
     const { error, result } = await response.json();
-    console.log(result);
     if (result) return result;
 
     if (error) throw new Error(error || 'Failed to generate design');
@@ -45,5 +44,6 @@ export const getProjects = async () => {
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }
+    
     return response.json();
 }

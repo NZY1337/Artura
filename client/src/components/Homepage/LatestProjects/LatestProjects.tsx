@@ -1,26 +1,25 @@
-import { useState } from "react";
-import { Container, Grid, Typography } from '@mui/material';
-
+// hooks
 import useCategory from "../../../hooks/useCategory";
-import BuilderModalPreview from "../../Builder/BuiulderModalPreview";
+
+// components
+import { Container, Grid, Typography } from '@mui/material';
 import Carousel from "../../UtilityComponents/Carousel";
 import RenderLatestProjects from "./RenderLatestProject";
 
-import type { ProjectApiProps } from "../../../types";
+// types
+import type { ProjectProps } from "../../../types";
 
 export default function LatestProjects() {
-    const [open, setOpen] = useState(false);
     const { data } = useCategory();
-    const [currentIndex, setCurrentIndex] = useState(0);
 
     const settings = {
         dots: false,
         autoplay: true,
         focusOnSelect: true,
-        speed: 3000,
+        speed: 5000,
         autoplaySpeed: 0,
-        slidesToShow: data?.projects?.slice(0, 5)?.length,
-        infinite: data?.projects?.length >= 4,  // Disable infinite if not enough items
+        slidesToShow: 2,
+        infinite: data?.projects?.length >= 1,  // Disable infinite if not enough items
         slidesToScroll: 1,
         responsive: [
             {
@@ -50,9 +49,6 @@ export default function LatestProjects() {
         ]
     };
 
-    const handleOpenModal = () => setOpen(true);
-    const handleSetCurrentIndex = (index: number) => setCurrentIndex(index);
-
     return (
         <>
             {data && data.projects && data.projects.length > 0 ? <>
@@ -73,13 +69,11 @@ export default function LatestProjects() {
                     </Container>
 
                     <Carousel className="latest-projects-carousel" settings={settings}>
-                        {data?.projects.slice(0, 5)?.map((project: ProjectApiProps, index: number) => (
-                            <RenderLatestProjects project={project} index={index} handleOpenModal={handleOpenModal} handleSetCurrentIndex={handleSetCurrentIndex} />
+                        {data?.projects.slice(0, 5)?.map((project: ProjectProps, index: number) => (
+                            <RenderLatestProjects project={project} index={index}  />
                         ))}
                     </Carousel>
                 </Container>
-
-                {/* <BuilderModalPreview currentIndex={currentIndex} open={open} project={data?.projects[currentIndex]} handleCloseModal={() => setOpen(false)} /> */}
             </> : null}
         </>
     );

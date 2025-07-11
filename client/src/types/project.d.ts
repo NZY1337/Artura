@@ -1,20 +1,23 @@
-import type { CategoryProps, DesignThemeProps, SpaceTypeProps, SizeImageProps, QualityFormatProps, OutputFormatProps, GeneratedImagesCountProps } from "./misc";
+import type { CategoryProps, DesignThemeProps, SpaceTypeProps, QualityFormatProps, OutputFormatProps, GeneratedImagesCountProps } from "./misc";
 
 // interface ApiResponse<T> {
 //     result: T;
 // }
 
-interface ImageProps {
+interface FetchedImage {
     url: string;
     id: string;
     createdAt: string;
     projectId: string;
 }
 
-interface PreviewImageProps {
+interface UploadedImage {
     file: File;
     preview: string
 }
+
+export type Image = FetchedImage | UploadedImage;
+
 
 export interface ProjectProps {
     id: string;
@@ -24,7 +27,7 @@ export interface ProjectProps {
     updatedAt: string;
     prompt: string;
     background: string;
-    images: (ImageProps | PreviewImageProps);
+    images: Image[];
     outputFormat: OutputFormatProps;
     quality: QualityFormatProps;
     size: string;
@@ -52,12 +55,7 @@ export interface ImageGenerationResponseProps {
     updatedAt: string;
 }
 
-export interface RenderLatestProjectsProps {
-    project: ProjectProps
-    index: number;
-    handleOpenModal: () => void;
-    handleSetCurrentIndex: (index: number) => void;
-}
+
 
 export type ProjectResponseProps = {
     project: ProjectProps;

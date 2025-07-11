@@ -1,11 +1,4 @@
 import {
-    SpaceTypeProps,
-    DesignThemeProps,
-    OutputFormatProps,
-    GeneratedImagesCountProps,
-    SizeImageProps,
-    QualityFormatProps,
-    CategoryProps,
     EditableProjectProps,
     type ProjectApiProps
 } from "./index";
