@@ -1,5 +1,8 @@
-// hooks
-import { useState } from 'react';
+import * as React from 'react';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
 
 // components
 import FormControl from '@mui/material/FormControl';
@@ -19,33 +22,19 @@ interface NativeSelectProps {
 }
 
 const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSelectProps) => {
-    const [canSelect, setCanSelect] = useState(true)
-    const handleChangeMultiple = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        if (!canSelect) return;
+    const onHandleChange = (event: React.SyntheticEvent<Element, Event>) => {
+        const target = event.target as HTMLInputElement;
+        const value = target.value as DesignThemeProps | SpaceTypeProps | CategoryProps;
 
-        const { options } = event.target;
-        const value: string[] = [];
-        for (let i = 0, l = options.length; i < l; i += 1) {
-            if (options[i].selected) {
-                value.push(options[i].value);
-            }
-        }
-        setBuilderState((prev: EditableProjectProps) => ({ ...prev, [name]: value }));
-    };
-
-    const handleStopMultipleEdits = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (event.key === 'Meta' || event.key === 'Shift') {
-            setCanSelect(false);
-        }
-    };
-
-    const handleStartMultipleEditsOnkeyUp = () => {
-        if (!canSelect) setCanSelect(true)
+        setBuilderState((prev: EditableProjectProps) => ({
+            ...prev,
+            [name]: value,
+        }));
     }
 
     return (
         <div>
-            <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 300 }}>
+            {/* <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 300 }}>
                 <Select<string>
                     multiple={true}
                     native
@@ -104,15 +93,35 @@ const NativeSelect = ({ optionLabels, labels, setBuilderState, name }: NativeSel
                         id: 'select-multiple-native',
                     }}
                 >
-                    {optionLabels.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                        </option>
-                    ))}
+
+                    <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                    </option>
+
                 </Select>
+            </FormControl> */}
+
+            <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 300 }}>
+                <FormLabel id="demo-radio-buttons-group-label">{name}</FormLabel>
+                <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="female" name="radio-buttons-group">
+                    {optionLabels.map((opt) => (
+                        <FormControlLabel
+                            value={opt.value}
+                            control={<Radio />}
+                            checked={opt.value === labels}
+                            label={opt.label}
+                            onChange={onHandleChange}
+                        />
+                    ))}
+
+                </RadioGroup>
             </FormControl>
-        </div >
+
+
+        </div>
     );
 };
 
 export default NativeSelect;
+
+

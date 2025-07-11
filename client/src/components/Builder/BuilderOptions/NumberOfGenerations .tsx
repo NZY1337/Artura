@@ -15,8 +15,6 @@ function valuetext(value: number) {
 const NumberOfGenerations: React.FC<QualityAndSizeBuilderProps> = ({ builderState, setBuilderState }) => {
     const { n } = builderState;
 
-    console.log(n)
-
     return (
         <DropdownSetting icon={<Icon><Typography fontWeight={'bold'} variant='body1'>{n}x</Typography></Icon>}>
             <Box sx={{ width: 300, padding: "0 15px" }}>

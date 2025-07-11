@@ -35,6 +35,8 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
         images: [],
     });
 
+    console.log(builderState)
+
     const handleRemoveImage = (index: number) => {
         const newImages = [...builderState.images];
         newImages.splice(index, 1);
@@ -43,7 +45,7 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
 
     return (
         <>
-            {builderState.images.length > 0 &&  <Gallery images={builderState.images} onRemove={handleRemoveImage} />}
+            {builderState.images.length > 0 && <Gallery images={builderState.images} onRemove={handleRemoveImage} />}
             <BuilderOptions onHandleSubmit={onHandleSubmit} setBuilderState={setBuilderState} builderState={builderState} isLoading={isLoading} />
             <BuilderOptionsPreview builderState={builderState} />
         </>

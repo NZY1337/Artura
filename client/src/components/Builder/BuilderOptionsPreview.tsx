@@ -15,13 +15,13 @@ const BuilderOptionsPreview: React.FC<{ builderState: EditableProjectProps }> = 
     return (
         <Stack direction="row" spacing={3} justifyContent="flex-start" mt={2}>
             <Typography variant="caption" color="gray">
-                category: <span style={{ color: chooseMode }}>{builderState.category[0]}</span>
+                category: <span style={{ color: chooseMode }}>{builderState.category}</span>
             </Typography>
             <Typography variant="caption" color="gray">
-                Space Type: <span style={{ color: chooseMode }}>{builderState.spaceType[0]}</span>
+                Space Type: <span style={{ color: chooseMode }}>{builderState.spaceType}</span>
             </Typography>
             <Typography variant="caption" color="gray">
-                Design Theme: <span style={{ color: chooseMode }}>{builderState.designTheme[0]}</span>
+                Design Theme: <span style={{ color: chooseMode }}>{builderState.designTheme}</span>
             </Typography>
 
             <Typography variant="caption" color="gray">
