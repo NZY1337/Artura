@@ -2,6 +2,11 @@ import { SizeImageProps, QualityFormatProps } from "../../types";
 
 import { ImageEditParams } from "openai/resources/images";
 
+
+// Constants
+export const MODEL_NAME = "gpt-image-1";
+export const BACKGROUND_MODE = "auto";
+
 export const sizeMap: Record<SizeImageProps, ImageEditParams['size']> = {
     SIZE_1024x1024: "1024x1024",
     SIZE_1024x1536: "1024x1536",

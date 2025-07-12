@@ -1,10 +1,58 @@
-export type SizeImageProps =
-    | "SIZE_1024x1024"
-    | "SIZE_1024x1536"
-    | "SIZE_1536x1024"
-    | "AUTO";
+export type SpaceTypeProps =
+    | 'LIVING_ROOM'
+    | 'BEDROOM'
+    | 'KITCHEN'
+    | 'BATHROOM'
+    | 'DINING_ROOM'
+    | 'HOME_OFFICE'
+    | 'KIDS_ROOM'
+    | 'HALLWAY_CORRIDOR'
+    | 'BALCONY_TERRACE'
+    | 'GAME_ROOM'
+    | 'STUDY';
+
+export type CategoryProps =
+    | 'DESIGN_GENERATION'
+    | 'LANDSCAPING'
+    | 'VIRTUAL_STAGING'
+    | 'FLOOR_PLANNING';
+
+
+export type DesignThemeProps =
+    | 'MODERN'
+    | 'CONTEMPORARY'
+    | 'MINIMALIST'
+    | 'SCANDINAVIAN'
+    | 'INDUSTRIAL'
+    | 'MID_CENTURY_MODERN'
+    | 'TRADITIONAL'
+    | 'CLASSIC'
+    | 'BAROQUE'
+    | 'JAPANESE_ZEN'
+    | 'WABI_SABI'
+    | 'FARMHOUSE'
+    | 'RUSTIC'
+    | 'BOHEMIAN'
+    | 'ART_DECO'
+    | 'VICTORIAN'
+    | 'COASTAL'
+    | 'TROPICAL'
+    | 'URBAN'
+    | 'MAXIMALIST'
+    | 'FUTURISTIC';
+
+export type OutputFormatProps =
+    | 'PNG'
+    | 'JPEG'
+    | 'WEBP';
 
 export type QualityFormatProps =
-    | "HIGH"
-    | "MEDIUM"
-    | "LOW";
+    | 'LOW'
+    | 'MEDIUM'
+    | 'HIGH';
+
+export type SizeImageProps =
+    | 'SIZE_1024x1024'
+    | 'SIZE_1024x1536'
+    | 'SIZE_1536x1024'
+    | 'AUTO';
