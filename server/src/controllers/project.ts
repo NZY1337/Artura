@@ -20,22 +20,15 @@ import type { FileLike } from "openai/uploads";
 // helpers
 import {
     calculateImageGenerationCost,
-    createStorageUrl,
     isValidUsage,
     uploadGeneratedImagesToSupabase,
     uploadUploadedImagesToSupabase,
     sizeMap, 
     qualityMap,
-    openaiToFile
+    MODEL_NAME,
+    BACKGROUND_MODE
 } from "../utils";
 
-import { SUPABASE_URL } from "../../secrets";
-
-// !! extract Artura to ENV 
-
-// https://yfyiqiqqwgdvmazcgdnv.supabase.co - SUPABASE_URL
-
-// // Types for the response
 // export interface ImageResponse {
 //   created: number;
 //   background: "transparent" | "opaque" | "auto";
@@ -110,26 +103,26 @@ const mockedImages = [
     'https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1750024202715-0.png'
 ]
 
-// !! TODO: must validate the request body with ProjectValidator
 export const designGeneratorUpload = async (req: Request, res: Response) => {
     const { userId } = req.auth;
     const { files }  = req;
-    const { n, prompt, size, outputFormat, quality, category, spaceType, designTheme } = req.body;
-    const imageCount = parseInt(n, 10) || 1;
 
-    // validate the request body with Zod
-    
+    const validationResult = ProjectValidator.safeParse(req.body);
+
+    if (!validationResult.success) throw new BadRequestException(ErrorCode.BAD_REQUEST, "Invalid request body");
+
+    const { n, prompt, size, outputFormat, quality, category, spaceType, designTheme } = validationResult.data;
+
     // if it's image generation - no images are uploaded - else it should be image editing
     const isGenerationEndpoint = category === "DESIGN_GENERATION";
 
-    // request body validation is the same for both endpoints
+    // res body is the same for both endpoints
     let imgResponse = null;
 
-    // image.generate endpoint - NO REFFERECENCE IMAGES - else image.edit endpoint :: USER UPLOADED REFFERENCE IMAGES
     if (isGenerationEndpoint) {
-        imgResponse = await openaiService.generate({ prompt, n: imageCount, size, quality });
+        imgResponse = await openaiService.generate({ prompt, n, size, quality });
     } else {
-        imgResponse = await openaiService.edit({ prompt, n: imageCount, size, quality, files: files as Express.Multer.File[] || [] });
+        imgResponse = await openaiService.edit({ prompt, n, size, quality, files: (files as Express.Multer.File[]) ?? []});
     }
 
     // if the openai response is valid -> do the rest of computation
@@ -148,7 +141,7 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
     const allImages           = [...generatedImagesUrls, ...uploadedImagesUrls];
 
     const { tokenCost, imageCost, totalCost } = calculateImageGenerationCost({
-            model: "gpt-image-1",
+            model: MODEL_NAME,
             size: sizeMap[size as SizeImageProps],
             quality: qualityMap[quality as QualityFormatProps],
             input_tokens_details: usage.input_tokens_details,
@@ -167,9 +160,9 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
                 prompt,
                 size,
                 quality,
-                background: "auto",
+                background: BACKGROUND_MODE,
                 outputFormat,
-                n: imageCount
+                n
             },
         });
 
@@ -204,7 +197,6 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
     res.status(200).json({ result });
 };
 
-// get all projects per user
 export const getProjects = async (req: Request, res: Response) => {
     const projects = await prismaClient.project.findMany({
         include: {

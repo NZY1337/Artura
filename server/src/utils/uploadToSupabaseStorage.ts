@@ -2,9 +2,10 @@
 import { supabaseClient } from "../services/supabase";
 import { BadRequestException, ErrorCode } from "../middlewares/errorMiddleware";
 import { SUPABASE_URL } from "../../secrets";
+import { MAX_FILE_SIZE } from "./constants";
 
-export const createStorageUrl = (userId: string, identifier: string): string => {
-    return `${userId}/generated-${userId}-${Date.now()}-${identifier}`;
+export const createStoragePath = (userId: string, identifier: string): string => {
+    return `${userId}/${identifier}-${userId}-${Date.now()}`;
 }
 
 export const sanitizeFilename = (filename: string) => {
@@ -20,6 +21,14 @@ export async function uploadGeneratedImagesToSupabase(
     userId: string,
     imageData: { b64_json?: string }[]
 ): Promise<string[]> {
+    if (!userId) {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "User ID is required");
+    }
+    
+    if (!imageData || imageData.length === 0) {
+        return [];
+    }
+
     return await Promise.all(
         imageData.map(async (data, index) => {
             if (!data.b64_json) {
@@ -27,7 +36,7 @@ export async function uploadGeneratedImagesToSupabase(
             }
 
             const imageBuffer = Buffer.from(data.b64_json, "base64");
-            const storagePath = createStorageUrl(userId, `generated-${index}`);
+            const storagePath = createStoragePath(userId, `generated-${index}`);
 
             const { error } = await supabaseClient.storage.from("artura").upload(storagePath, imageBuffer, { contentType: "image/png" });
 
@@ -43,10 +52,25 @@ export async function uploadUploadedImagesToSupabase(
     userId: string,
     files: Express.Multer.File[]
 ): Promise<string[]> {
+    if (!userId) {
+        throw new BadRequestException(ErrorCode.BAD_REQUEST, "User ID is required");
+    }
+    
+    if (!files || files.length === 0) {
+        return [];
+    }
+
     return await Promise.all(
         files.map(async (file, index) => {
+            if (file.size > MAX_FILE_SIZE) {
+                throw new BadRequestException(
+                    ErrorCode.BAD_REQUEST, 
+                    `File ${file.originalname} is too large (${file.size} bytes, max: ${MAX_FILE_SIZE})`
+                );
+            }
+
             const safeFileName = sanitizeFilename(file.originalname);
-            const storagePath = createStorageUrl(userId, `uploaded-${index}-${safeFileName}`);
+            const storagePath = createStoragePath(userId, `uploaded-${index}-${safeFileName}`);
 
             const { error } = await supabaseClient.storage
                 .from("artura")

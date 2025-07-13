@@ -14,7 +14,7 @@ export enum ErrorCode {
     INTERNAL_EXCEPTION = StatusCodes.INTERNAL_SERVER_ERROR,
     UNAUTHORIZED = StatusCodes.UNAUTHORIZED,
     CONFLICT = StatusCodes.CONFLICT,
-    INSUFFICIENT_CREDITS = StatusCodes.PAYMENT_REQUIRED
+    INSUFFICIENT_CREDITS = StatusCodes.PAYMENT_REQUIRED,
 }
 
 export const errorMiddleware = (err: any, req: Request, res: Response, next: NextFunction) => {
