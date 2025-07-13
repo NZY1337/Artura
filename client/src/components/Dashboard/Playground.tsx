@@ -235,11 +235,13 @@ const Playground = () => {
                                 <>
                                     <Carousel className="playground-carousel-container" settings={settings}>
                                         {generatedImages.map((image, index) => (
-                                            <img
-                                                key={image.url}
-                                                src={image.url}
-                                                alt={`Interior ${index + 1}`}
-                                            />
+                                            "url" in image ? (
+                                                <img
+                                                    key={image.url}
+                                                    src={image.url}
+                                                    alt={`Interior ${index + 1}`}
+                                                />
+                                            ) : null
                                         ))}
                                     </Carousel>
 

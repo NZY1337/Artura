@@ -51,7 +51,7 @@ const BuilderOptions = ({ builderState, isLoading, setBuilderState, onHandleSubm
         <Box sx={{ width: '100%' }} component={'form'}>
             <Typography variant='body2' textAlign={'right'} color='orange'>characters: {CHARS_LIMIT - charCount}</Typography>
             <TextareaAutosize
-                placeholder={`Eg: generate a beautiful ${builderState.spaceType} design in a ${builderState.designTheme} style with ...`}
+                placeholder='Describe your design, chose from the options below.'
                 value={prompt}
                 onChange={(e) => handlePromptChange(e)}
                 maxRows={4}

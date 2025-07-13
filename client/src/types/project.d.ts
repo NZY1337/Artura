@@ -55,8 +55,6 @@ export interface ImageGenerationResponseProps {
     updatedAt: string;
 }
 
-
-
 export type ProjectResponseProps = {
     project: ProjectProps;
     images: ProjectImageProps[];

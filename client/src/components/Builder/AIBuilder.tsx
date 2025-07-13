@@ -28,7 +28,7 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
         quality: 'HIGH',
         spaceType: 'LIVING_ROOM',
         designTheme: 'MODERN',
-        category: 'DESIGN_GENERATOR',
+        category: 'DESIGN_GENERATION',
         prompt: '',
         n: 1,
         outputFormat: 'PNG',

@@ -94,18 +94,22 @@ const BuilderModalPreview = ({ project, open, handleCloseModal, slideIndex }: Bu
                 <Grid size={{ xs: 12, md: 12, lg: 5 }} sx={{ display: "flex", alignItems: "center", p: 4 }}>
                     <Box>
                         <Stack direction="row" spacing={1} alignItems="center" mb={2}>
-                            {imagesUploadedByUser.map((image) =>
-                                image.type === 'fetched' ? (
-                                    <Avatar
-                                    key={image.url}
-                                    variant="rounded"
-                                    src={image.url}
-                                    onMouseEnter={() => handleMouseEnter(image.url)}
-                                    onMouseLeave={handleMouseLeave}
-                                    sx={{ width: 80, height: 80, cursor: 'pointer' }}
-                                    />
-                                ) : null
-                            )}
+                            {imagesUploadedByUser.map((image, idx) => {
+                                // Type guard to ensure 'url' exists
+                                if ('url' in image && typeof image.url === 'string') {
+                                    return (
+                                        <Avatar
+                                            key={image.url || idx}
+                                            variant="rounded"
+                                            src={image.url}
+                                            onMouseEnter={() => handleMouseEnter(image.url)}
+                                            onMouseLeave={handleMouseLeave}
+                                            sx={{ width: 80, height: 80, cursor: 'pointer' }}
+                                        />
+                                    );
+                                }
+                                return null;
+                            })}
                         </Stack>
 
                         <Typography variant="body2" sx={{ color: "#ccc", mb: 3 }}>
@@ -120,7 +124,7 @@ const BuilderModalPreview = ({ project, open, handleCloseModal, slideIndex }: Bu
                                 quality: project?.quality,
                                 spaceType: "LIVING_ROOM",
                                 designTheme: "MODERN",
-                                category: "DESIGN_GENERATOR",
+                                category: "DESIGN_GENERATION",
                                 prompt: project?.prompt,
                                 n: 1,
                                 outputFormat: "PNG",
