@@ -7,6 +7,7 @@ interface BuilderOptionsProps {
     builderState: EditableProjectProps;
     isLoading: boolean;
     setBuilderState: React.Dispatch<React.SetStateAction<EditableProjectProps>>;
+    handleGenerateBaseDesign: () => void;
     onHandleSubmit: (stateBuilder: EditableProjectProps) => void;
 }
 

@@ -15,8 +15,9 @@ import SpaceTypes from './BuilderOptions/SpaceTypes';
 import DesignThemes from './BuilderOptions/DesignThemes';
 import Categories from './BuilderOptions/Categories';
 import FileUpload from '../UtilityComponents/FileUpload';
+import Button from '@mui/material/Button';
 
-// import AttachFile from '@mui/icons-material/AttachFile';\
+// import AttachFile from '@mui/icons-material/AttachFile';
 
 // constants
 import { CHARS_LIMIT, CATEGORY } from '../../helpers/constants';
@@ -27,7 +28,7 @@ import { useColorScheme } from "@mui/material";
 // types
 import type { BuilderOptionsProps } from '../../types';
 
-const BuilderOptions = ({ builderState, isLoading, setBuilderState, onHandleSubmit, }: BuilderOptionsProps) => {
+const BuilderOptions = ({ builderState, isLoading, setBuilderState, onHandleSubmit, handleGenerateBaseDesign }: BuilderOptionsProps) => {
     const { prompt } = builderState;
     const { mode } = useColorScheme();
     const [charCount, setCharCount] = useState<number>(0);
@@ -89,15 +90,17 @@ const BuilderOptions = ({ builderState, isLoading, setBuilderState, onHandleSubm
                     )}
                 </Box>
 
-                <IconButton color='success' loading={isLoading} onClick={() => onHandleSubmit(builderState)}
-                    sx={{
-                        ml: 2,
-                        width: 40,
-                        height: 40,
-                        borderRadius: '50%',
-                    }}>
-                    <Send fontSize="small" />
-                </IconButton>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Button onClick={handleGenerateBaseDesign}>Generate Base Design</Button>
+                    <IconButton color='success' loading={isLoading} onClick={() => onHandleSubmit(builderState)}
+                        sx={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: '50%',
+                        }}>
+                        <Send fontSize="small" />
+                    </IconButton>
+                </Box>
             </Box>
         </Box >
     );

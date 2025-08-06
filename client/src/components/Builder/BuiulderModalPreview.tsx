@@ -124,7 +124,7 @@ const BuilderModalPreview = ({ project, open, handleCloseModal, slideIndex }: Bu
                                 quality: project?.quality,
                                 spaceType: "LIVING_ROOM",
                                 designTheme: "MODERN",
-                                category: "DESIGN_GENERATION",
+                                category: "DESIGN_GENERATOR",
                                 prompt: project?.prompt,
                                 n: 1,
                                 outputFormat: "PNG",

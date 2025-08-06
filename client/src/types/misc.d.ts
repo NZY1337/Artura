@@ -19,11 +19,8 @@ export type SpaceTypeProps =
     | 'STUDY';
 
 export type CategoryProps =
-    | 'DESIGN_GENERATION'
-    | 'LANDSCAPING'
-    | 'VIRTUAL_STAGING'
-    | 'FLOOR_PLANNING';
-
+    | 'DESIGN_GENERATOR'
+    | 'DESIGN_EDITOR';
 
 export type DesignThemeProps =
     | 'MODERN'

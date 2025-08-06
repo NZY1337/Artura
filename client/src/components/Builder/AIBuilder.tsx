@@ -1,5 +1,6 @@
 // hooks
 import { useState } from "react";
+import useBuilderPrompt from "../../hooks/useBuilderPrompt";
 
 // icons
 import CloseIcon from '@mui/icons-material/Close';
@@ -8,6 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Card, CardMedia, Box, IconButton } from '@mui/material';
 import BuilderOptions from "./BuilderOptions";
 import BuilderOptionsPreview from "./BuilderOptionsPreview";
+import CustomCategories from "./CustomCategories";
 
 // types
 import type { EditableProjectProps } from "../../types";
@@ -28,14 +30,19 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
         quality: 'HIGH',
         spaceType: 'LIVING_ROOM',
         designTheme: 'MODERN',
-        category: 'DESIGN_GENERATION',
+        category: 'DESIGN_GENERATOR',
         prompt: '',
         n: 1,
         outputFormat: 'PNG',
         images: [],
     });
 
-    const handleRemoveImage = (index: number) => {
+    const { handlePillClick, handleGenerateBaseDesign } = useBuilderPrompt({
+        builderState,
+        setBuilderState,
+    });
+    
+    const handleRemoveImage = (index: number) =>  {
         const newImages = [...builderState.images];
         newImages.splice(index, 1);
         setBuilderState({ ...builderState, images: newImages });
@@ -44,8 +51,9 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
     return (
         <>
             {builderState.images.length > 0 && <Gallery images={builderState.images} onRemove={handleRemoveImage} />}
-            <BuilderOptions onHandleSubmit={onHandleSubmit} setBuilderState={setBuilderState} builderState={builderState} isLoading={isLoading} />
+            <BuilderOptions handleGenerateBaseDesign={handleGenerateBaseDesign} onHandleSubmit={onHandleSubmit} setBuilderState={setBuilderState} builderState={builderState} isLoading={isLoading} />
             <BuilderOptionsPreview builderState={builderState} />
+            <CustomCategories onPillClick={handlePillClick} />
         </>
     );
 };

@@ -28,10 +28,8 @@ const SPACE_TYPE = [
 ] satisfies Array<{ label: string; value: SpaceTypeProps }>;
 
 const CATEGORY = [
-    { label: "Design Generator", value: "DESIGN_GENERATION" },
-    { label: "Virtual Staging", value: "VIRTUAL_STAGING" },
-    { label: "Landscaping", value: "LANDSCAPING" },
-    { label: "Floor Planning", value: "FLOOR_PLANNING" },
+    { label: "Design Generator", value: "DESIGN_GENERATOR" },
+    { label: "Design Editor", value: "DESIGN_EDITOR" },
 ] satisfies Array<{ label: string; value: CategoryProps }>;
 
 const DESIGN_THEME = [

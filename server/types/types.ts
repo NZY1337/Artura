@@ -13,7 +13,7 @@ export const SPACE_TYPES = [
 ] as const;
 
 export const CATEGORIES = [
-    'DESIGN_GENERATION', 
+    'DESIGN_GENERATOR', 
     'LANDSCAPING', 
     'VIRTUAL_STAGING', 
     'FLOOR_PLANNING'

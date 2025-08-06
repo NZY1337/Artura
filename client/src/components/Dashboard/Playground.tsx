@@ -28,7 +28,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 //     project: {
 //         id: "bbb7b7b2-4468-4329-a11e-b9eccdc6a333",
 //         userId: "user_2xrVpetV8CkDDyfbJPSXmsrRe57",
-//         category: "DESIGN_GENERATION",
+//         category: "DESIGN_GENERATOR",
 //         createdAt: "2025-06-19T13:28:53.399Z",
 //         updatedAt: "2025-06-19T13:28:53.399Z",
 //         prompt:
@@ -189,7 +189,7 @@ const Playground = () => {
         <Box sx={{ position: "relative", height: "90vh" }}>
             <Box
                 sx={{
-                    scrollbarWidth: "thin", // Firefox
+                    scrollbarWidth: "thin",
                     scrollbarColor: "#888 transparent",
                     "&::-webkit-scrollbar": {
                         width: "6px",
@@ -200,7 +200,7 @@ const Playground = () => {
                     },
                     "&::-webkit-scrollbar-track": {
                         backgroundColor: "transparent",
-                        marginRight: "5px", // Add spacing to push the thumb left
+                        marginRight: "5px", 
                     },
                     height: "100%",
                     overflow: "auto",

@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { openAiClient } from "../services/openai";
 import { prismaClient } from "../services/prismaClient";
 import { ProjectValidator } from "../validation/project";
 
@@ -15,7 +14,6 @@ import {
 
 // types
 import type { SizeImageProps, QualityFormatProps } from "../../types";
-import type { FileLike } from "openai/uploads";
 
 // helpers
 import {
@@ -57,7 +55,7 @@ const mockRes = {
     project: {
         id: "bbb7b7b2-4468-4329-a11e-b9eccdc6a333",
         userId: "user_2xrVpetV8CkDDyfbJPSXmsrRe57",
-        category: "DESIGN_GENERATION",
+        category: "DESIGN_GENERATOR",
         createdAt: "2025-06-19T13:28:53.399Z",
         updatedAt: "2025-06-19T13:28:53.399Z",
         prompt:
@@ -114,7 +112,7 @@ export const designGeneratorUpload = async (req: Request, res: Response) => {
     const { n, prompt, size, outputFormat, quality, category, spaceType, designTheme } = validationResult.data;
 
     // if it's image generation - no images are uploaded - else it should be image editing
-    const isGenerationEndpoint = category === "DESIGN_GENERATION";
+    const isGenerationEndpoint = category === "DESIGN_GENERATOR";
 
     // res body is the same for both endpoints
     let imgResponse = null;

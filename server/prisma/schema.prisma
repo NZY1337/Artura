@@ -28,10 +28,8 @@ enum SpaceType {
 }
 
 enum Category {
-    DESIGN_GENERATION
-    LANDSCAPING
-    VIRTUAL_STAGING
-    FLOOR_PLANNING
+    DESIGN_GENERATOR
+    DESIGN_EDITOR
 }
 
 enum DesignTheme {
@@ -107,7 +105,7 @@ model Project {
     id           String        @id @default(uuid())
     userId       String
     prompt       String        @db.Text
-    category     Category      @default(DESIGN_GENERATION)
+    category     Category      @default(DESIGN_GENERATOR)
     designTheme  DesignTheme   @default(MODERN)
     spaceType    SpaceType     @default(LIVING_ROOM)
     size         SizeImage     @default(SIZE_1024x1024)
