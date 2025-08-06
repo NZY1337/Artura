@@ -36,10 +36,11 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
         outputFormat: 'PNG',
         images: [],
     });
-
+    const [charCount, setCharCount] = useState<number>(0);
     const { handlePillClick, handleGenerateBaseDesign } = useBuilderPrompt({
         builderState,
         setBuilderState,
+        setCharCount,
     });
     
     const handleRemoveImage = (index: number) =>  {
@@ -51,7 +52,16 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
     return (
         <>
             {builderState.images.length > 0 && <Gallery images={builderState.images} onRemove={handleRemoveImage} />}
-            <BuilderOptions handleGenerateBaseDesign={handleGenerateBaseDesign} onHandleSubmit={onHandleSubmit} setBuilderState={setBuilderState} builderState={builderState} isLoading={isLoading} />
+            <BuilderOptions 
+                builderState={builderState} 
+                isLoading={isLoading} 
+                charCount={charCount} 
+                setCharCount={setCharCount}
+                handleGenerateBaseDesign={handleGenerateBaseDesign} 
+                onHandleSubmit={onHandleSubmit} 
+                setBuilderState={setBuilderState} 
+                
+            />
             <BuilderOptionsPreview builderState={builderState} />
             <CustomCategories onPillClick={handlePillClick} />
         </>

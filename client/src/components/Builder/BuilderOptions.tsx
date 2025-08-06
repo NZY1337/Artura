@@ -1,5 +1,4 @@
 
-import { useState } from 'react';
 import { useNotifications } from '@toolpad/core';
 
 // components
@@ -28,17 +27,16 @@ import { useColorScheme } from "@mui/material";
 // types
 import type { BuilderOptionsProps } from '../../types';
 
-const BuilderOptions = ({ builderState, isLoading, setBuilderState, onHandleSubmit, handleGenerateBaseDesign }: BuilderOptionsProps) => {
+const BuilderOptions = ({ builderState, charCount, setCharCount, isLoading, setBuilderState, onHandleSubmit, handleGenerateBaseDesign }: BuilderOptionsProps) => {
     const { prompt } = builderState;
     const { mode } = useColorScheme();
-    const [charCount, setCharCount] = useState<number>(0);
     const notifications = useNotifications();
 
     const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = e.target.value;
         setCharCount(value.length);
 
-        if (value.length == 500) {
+        if (value.length >= 500) {
             notifications.show('You have reached the 500 character limit.', {
                 severity: 'warning',
                 autoHideDuration: 2000,
