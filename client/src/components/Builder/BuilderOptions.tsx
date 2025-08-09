@@ -1,6 +1,4 @@
 
-import { useNotifications } from '@toolpad/core';
-
 // components
 import Box from '@mui/material/Box';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
@@ -27,24 +25,9 @@ import { useColorScheme } from "@mui/material";
 // types
 import type { BuilderOptionsProps } from '../../types';
 
-const BuilderOptions = ({ builderState, charCount, setCharCount, isLoading, setBuilderState, onHandleSubmit, handleGenerateBaseDesign }: BuilderOptionsProps) => {
+const BuilderOptions = ({ builderState, charCount, isLoading, setBuilderState, onHandleSubmit, handleGenerateBaseDesign, handlePromptChange }: BuilderOptionsProps) => {
     const { prompt } = builderState;
     const { mode } = useColorScheme();
-    const notifications = useNotifications();
-
-    const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const value = e.target.value;
-        setCharCount(value.length);
-
-        if (value.length >= 500) {
-            notifications.show('You have reached the 500 character limit.', {
-                severity: 'warning',
-                autoHideDuration: 2000,
-            });
-        }
-
-        setBuilderState((prev: typeof builderState) => ({ ...prev, prompt: value }));
-    }
 
     return (
         <Box sx={{ width: '100%' }} component={'form'}>

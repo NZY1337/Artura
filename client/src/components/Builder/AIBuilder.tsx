@@ -37,7 +37,7 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
         images: [],
     });
     const [charCount, setCharCount] = useState<number>(0);
-    const { handlePillClick, handleGenerateBaseDesign } = useBuilderPrompt({
+    const { handleClickCategory, handleGenerateBaseDesign, handlePromptChange } = useBuilderPrompt({
         builderState,
         setBuilderState,
         setCharCount,
@@ -56,14 +56,13 @@ const AIBuilder = ({ onHandleSubmit, isLoading }: AIBuilderProps) => {
                 builderState={builderState} 
                 isLoading={isLoading} 
                 charCount={charCount} 
-                setCharCount={setCharCount}
                 handleGenerateBaseDesign={handleGenerateBaseDesign} 
                 onHandleSubmit={onHandleSubmit} 
                 setBuilderState={setBuilderState} 
-                
+                handlePromptChange={handlePromptChange}
             />
             <BuilderOptionsPreview builderState={builderState} />
-            <CustomCategories onPillClick={handlePillClick} />
+            <CustomCategories onPillClick={handleClickCategory} />
         </>
     );
 };

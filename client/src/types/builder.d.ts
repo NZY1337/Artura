@@ -7,10 +7,10 @@ interface BuilderOptionsProps {
     builderState: EditableProjectProps;
     isLoading: boolean;
     charCount: number;
-    setCharCount: React.Dispatch<React.SetStateAction<number>>;
     setBuilderState: React.Dispatch<React.SetStateAction<EditableProjectProps>>;
     handleGenerateBaseDesign: () => void;
     onHandleSubmit: (stateBuilder: EditableProjectProps) => void;
+    handlePromptChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export type SubmitBuilderProps = Pick<ProjectApiProps, "n" | "prompt" | "size" | "output_format" | "images" | "quality" | "category">
