@@ -1,5 +1,5 @@
 // hooks
-import useCategory from "../../../hooks/useCategory";
+import useProjects from "../../../hooks/useProjects";
 
 // components
 import { Container, Grid, Typography } from '@mui/material';
@@ -10,7 +10,7 @@ import RenderLatestProjects from "./RenderLatestProject";
 import type { ProjectProps } from "../../../types";
 
 export default function LatestProjects() {
-    const { data } = useCategory();
+    const { data } = useProjects();
 
     const settings = {
         dots: false,
@@ -70,7 +70,7 @@ export default function LatestProjects() {
 
                     <Carousel className="latest-projects-carousel" settings={settings}>
                         {data?.projects.slice(0, 5)?.map((project: ProjectProps, index: number) => (
-                            <RenderLatestProjects project={project} index={index}  />
+                            <RenderLatestProjects project={project} index={index} />
                         ))}
                     </Carousel>
                 </Container>

@@ -18,7 +18,6 @@ interface UploadedImage {
 
 export type Image = FetchedImage | UploadedImage;
 
-
 export interface ProjectProps {
     id: string;
     userId: string;
@@ -27,7 +26,7 @@ export interface ProjectProps {
     updatedAt: string;
     prompt: string;
     background: string;
-    images: Image[];
+    images: (Image | File)[];
     outputFormat: OutputFormatProps;
     quality: QualityFormatProps;
     size: string;

@@ -1,64 +1,62 @@
 export const SPACE_TYPES = [
-    'LIVING_ROOM', 
-    'BEDROOM', 
-    'KITCHEN', 
-    'BATHROOM', 
-    'DINING_ROOM', 
-    'HOME_OFFICE', 
-    'KIDS_ROOM', 
-    'HALLWAY_CORRIDOR', 
-    'BALCONY_TERRACE', 
-    'GAME_ROOM', 
+    'LIVING_ROOM',
+    'BEDROOM',
+    'KITCHEN',
+    'BATHROOM',
+    'DINING_ROOM',
+    'HOME_OFFICE',
+    'KIDS_ROOM',
+    'HALLWAY_CORRIDOR',
+    'BALCONY_TERRACE',
+    'GAME_ROOM',
     'STUDY'
 ] as const;
 
 export const CATEGORIES = [
-    'DESIGN_GENERATOR', 
-    'LANDSCAPING', 
-    'VIRTUAL_STAGING', 
-    'FLOOR_PLANNING'
+    'DESIGN_GENERATOR',
+    'DESIGN_EDITOR',
 ] as const;
 
 export const DESIGN_THEMES = [
-    'MODERN', 
-    'CONTEMPORARY', 
-    'MINIMALIST', 
-    'SCANDINAVIAN', 
-    'INDUSTRIAL', 
-    'MID_CENTURY_MODERN', 
-    'TRADITIONAL', 
-    'CLASSIC', 
-    'BAROQUE', 
-    'JAPANESE_ZEN', 
-    'WABI_SABI', 
-    'FARMHOUSE', 
-    'RUSTIC', 
-    'BOHEMIAN', 
-    'ART_DECO', 
-    'VICTORIAN', 
-    'COASTAL', 
-    'TROPICAL', 
-    'URBAN', 
-    'MAXIMALIST', 
+    'MODERN',
+    'CONTEMPORARY',
+    'MINIMALIST',
+    'SCANDINAVIAN',
+    'INDUSTRIAL',
+    'MID_CENTURY_MODERN',
+    'TRADITIONAL',
+    'CLASSIC',
+    'BAROQUE',
+    'JAPANESE_ZEN',
+    'WABI_SABI',
+    'FARMHOUSE',
+    'RUSTIC',
+    'BOHEMIAN',
+    'ART_DECO',
+    'VICTORIAN',
+    'COASTAL',
+    'TROPICAL',
+    'URBAN',
+    'MAXIMALIST',
     'FUTURISTIC'
 ] as const;
 
 export const SIZE_OPTIONS = [
-    'SIZE_1024x1024', 
-    'SIZE_1024x1536', 
-    'SIZE_1536x1024', 
+    'SIZE_1024x1024',
+    'SIZE_1024x1536',
+    'SIZE_1536x1024',
     'AUTO'
 ] as const;
 
 export const QUALITY_OPTIONS = [
-    'LOW', 
-    'MEDIUM', 
+    'LOW',
+    'MEDIUM',
     'HIGH'
 ] as const;
 
 export const OUTPUT_FORMATS = [
-    'PNG', 
-    'JPEG', 
+    'PNG',
+    'JPEG',
     'WEBP'
 ] as const;
 

@@ -1,6 +1,5 @@
 import type { ProjectResponseProps } from "../../types";
 
-
 // result = {
 //     "project": {
 //         "id": "a7ee2d7c-baba-4c6c-935e-3a1874221f7e",
@@ -51,9 +50,38 @@ import type { ProjectResponseProps } from "../../types";
 //      ]
 // },
 
-
 export const mapResponseData = (data: ProjectResponseProps) => {
     const { project: { id, userId, prompt, category, size, quality, createdAt, updatedAt, background, outputFormat, designTheme, spaceType, n }, images } = data;
 
-    return { id, userId, prompt, category, size, quality, createdAt, updatedAt, images, background, outputFormat, designTheme, spaceType, n };
+    return {
+        id,
+        userId,
+        prompt,
+        category,
+        size,
+        quality,
+        createdAt,
+        updatedAt,
+        images,
+        background,
+        outputFormat,
+        designTheme,
+        spaceType,
+        n
+    };
 }
+
+export const urlToFile = async (url: string): Promise<File> => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+
+    // Extract filename from URL or create a default one
+    const filename = url.split('/').pop() || `image-${Date.now()}.png`;
+
+    // Create a File object (which extends Blob) with proper File properties
+    return new File([blob], filename, {
+        type: blob.type || 'image/png',
+        lastModified: Date.now()
+    });
+};
+

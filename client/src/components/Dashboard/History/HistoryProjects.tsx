@@ -1,6 +1,6 @@
 // hooks
 import { useDashboardContext } from '../hooks/useDashboardContext';
-import useCategory from '../../../hooks/useCategory';
+import useProjects from '../../../hooks/useProjects';
 
 // components
 import Grid from '@mui/material/Grid';
@@ -12,7 +12,7 @@ import Skeleton from 'react-loading-skeleton';
 import type { ProjectProps, GridCell } from '../../../types';
 
 const HistoryProjects = () => {
-    const { isPending, data } = useCategory();
+    const { isPending, data } = useProjects();
     const { setGrid, grid } = useDashboardContext();
 
     const skeletonCount = data?.projects?.length || 6;

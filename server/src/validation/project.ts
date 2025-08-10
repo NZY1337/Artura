@@ -24,8 +24,7 @@ export const ProjectValidator = z.object({
     category: z.enum(CATEGORIES),
     spaceType: z.enum(SPACE_TYPES),
     designTheme: z.enum(DESIGN_THEMES),
-    images: z.array(z.string()).optional(),
-});
+}); // Remove strict mode and images field
 
 // Export the inferred type
 export type ValidatedProjectData = z.infer<typeof ProjectValidator>;

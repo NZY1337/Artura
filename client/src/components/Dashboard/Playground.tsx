@@ -2,7 +2,8 @@
 import { useState, type SetStateAction } from "react";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { useDashboardContext } from "./hooks/useDashboardContext";
-import useDesignGeneration from "../../hooks/variations/useDesignGeneration";
+import useDesignGenerator from "../../hooks/variations/useDesignGenerator";
+import useDesignEditor from "../../hooks/variations/useDesignEditor";
 import { useQueryClient } from "@tanstack/react-query";
 
 // types
@@ -17,7 +18,7 @@ import Box from "@mui/material/Box";
 import Carousel from "../UtilityComponents/Carousel";
 
 // utils
-import { mapResponseData } from "../utils/utilities";
+import { mapResponseData, urlToFile } from "../utils/utilities";
 
 // icons
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -73,10 +74,23 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
 const Playground = () => {
     const [open, setOpen] = useState(false);
-    const { isPending, mutate } = useDesignGeneration();
-    const { grid, project, setGrid, setProject } = useDashboardContext();
     const [slideIndex, setSlideIndex] = useState(0);
+    const [builderState, setBuilderState] = useState<EditableProjectProps>({
+        size: 'SIZE_1024x1024',
+        quality: 'HIGH',
+        spaceType: 'LIVING_ROOM',
+        designTheme: 'MODERN',
+        category: 'DESIGN_GENERATOR',
+        prompt: '',
+        n: 1,
+        outputFormat: 'PNG',
+        images: [],
+    });
 
+    // hooks
+    const { isPending: isPendingGenerator, mutate: mutateGenerator } = useDesignGenerator();
+    const { isPending: isPendingEditor, mutate: mutateEditor } = useDesignEditor();
+    const { grid, project, setGrid, setProject } = useDashboardContext();
     const queryClient = useQueryClient();
     const notifications = useNotifications();
 
@@ -106,6 +120,9 @@ const Playground = () => {
           * If no empty cell is found, it does nothing.
     */
     const handleQueuedGeneration = async (project: EditableProjectProps) => {
+        let targetIndex: number | null = null;
+        const { category } = project;
+
         if (project.prompt === "") {
             notifications.show("Add more details to the prompt for better results.",
                 {
@@ -115,8 +132,6 @@ const Playground = () => {
             );
             return;
         }
-
-        let targetIndex: number | null = null;
 
         setGrid((prevGrid: GridCell[]) => {
             const newGrid = [...prevGrid];
@@ -142,24 +157,47 @@ const Playground = () => {
         //     return newGrid;
         // });
 
-        mutate(project, {
-            onSuccess: (data: ProjectResponseProps) => {
-                setGrid((prevGrid: GridCell[]) => {
-                    const newGrid = [...prevGrid];
-                    newGrid[targetIndex!] = mapResponseData(data);
-                    return newGrid;
-                });
+        if (category === "DESIGN_EDITOR") {
+            mutateEditor(project, {
+                onSuccess: (data: ProjectResponseProps) => {
+                    setGrid((prevGrid: GridCell[]) => {
+                        const newGrid = [...prevGrid];
+                        newGrid[targetIndex!] = mapResponseData(data);
+                        return newGrid;
+                    });
 
-                queryClient.invalidateQueries({ queryKey: ['projects'] });
-            },
-            onError: () => {
-                setGrid((prevGrid: GridCell[]) => {
-                    const newGrid = [...prevGrid];
-                    newGrid[targetIndex!] = null;
-                    return newGrid;
-                });
-            },
-        });
+                    queryClient.invalidateQueries({ queryKey: ['projects'] });
+                },
+                onError: () => {
+                    setGrid((prevGrid: GridCell[]) => {
+                        const newGrid = [...prevGrid];
+                        newGrid[targetIndex!] = null;
+                        return newGrid;
+                    });
+                },
+            });
+        }
+
+        if (category === "DESIGN_GENERATOR") {
+            mutateGenerator(project, {
+                onSuccess: (data: ProjectResponseProps) => {
+                    setGrid((prevGrid: GridCell[]) => {
+                        const newGrid = [...prevGrid];
+                        newGrid[targetIndex!] = mapResponseData(data);
+                        return newGrid;
+                    });
+
+                    queryClient.invalidateQueries({ queryKey: ['projects'] });
+                },
+                onError: () => {
+                    setGrid((prevGrid: GridCell[]) => {
+                        const newGrid = [...prevGrid];
+                        newGrid[targetIndex!] = null;
+                        return newGrid;
+                    });
+                },
+            });
+        }
     };
 
     const onFullscreen = (index: number) => {
@@ -185,6 +223,73 @@ const Playground = () => {
         });
     };
 
+    const onEditProject = async (index: number) => {
+        const selectedProject = grid[index];
+
+        if (!selectedProject || selectedProject === null || "loading" in selectedProject) {
+            return;
+        }
+
+        try {
+            // Show loading indicator while preparing edit data
+            notifications.show("Preparing project for editing...", {
+                severity: "info",
+                autoHideDuration: 2000,
+            });
+
+            // Convert image URLs to File objects
+            const convertedImages: Array<{ file: File, preview: string }> = [];
+
+            if (selectedProject.images && Array.isArray(selectedProject.images)) {
+                for (const image of selectedProject.images) {
+                    if ('url' in image && image.url) {
+                        try {
+                            const fileObject = await urlToFile(image.url);
+                            convertedImages.push({
+                                file: fileObject,
+                                preview: image.url // Keep the original URL as preview
+                            });
+                        } catch (error) {
+                            console.error('Failed to convert image:', error);
+                            notifications.show("Failed to load some images for editing", {
+                                severity: "warning",
+                                autoHideDuration: 3000,
+                            });
+                        }
+                    }
+                }
+            }
+
+            // Update builderState with the selected project data and converted images
+            setBuilderState({
+                id: selectedProject.id,
+                category: selectedProject.category,
+                prompt: selectedProject.prompt,
+                background: selectedProject.background,
+                outputFormat: selectedProject.outputFormat,
+                quality: selectedProject.quality,
+                size: selectedProject.size,
+                designTheme: selectedProject.designTheme,
+                spaceType: selectedProject.spaceType,
+                n: selectedProject.n,
+                // Add the converted images as File objects
+                images: convertedImages,
+            });
+
+            notifications.show("Project loaded for editing", {
+                severity: "success",
+                autoHideDuration: 2000,
+            });
+
+        } catch (error) {
+            console.error('Error preparing project for edit:', error);
+            notifications.show("Failed to prepare project for editing", {
+                severity: "error",
+                autoHideDuration: 3000,
+            });
+        }
+    };
+
     return (
         <Box sx={{ position: "relative", height: "90vh" }}>
             <Box
@@ -200,7 +305,7 @@ const Playground = () => {
                     },
                     "&::-webkit-scrollbar-track": {
                         backgroundColor: "transparent",
-                        marginRight: "5px", 
+                        marginRight: "5px",
                     },
                     height: "100%",
                     overflow: "auto",
@@ -212,9 +317,9 @@ const Playground = () => {
                 }}>
                 {grid.map((item, index) => {
                     const isLoading = item && "loading" in item;
-                    const generatedImages = item !== null 
-                        && !("loading" in item) 
-                        && Array.isArray(item.images) 
+                    const generatedImages = item !== null
+                        && !("loading" in item)
+                        && Array.isArray(item.images)
                         && item.images.filter((image) => 'url' in image && !image.url.includes("uploaded-"));
 
                     return (
@@ -245,7 +350,7 @@ const Playground = () => {
                                         ))}
                                     </Carousel>
 
-                                    <GenerationBox onFullscreen={() => onFullscreen(index)} onRemove={() => onRemove(index)} />
+                                    <GenerationBox onFullscreen={() => onFullscreen(index)} onRemove={() => onRemove(index)} onEdit={() => onEditProject(index)} />
                                 </>
                             ) : null}
 
@@ -276,7 +381,7 @@ const Playground = () => {
                 minWidth: "100px",
                 width: "100%",
             }}>
-                <AIBuilder onHandleSubmit={handleQueuedGeneration} isLoading={isPending} />
+                <AIBuilder builderState={builderState} setBuilderState={setBuilderState} onHandleSubmit={handleQueuedGeneration} isLoading={isPendingGenerator || isPendingEditor} />
             </Box>
         </Box>
     );
