@@ -92,6 +92,11 @@ const DASHBOARD_NAVIGATION: Navigation = [
         title: 'Users',
         icon: <UserIcon />,
     },
+    {
+        segment: 'dashboard/stats',
+        title: 'Statistics',
+        icon: <DashboardIcon />,
+    },
 ];
 
 const DASHBOARD_NAV_BACKGROUND = {

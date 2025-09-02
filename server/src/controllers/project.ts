@@ -50,7 +50,6 @@ import {
 // https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1748797755897.png
 // https://yfyiqiqqwgdvmazcgdnv.supabase.co/storage/v1/object/public/artura/artura/user_2xrVpetV8CkDDyfbJPSXmsrRe57/generated-user_2xrVpetV8CkDDyfbJPSXmsrRe57-1748888792317-0.png"
 
-
 export const designGenerator = async (req: Request, res: Response) => {
     const { userId } = req.auth;
 
@@ -228,6 +227,7 @@ export const getProjects = async (req: Request, res: Response) => {
     const projects = await prismaClient.project.findMany({
         include: {
             images: true,
+            response: true,
         },
         where: {
             userId: req.auth.userId,

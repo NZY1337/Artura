@@ -108,8 +108,8 @@ export const errorHandler = (method: Function) => {
                 exception = new BadRequestException(ErrorCode.UNPROCESSABLE_ENTITY, "Unprocessed Entity - Validation Error");
             } else if (error instanceof OpenAIError) {
                 const status = (error as any).status || ErrorCode.UNPROCESSABLE_ENTITY;
-                const detailedMessage = (error as any)?.error?.message || error.message || 'OpenAI Error';
-                exception = new OpenAiErrorException(status, detailedMessage);
+                const message = (error as any)?.error?.message || error.message || 'OpenAI Error';
+                exception = new OpenAiErrorException(status, message);
             } else {
                 exception = new InternalException(ErrorCode.INTERNAL_EXCEPTION, "Something went wrong!",);
             }

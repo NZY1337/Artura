@@ -84,3 +84,30 @@ export async function uploadUploadedImagesToSupabase(
         })
     );
 }
+
+/**
+ * Detect whether a given Supabase storage URL or storage path corresponds to a generated image.
+ * Accepts either the full public URL returned by upload functions or the raw storage path.
+ */
+export const isGeneratedStoragePath = (urlOrPath: string): boolean => {
+    try {
+        const last = urlOrPath.split('/').pop() || urlOrPath;
+        const decoded = decodeURIComponent(last);
+        return decoded.includes('generated-');
+    } catch (e) {
+        return urlOrPath.includes('generated-');
+    }
+}
+
+/**
+ * Detect whether a given Supabase storage URL or storage path corresponds to an uploaded image.
+ */
+export const isUploadedStoragePath = (urlOrPath: string): boolean => {
+    try {
+        const last = urlOrPath.split('/').pop() || urlOrPath;
+        const decoded = decodeURIComponent(last);
+        return decoded.includes('uploaded-');
+    } catch (e) {
+        return urlOrPath.includes('uploaded-');
+    }
+}

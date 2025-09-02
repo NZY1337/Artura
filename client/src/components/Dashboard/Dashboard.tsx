@@ -14,6 +14,7 @@ import DashboardFooter from './DashboardFooter';
 import Playground from './Playground';
 import Profile from './Profile';
 import Overview from './Overview';
+import DashboardStats from './DashboardStats';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import { Users } from './Users';
@@ -41,7 +42,9 @@ export default function Dashboard() {
     const divRef = useRef<HTMLDivElement>(null);
     const { user } = useUser();
     const { signOut } = useClerk();
-    const { getToken } = useAuth();
+
+    useAuth();
+    
     const { setMode, mode } = useColorScheme() as {
         setMode: (mode: 'light' | 'dark') => void;
         mode: 'light' | 'dark';
@@ -89,6 +92,9 @@ export default function Dashboard() {
             case '/dashboard/profile':
                 return <Profile />;
 
+            case '/dashboard/stats':
+                return <DashboardStats />;
+
             case '/dashboard/users':
                 return <Users />;
 
@@ -98,18 +104,11 @@ export default function Dashboard() {
     };
 
     useEffect(() => {
-        async function callProtectedRoute() {
-            const token = await getToken();
-            console.log(token);  // copy this exact token to Postman
-        }
-
-        // callProtectedRoute()
-
         const parent = divRef.current?.parentElement;
         if (parent) {
             parent.classList.add('no-overflow');
         }
-    }, [])
+    }, [divRef]);
 
     return (
         <AppProvider

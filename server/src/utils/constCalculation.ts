@@ -15,11 +15,11 @@ type SingleImagePrice = {
 
 // pricing for GPT-image-1
 const TOTAL_TOKENS: number                   = 1000000; // Cost per million tokens for GPT-image-1
-const TEXT_INPUT_TOKENS_PRICE: number        = 5; // $5 per TOTAL_TOKENS tokens for GPT-image-1
-const TEXT_INPUT_CACHED_TOKENS_PRICE: number = 1.25; // $1.25 per TOTAL_TOKENS tokens for GPT-image-1
-const IMAGE_INPUT_TOKENS_PRICE: number       = 10; // $10 per TOTAL_TOKENS input tokens for GPT-image-1
-const IMAGE_CACHED_TOKENS_PRICE: number      = 2.5; // $2.50 per TOTAL_TOKENS cached tokens for GPT-image-1
-const IMAGE_OUTPUT_TOKENS_PRICE: number      = 40; // $40 per TOTAL_TOKENS output tokens for GPT-image-1
+const TEXT_INPUT_TOKENS_PRICE: number        = 5;       // $5 per TOTAL_TOKENS tokens for GPT-image-1
+const TEXT_INPUT_CACHED_TOKENS_PRICE: number = 1.25;    // $1.25 per TOTAL_TOKENS tokens for GPT-image-1
+const IMAGE_INPUT_TOKENS_PRICE: number       = 10;      // $10 per TOTAL_TOKENS input tokens for GPT-image-1
+const IMAGE_CACHED_TOKENS_PRICE: number      = 2.5;     // $2.50 per TOTAL_TOKENS cached tokens for GPT-image-1
+const IMAGE_OUTPUT_TOKENS_PRICE: number      = 40;      // $40 per TOTAL_TOKENS output tokens for GPT-image-1
 
 const SINGLE_TOKEN_PRICE = {
   text: {

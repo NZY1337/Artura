@@ -7,7 +7,7 @@ import useDesignEditor from "../../hooks/variations/useDesignEditor";
 import { useQueryClient } from "@tanstack/react-query";
 
 // types
-import type { GridCell, ProjectResponseProps, EditableProjectProps } from "../../types";
+import type { EditableProjectProps } from "../../types";
 
 // components
 import { TypeAnimation } from "react-type-animation";
@@ -18,7 +18,8 @@ import Box from "@mui/material/Box";
 import Carousel from "../UtilityComponents/Carousel";
 
 // utils
-import { mapResponseData, urlToFile } from "../utils/utilities";
+import { urlToFile } from "../utils/utilities";
+import useQueuedGeneration from "../../hooks/useQueuedGeneration";
 
 // icons
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -94,6 +95,14 @@ const Playground = () => {
     const queryClient = useQueryClient();
     const notifications = useNotifications();
 
+    const { handleQueuedGeneration } = useQueuedGeneration({
+        setGrid,
+        mutateGenerator,
+        mutateEditor,
+        queryClient,
+        notifications,
+    });
+
     const settings = {
         lazyLoad: true,
         slidesToShow: 1, // make sure it's 1 if you want only one image at a time
@@ -119,86 +128,7 @@ const Playground = () => {
           * Once the generation is complete, it updates the grid with the generated project.
           * If no empty cell is found, it does nothing.
     */
-    const handleQueuedGeneration = async (project: EditableProjectProps) => {
-        let targetIndex: number | null = null;
-        const { category } = project;
-
-        if (project.prompt === "") {
-            notifications.show("Add more details to the prompt for better results.",
-                {
-                    severity: "error",
-                    autoHideDuration: 3000,
-                }
-            );
-            return;
-        }
-
-        setGrid((prevGrid: GridCell[]) => {
-            const newGrid = [...prevGrid];
-            const firstEmptyIndex = newGrid.findIndex((cell) => cell == null);
-            if (firstEmptyIndex !== -1) {
-                newGrid[firstEmptyIndex] = { loading: true };
-                targetIndex = firstEmptyIndex;
-            }
-
-            return newGrid;
-        });
-
-        // Wait a tick to ensure React state update goes through
-        await new Promise((res) => setTimeout(res, 0));
-
-        if (targetIndex === null) return;
-        // const generated = await mockGenerate(
-        //   Math.floor(Math.random() * mockData.length)
-        // );
-        // setGrid((prevGrid: GridCell[]) => {
-        //     const newGrid = [...prevGrid];
-        //     newGrid[targetIndex!] = mapResponseData(result);
-        //     return newGrid;
-        // });
-
-        if (category === "DESIGN_EDITOR") {
-            mutateEditor(project, {
-                onSuccess: (data: ProjectResponseProps) => {
-                    setGrid((prevGrid: GridCell[]) => {
-                        const newGrid = [...prevGrid];
-                        newGrid[targetIndex!] = mapResponseData(data);
-                        return newGrid;
-                    });
-
-                    queryClient.invalidateQueries({ queryKey: ['projects'] });
-                },
-                onError: () => {
-                    setGrid((prevGrid: GridCell[]) => {
-                        const newGrid = [...prevGrid];
-                        newGrid[targetIndex!] = null;
-                        return newGrid;
-                    });
-                },
-            });
-        }
-
-        if (category === "DESIGN_GENERATOR") {
-            mutateGenerator(project, {
-                onSuccess: (data: ProjectResponseProps) => {
-                    setGrid((prevGrid: GridCell[]) => {
-                        const newGrid = [...prevGrid];
-                        newGrid[targetIndex!] = mapResponseData(data);
-                        return newGrid;
-                    });
-
-                    queryClient.invalidateQueries({ queryKey: ['projects'] });
-                },
-                onError: () => {
-                    setGrid((prevGrid: GridCell[]) => {
-                        const newGrid = [...prevGrid];
-                        newGrid[targetIndex!] = null;
-                        return newGrid;
-                    });
-                },
-            });
-        }
-    };
+    // ...existing code...
 
     const onFullscreen = (index: number) => {
         const selectedProject = grid[index];
