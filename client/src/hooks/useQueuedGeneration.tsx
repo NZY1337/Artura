@@ -58,6 +58,25 @@ const generateMockResponse = (project: EditableProjectProps): ProjectResponsePro
   };
 };
 
+/**
+ * Custom React hook to handle queued generation or editing of design projects,
+ * supporting both real API calls and mock data simulation for development/testing.
+ *
+ * This hook manages the process of updating a grid of cells with loading states,
+ * invoking the appropriate mutation (generator or editor) based on the project category,
+ * and handling notifications and cache invalidation. When `useMockData` is enabled,
+ * it simulates the API response with a delay and mock data.
+ *
+ * @param setGrid - Function to update the grid state, typically representing UI cells.
+ * @param mutateGenerator - Mutation function for design generation API calls.
+ * @param mutateEditor - Mutation function for design editing API calls.
+ * @param queryClient - React Query client instance for cache management.
+ * @param notifications - Object with a `show` method to display user notifications.
+ * @param useMockData - Optional flag to enable mock data simulation (default: true).
+ *
+ * @returns An object with the `handleQueuedGeneration` function, which processes a project
+ *          and updates the grid accordingly, handling both mock and real API flows.
+ */
 export default function useQueuedGeneration({
   setGrid,
   mutateGenerator,
@@ -74,30 +93,26 @@ export default function useQueuedGeneration({
   useMockData?: boolean; // Make it optional with default true
 }) {
   const handleQueuedGeneration = async (project: EditableProjectProps) => {
-    let targetIndex: number | null = null;
     const { category } = project;
+    const generationId = `gen-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 
     if (project.prompt === "") {
-      notifications.show("Add more details to the prompt for better results.", {
-        severity: "error",
-        autoHideDuration: 3000,
-      });
-      return;
+        notifications.show("Add more details to the prompt for better results.", {
+            severity: "error",
+            autoHideDuration: 3000,
+        });
+        return;
     }
 
     setGrid((prevGrid: GridCell[]) => {
-      const newGrid = [...prevGrid];
-      const firstEmptyIndex = newGrid.findIndex((cell) => cell == null);
-      if (firstEmptyIndex !== -1) {
-        newGrid[firstEmptyIndex] = { loading: true } as GridCell;
-        targetIndex = firstEmptyIndex;
-      }
+        const newGrid = [...prevGrid];
+        const firstEmptyIndex = newGrid.findIndex((cell) => cell == null);
+        if (firstEmptyIndex !== -1) {
+            newGrid[firstEmptyIndex] = { loading: true, generationId } as GridCell;
+        }
 
-      return newGrid;
+        return newGrid;
     });
-
-
-    if (targetIndex === null) return;
 
     // If using mock data, simulate API call with mock response
     if (useMockData) {
@@ -107,7 +122,14 @@ export default function useQueuedGeneration({
         
         setGrid((prevGrid: GridCell[]) => {
           const newGrid = [...prevGrid];
-          newGrid[targetIndex!] = mapResponseData(mockData);
+          // Find the loading cell with matching generationId
+          const targetIndex = newGrid.findIndex((cell) => 
+            cell && 'loading' in cell && cell.generationId === generationId
+          );
+          
+          if (targetIndex !== -1) {
+            newGrid[targetIndex] = mapResponseData(mockData);
+          }
           return newGrid;
         });
 
@@ -129,7 +151,14 @@ export default function useQueuedGeneration({
         onSuccess: (data: ProjectResponseProps) => {
           setGrid((prevGrid: GridCell[]) => {
             const newGrid = [...prevGrid];
-            newGrid[targetIndex!] = mapResponseData(data);
+            // Find the loading cell with matching generationId
+            const targetIndex = newGrid.findIndex((cell) => 
+              cell && 'loading' in cell && cell.generationId === generationId
+            );
+            
+            if (targetIndex !== -1) {
+              newGrid[targetIndex] = mapResponseData(data);
+            }
             return newGrid;
           });
 
@@ -138,7 +167,14 @@ export default function useQueuedGeneration({
         onError: () => {
           setGrid((prevGrid: GridCell[]) => {
             const newGrid = [...prevGrid];
-            newGrid[targetIndex!] = null;
+            // Find the loading cell with matching generationId and remove it
+            const targetIndex = newGrid.findIndex((cell) => 
+              cell && 'loading' in cell && cell.generationId === generationId
+            );
+            
+            if (targetIndex !== -1) {
+              newGrid[targetIndex] = null;
+            }
             return newGrid;
           });
         },
@@ -150,7 +186,14 @@ export default function useQueuedGeneration({
         onSuccess: (data: ProjectResponseProps) => {
           setGrid((prevGrid: GridCell[]) => {
             const newGrid = [...prevGrid];
-            newGrid[targetIndex!] = mapResponseData(data);
+            // Find the loading cell with matching generationId
+            const targetIndex = newGrid.findIndex((cell) => 
+              cell && 'loading' in cell && cell.generationId === generationId
+            );
+            
+            if (targetIndex !== -1) {
+              newGrid[targetIndex] = mapResponseData(data);
+            }
             return newGrid;
           });
 
@@ -159,7 +202,14 @@ export default function useQueuedGeneration({
         onError: () => {
           setGrid((prevGrid: GridCell[]) => {
             const newGrid = [...prevGrid];
-            newGrid[targetIndex!] = null;
+            // Find the loading cell with matching generationId and remove it
+            const targetIndex = newGrid.findIndex((cell) => 
+              cell && 'loading' in cell && cell.generationId === generationId
+            );
+            
+            if (targetIndex !== -1) {
+              newGrid[targetIndex] = null;
+            }
             return newGrid;
           });
         },
