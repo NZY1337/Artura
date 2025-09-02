@@ -130,7 +130,7 @@ export default function Dashboard() {
                             appTitle: DashboardTitle,
                             toolbarActions: () => {
                                 return <>
-                                    <HistoryDrawer />
+                                    {window.location.pathname === '/dashboard/playground' && <HistoryDrawer />}
                                     <CustomThemeSwitcher setMode={setMode} mode={mode} />
                                 </>
                             }

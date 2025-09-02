@@ -13,13 +13,12 @@ import type { EditableProjectProps } from "../../types";
 import type { Dispatch, SetStateAction } from "react";
 
 export interface AIBuilderProps {
-    isLoading: boolean;
     builderState: EditableProjectProps;
     setBuilderState: Dispatch<SetStateAction<EditableProjectProps>>;
     onHandleSubmit: (stateBuilder: EditableProjectProps) => void;
 };
 
-const AIBuilder = ({ onHandleSubmit, isLoading, builderState, setBuilderState }: AIBuilderProps) => {
+const AIBuilder = ({ onHandleSubmit, builderState, setBuilderState }: AIBuilderProps) => {
     const [charCount, setCharCount] = useState<number>(0);
 
     const { handleClickCategory, handleGenerateBaseDesign, handlePromptChange } = useBuilderPrompt({
@@ -39,7 +38,6 @@ const AIBuilder = ({ onHandleSubmit, isLoading, builderState, setBuilderState }:
             {builderState.images.length > 0 ? <UploadedImagesGallery images={builderState.images} onRemove={handleRemoveImage} /> : null}
             <BuilderOptions
                 builderState={builderState}
-                isLoading={isLoading}
                 charCount={charCount}
                 handleGenerateBaseDesign={handleGenerateBaseDesign}
                 onHandleSubmit={onHandleSubmit}

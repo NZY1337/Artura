@@ -73,11 +73,8 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 //     });
 // };
 
-const Playground = () => {
-    const [open, setOpen] = useState(false);
-    const [slideIndex, setSlideIndex] = useState(0);
-    const [builderState, setBuilderState] = useState<EditableProjectProps>({
-        size: 'SIZE_1024x1024',
+const MOCK_BUILDER_STATE: EditableProjectProps = {
+    size: 'SIZE_1024x1024',
         quality: 'HIGH',
         spaceType: 'LIVING_ROOM',
         designTheme: 'MODERN',
@@ -86,7 +83,12 @@ const Playground = () => {
         n: 1,
         outputFormat: 'PNG',
         images: [],
-    });
+};
+
+const Playground = () => {
+    const [open, setOpen] = useState(false);
+    const [slideIndex, setSlideIndex] = useState(0);
+    const [builderState, setBuilderState] = useState<EditableProjectProps>(MOCK_BUILDER_STATE);
 
     // hooks
     const { isPending: isPendingGenerator, mutate: mutateGenerator } = useDesignGenerator();
@@ -116,20 +118,6 @@ const Playground = () => {
         beforeChange: (_: number, next: SetStateAction<number>) => setSlideIndex(next)
     };
 
-    /*
-        - In your first setGrid, I'm setting a loading: true marker.
-        - But React state updates are asynchronous — they don’t immediately apply.
-        - calling mockGenerate() right after setGrid(), the component might not yet re-render and show the "Loading..." state.
-        - So the await setTimeout(..., 0) gives React time to finish that state update, ensuring the "loading" indicator is visible before the mock generation finishes.
-          * @returns 
-          * This function handles the queued generation of a new project.
-          * It finds the first empty cell in the grid, sets it to loading state,
-          * and then simulates a generation process by calling mockGenerate.
-          * Once the generation is complete, it updates the grid with the generated project.
-          * If no empty cell is found, it does nothing.
-    */
-    // ...existing code...
-
     const onFullscreen = (index: number) => {
         const selectedProject = grid[index];
 
@@ -145,6 +133,8 @@ const Playground = () => {
     };
 
     const onRemove = (index: number) => {
+        setBuilderState(MOCK_BUILDER_STATE);
+
         setGrid((prevGrid) => {
             const newArr = [...prevGrid];
             newArr.splice(index, 1);
@@ -203,7 +193,7 @@ const Playground = () => {
                 spaceType: selectedProject.spaceType,
                 n: selectedProject.n,
                 // Add the converted images as File objects
-                images: convertedImages,
+                images: convertedImages, 
             });
 
             notifications.show("Project loaded for editing", {
@@ -311,7 +301,7 @@ const Playground = () => {
                 minWidth: "100px",
                 width: "100%",
             }}>
-                <AIBuilder builderState={builderState} setBuilderState={setBuilderState} onHandleSubmit={handleQueuedGeneration} isLoading={isPendingGenerator || isPendingEditor} />
+                <AIBuilder builderState={builderState} setBuilderState={setBuilderState} onHandleSubmit={handleQueuedGeneration}  />
             </Box>
         </Box>
     );

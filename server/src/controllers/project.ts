@@ -53,8 +53,6 @@ import {
 export const designGenerator = async (req: Request, res: Response) => {
     const { userId } = req.auth;
 
-    console.log("Request body:", req.body); // Debug log
-
     const validationResult = ProjectValidator.safeParse(req.body);
 
     if (!validationResult.success) {
@@ -135,8 +133,6 @@ export const designGenerator = async (req: Request, res: Response) => {
 export const designEditor = async (req: Request, res: Response) => {
     const { userId } = req.auth;
     const { files } = req;
-
-    console.log("Request body:", req.body); // Debug log
 
     const validationResult = ProjectValidator.safeParse(req.body);
 

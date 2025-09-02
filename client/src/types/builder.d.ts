@@ -5,7 +5,6 @@ import {
 
 interface BuilderOptionsProps {
     builderState: EditableProjectProps;
-    isLoading: boolean;
     charCount: number;
     setBuilderState: React.Dispatch<React.SetStateAction<EditableProjectProps>>;
     handleGenerateBaseDesign: () => void;

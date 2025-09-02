@@ -25,7 +25,7 @@ import { useColorScheme } from "@mui/material";
 // types
 import type { BuilderOptionsProps } from '../../types';
 
-const BuilderOptions = ({ builderState, charCount, isLoading, setBuilderState, onHandleSubmit, handleGenerateBaseDesign, handlePromptChange }: BuilderOptionsProps) => {
+const BuilderOptions = ({ builderState, charCount, setBuilderState, onHandleSubmit, handleGenerateBaseDesign, handlePromptChange }: BuilderOptionsProps) => {
     const { prompt } = builderState;
     const { mode } = useColorScheme();
 
@@ -73,7 +73,7 @@ const BuilderOptions = ({ builderState, charCount, isLoading, setBuilderState, o
 
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Button onClick={handleGenerateBaseDesign}>Generate Base Design</Button>
-                    <IconButton color='success' loading={isLoading} onClick={() => onHandleSubmit(builderState)}
+                    <IconButton color='success' onClick={() => onHandleSubmit(builderState)}
                         sx={{
                             width: 40,
                             height: 40,

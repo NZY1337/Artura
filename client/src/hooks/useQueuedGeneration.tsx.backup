@@ -1,54 +1,67 @@
-import type { GridCell, EditableProjectProps, ProjectResponseProps } from "../types";
-import { mapResponseData } from "../components/utils/utilities";
-import type { QueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
+import type { EditableProjectProps, ProjectResponseProps } from "../types";
+
+type GridCell = {
+  project: ProjectResponseProps["project"];
+  images: ProjectResponseProps["images"];
+  imageGenerationResponse: ProjectResponseProps["imageGenerationResponse"];
+  loading?: boolean;
+} | null;QueryClient } from "@tanstack/react-query";
+import { EditableProjectProps, ProjectResponseProps } from "../types";
+
+type GridCell = {
+  project: any;
+  images: any[];
+  imageGenerationResponse: any;
+  loading?: boolean;
+};
 
 type MutateFn = (
-  p: EditableProjectProps,
-  opts: { onSuccess?: (data: ProjectResponseProps) => void; onError?: () => void }
+  project: EditableProjectProps,
+  options?: {
+    onSuccess?: (data: ProjectResponseProps) => void;
+    onError?: () => void;
+  }
 ) => void;
 
-// Mock data generator function
+// Mock data generator
 const generateMockResponse = (project: EditableProjectProps): ProjectResponseProps => {
-  const mockImageUrls = [
-    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800",
-    "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800", 
-    "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800",
-    "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800",
-  ];
-
-  const randomImages = Array.from({ length: Math.floor(Math.random() * 3) + 1 }, (_, i) => ({
-    id: `mock-img-${Date.now()}-${i}`,
-    url: mockImageUrls[Math.floor(Math.random() * mockImageUrls.length)],
-    createdAt: new Date().toISOString(),
-    projectId: `mock-project-${Date.now()}`,
-  }));
-
+  const mockId = `mock-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const imageId = `img-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  
   return {
     project: {
-      id: `mock-project-${Date.now()}`,
+      id: mockId,
       userId: "mock-user-id",
-      category: project.category,
+      category: project.category!,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      prompt: project.prompt,
+      prompt: project.prompt!,
       background: project.background || "auto",
-      images: project.images || [],
-      outputFormat: project.outputFormat,
-      quality: project.quality,
-      size: project.size,
-      designTheme: project.designTheme,
-      spaceType: project.spaceType,
-      n: project.n,
+      images: [],
+      outputFormat: project.outputFormat!,
+      quality: project.quality!,
+      size: project.size!,
+      designTheme: project.designTheme!,
+      spaceType: project.spaceType!,
+      n: project.n!,
     },
-    images: randomImages,
+    images: [
+      {
+        id: imageId,
+        url: "https://picsum.photos/800/600?random=" + Math.floor(Math.random() * 1000),
+        createdAt: new Date().toISOString(),
+        projectId: mockId,
+      }
+    ],
     imageGenerationResponse: {
-      id: `mock-gen-${Date.now()}`,
-      projectId: `mock-project-${Date.now()}`,
-      inputTokens: Math.floor(Math.random() * 1000) + 100,
-      imageTokens: Math.floor(Math.random() * 2000) + 500,
-      textTokens: Math.floor(Math.random() * 500) + 50,
-      outputTokens: Math.floor(Math.random() * 1500) + 200,
-      totalTokens: Math.floor(Math.random() * 5000) + 1000,
+      id: `resp-${Date.now()}`,
+      projectId: mockId,
+      inputTokens: Math.floor(Math.random() * 1000) + 500,
+      imageTokens: Math.floor(Math.random() * 500) + 200,
+      textTokens: Math.floor(Math.random() * 200) + 100,
+      outputTokens: Math.floor(Math.random() * 100) + 50,
+      totalTokens: Math.floor(Math.random() * 1500) + 800,
       imageCost: Math.random() * 2 + 0.5,
       tokenCost: Math.random() * 1 + 0.2,
       totalCost: Math.random() * 3 + 0.7,
@@ -89,13 +102,12 @@ export default function useQueuedGeneration({
       const newGrid = [...prevGrid];
       const firstEmptyIndex = newGrid.findIndex((cell) => cell == null);
       if (firstEmptyIndex !== -1) {
-        newGrid[firstEmptyIndex] = { loading: true } as GridCell;
+        newGrid[firstEmptyIndex] = { loading: true } as unknown as GridCell;
         targetIndex = firstEmptyIndex;
       }
 
       return newGrid;
     });
-
 
     if (targetIndex === null) return;
 
@@ -117,12 +129,10 @@ export default function useQueuedGeneration({
           severity: "success",
           autoHideDuration: 3000,
         });
-      }, 5000 + Math.random() * 3000); // Random delay between 5-8 seconds to simulate real API
-
+      }, 2000 + Math.random() * 3000); // Random delay between 2-5 seconds to simulate real API
+      
       return;
     }
-
-    // Original API calls (only used when useMockData is false)
 
     if (category === "DESIGN_EDITOR") {
       mutateEditor(project, {
@@ -165,6 +175,16 @@ export default function useQueuedGeneration({
         },
       });
     }
+  };
+
+  // Helper function to map response data to grid cell format
+  const mapResponseData = (data: ProjectResponseProps): GridCell => {
+    return {
+      project: data.project,
+      images: data.images,
+      imageGenerationResponse: data.imageGenerationResponse || null,
+      loading: false,
+    };
   };
 
   return { handleQueuedGeneration };
