@@ -1,6 +1,9 @@
 import { useNotifications } from '@toolpad/core';
 
+// types 
 import type { BuilderOptionsProps } from "../types";
+
+// utils
 import { CHARS_LIMIT } from "../helpers/constants";
 
 const useBuilderPrompt = ({ builderState, setBuilderState, setCharCount }: Pick<BuilderOptionsProps, 'builderState' | 'setBuilderState'> & { setCharCount: React.Dispatch<React.SetStateAction<number>> }) => {
