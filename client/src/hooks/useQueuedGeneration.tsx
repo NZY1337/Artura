@@ -139,7 +139,7 @@ export default function useQueuedGeneration({
           severity: "success",
           autoHideDuration: 3000,
         });
-      }, 5000 + Math.random() * 3000); // Random delay between 5-8 seconds to simulate real API
+      }, 20000 + Math.random() * 3000); // Random delay between 20-23 seconds to simulate real API
 
       return;
     }
