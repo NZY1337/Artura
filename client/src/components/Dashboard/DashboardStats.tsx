@@ -1,4 +1,8 @@
+// hooks
 import { useMemo, useState } from 'react';
+import useProjects from '../../hooks/useProjects';
+
+// mui
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
@@ -13,8 +17,14 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
+// utils
+import { ITEMS_PER_PAGE } from '../../helpers/constants';
+
+// assets
 import fallbackImg from '../../assets/artura.png';
-import useProjects from '../../hooks/useProjects';
 
 // types
 import type { SelectChangeEvent } from '@mui/material/Select';
@@ -31,6 +41,7 @@ function formatCurrency(value: number) {
 
 export default function DashboardStats() {
     const { data, isPending, error } = useProjects();
+    const [page, setCurrentPage] = useState(1);
     const [query, setQuery] = useState('');
     const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'costDesc' | 'costAsc'>('newest');
     const [designType, setDesignType] = useState<'DESIGN_GENERATOR' | 'DESIGN_EDITOR' | 'GENERATED_OR_EDITED'>('GENERATED_OR_EDITED');
@@ -98,6 +109,10 @@ export default function DashboardStats() {
     if (isPending) return <Container><Typography>Loading stats...</Typography></Container>;
     if (error) return <Container><Typography color="error">Failed to load projects</Typography></Container>;
 
+    console.log(filtered.length);   
+    console.log(Math.ceil(filtered.length / 10));
+    console.log(page)
+
     return (
         <Container>
             <Typography variant="h4" mb={2}>Statistics</Typography>
@@ -156,7 +171,7 @@ export default function DashboardStats() {
             </Box>
 
             <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr', lg: 'repeat(3, 1fr)' }, gridAutoRows: '1fr' }}>
-                {filtered.map((p: ProjectWithResponse) => {
+                {filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE).map((p: ProjectWithResponse) => {
                     const resp = p.response;
                     const cost = Number(resp?.totalCost || 0);
                     const thumb = getThumb(p);
@@ -182,6 +197,12 @@ export default function DashboardStats() {
                         </Box>
                     );
                 })}
+            </Box>
+
+            <Box>
+                <Stack spacing={2} justifyContent={"center"} alignItems="center" mt={4} mb={4}>
+                    <Pagination  onChange={(_, page) => setCurrentPage(page)} count={Math.ceil(filtered.length / ITEMS_PER_PAGE)} color="primary" siblingCount={0} boundaryCount={2}  />
+                </Stack>
             </Box>
         </Container>
     );

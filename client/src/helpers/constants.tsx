@@ -6,14 +6,14 @@ import UserIcon from '@mui/icons-material/Person';
 import type { Navigation } from '@toolpad/core/AppProvider';
 import type { SpaceTypeProps, DesignThemeProps, CategoryProps, SizeImageProps, QualityFormatProps } from '../types';
 
-const BACKEND_URL = "http://localhost:3010/api";
+export const BACKEND_URL = "http://localhost:3010/api";
 
-const EMPTY_YOUR_SPACE = {
+export const EMPTY_YOUR_SPACE = {
     label: "Empty Your Space",
     segment: "empty-your-space"
 }
 
-const SPACE_TYPE = [
+export const SPACE_TYPE = [
     { label: "Living room", value: "LIVING_ROOM" },
     { label: "Bedroom", value: "BEDROOM" },
     { label: "Kitchen", value: "KITCHEN" },
@@ -27,12 +27,12 @@ const SPACE_TYPE = [
     { label: "Study", value: "STUDY" },
 ] satisfies Array<{ label: string; value: SpaceTypeProps }>;
 
-const CATEGORY = [
+export const CATEGORY = [
     { label: "Design Generator", value: "DESIGN_GENERATOR" },
     { label: "Design Editor", value: "DESIGN_EDITOR" },
 ] satisfies Array<{ label: string; value: CategoryProps }>;
 
-const DESIGN_THEME = [
+export const DESIGN_THEME = [
     { label: 'Modern', value: 'MODERN' },
     { label: 'Contemporary', value: 'CONTEMPORARY' },
     { label: 'Minimalist', value: 'MINIMALIST' },
@@ -56,22 +56,22 @@ const DESIGN_THEME = [
     { label: 'Futuristic', value: 'FUTURISTIC' },
 ] satisfies Array<{ label: string; value: DesignThemeProps }>
 
-const BUILDER_SIZES: { value: SizeImageProps; label: string }[] = [
+export const BUILDER_SIZES: { value: SizeImageProps; label: string }[] = [
     { value: 'SIZE_1024x1024', label: 'Square (1024×1024)' },
     { value: 'SIZE_1024x1536', label: 'Portrait (1024×1536)' },
     { value: 'SIZE_1536x1024', label: 'Landscape (1536x1024)' },
     { value: 'AUTO', label: 'Auto (let AI decide)' },
 ];
 
-const BUILDER_QUALITIES: { value: QualityFormatProps; label: string }[] = [
+export const BUILDER_QUALITIES: { value: QualityFormatProps; label: string }[] = [
     { value: 'HIGH', label: 'High' },
     { value: 'MEDIUM', label: 'Medium' },
     { value: 'LOW', label: 'Low' },
 ];
 
-const CHARS_LIMIT: number = 500;
+export const CHARS_LIMIT: number = 500;
 
-const DASHBOARD_NAVIGATION: Navigation = [
+export const DASHBOARD_NAVIGATION: Navigation = [
     {
         segment: 'dashboard',
         title: 'Dashboard',
@@ -99,7 +99,10 @@ const DASHBOARD_NAVIGATION: Navigation = [
     },
 ];
 
-const DASHBOARD_NAV_BACKGROUND = {
+export const ITEMS_PER_PAGE = 5;
+
+
+export const DASHBOARD_NAV_BACKGROUND = {
     dark: {
         backgroundColor: '#e5e5f7',
         backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #212121 150px), repeating-linear-gradient(#212121, #000000)`
@@ -112,16 +115,3 @@ const DASHBOARD_NAV_BACKGROUND = {
         return this[mode];
     },
 }
-
-export {
-    DASHBOARD_NAVIGATION,
-    BACKEND_URL,
-    SPACE_TYPE,
-    DESIGN_THEME,
-    CATEGORY,
-    EMPTY_YOUR_SPACE,
-    BUILDER_SIZES,
-    BUILDER_QUALITIES,
-    DASHBOARD_NAV_BACKGROUND,
-    CHARS_LIMIT
-};
